@@ -1,0 +1,112 @@
+.login-section {
+  background: #fff;
+  border-radius: 10px;
+  width: 100%;
+
+  .section-heading {
+    border-bottom: 1px solid #E5E5E5;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+
+    i {
+      cursor: pointer;
+      position: absolute;
+      left: 15px;
+      font-size: 2rem;
+      color: #069255;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .section-form {
+    padding: 15px;
+
+    .field-item {
+      margin-bottom: 15px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .field-input {
+        position: relative;
+
+        &__action {
+          position: absolute;
+          right: 5px;
+          top: 2px;
+
+          .forget-password {
+            cursor: pointer;
+            text-decoration: underline;
+            color: #069255;
+          }
+        }
+      }
+
+      .field-title {
+        color: #5C5C5C;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      input {
+        border: none;
+        width: 100%;
+        border-bottom: 1px solid #E8E8E8;
+
+        &::placeholder {
+          color: #ABABAB;
+        }
+
+        &:focus {
+          border-bottom: 1px solid #069255;
+        }
+      }
+
+      .error {
+        display: inline-block;
+        padding-top: 3px;
+        color: #EB5757;
+        font-size: 13px;
+      }
+
+      &--error {
+        input {
+          border-bottom: 1px solid #EB5757;
+        }
+      }
+    }
+  }
+
+  .section-footer {
+    padding: 15px;
+
+    button {
+      border: none;
+      background: #069255;
+      color: #fff;
+      border-radius: 5px;
+      height: 40px;
+      width: 100%;
+
+      &:disabled {
+        background: #ABABAB;
+      }
+    }
+  }
+
+  .register-shop {
+    text-align: center;
+    padding-bottom: 15px;
+
+    &__link {
+      color: #069255;
+      cursor: pointer;
+    }
+  }
+}

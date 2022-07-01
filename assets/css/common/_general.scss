@@ -1,0 +1,74 @@
+.collapse-group {
+  border-bottom: solid 1px #f0f2f5;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    height: 46px;
+    position: relative;
+    padding: 10px 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &-icon {
+      color: green;
+      font-size: 13px;
+      margin-right: 7px;
+      margin-top: -3px;
+    }
+
+    &-icon-expand {
+      position: absolute;
+      right: 14px;
+      top: 10px;
+      font-size: 13px;
+
+      &.is-rotate-90 {
+        transform: rotate(90deg);
+      }
+    }
+  }
+}
+
+.modal-title {
+  color: #FFF;
+}
+
+input {
+  outline: none;
+}
+
+.modal-header {
+  background-color: #069255;
+  text-align: center !important;
+  color: #FFFFFF;
+  padding: 4px 10px;
+
+  .close {
+    margin-left: 0;
+    color: #fff;
+    font-size: 26px;
+    opacity: 1;
+  }
+
+  .modal-title {
+    margin: auto;
+  }
+
+  h5 {
+    font-size: 18px;
+  }
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.v-popper__inner {
+  position: relative;
+  box-sizing: border-box;
+  overflow-y: auto;
+  font-size: 14px;
+}

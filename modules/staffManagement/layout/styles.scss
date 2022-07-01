@@ -1,0 +1,59 @@
+.staffManagement {
+  padding: 20px 15px;
+
+  .headline {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__title {
+      font-size: 26px;
+      font-weight: 500;
+    }
+
+    &__right {
+      display: flex;
+      align-items: center;
+
+      .searchArea {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+
+        &__counter {
+          margin-right: 15px;
+        }
+
+        .searchBox {
+          padding: 0px 10px;
+          width: 340px;
+          height: 36px;
+          border: 1px solid #b7b7b7;
+          border-radius: 5px;
+
+          &__input {
+            font-size: 14px;
+            border: none;
+            outline: none;
+            width: 100%;
+            margin-left: 5px;
+            &::placeholder {
+              color: #a3a1a1 !important;
+            }
+          }
+
+          &__remove {
+            width: 15px;
+          }
+        }
+      }
+    }
+  }
+
+  &__list--title {
+    font-weight: 500;
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+}

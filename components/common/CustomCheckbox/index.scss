@@ -1,0 +1,120 @@
+.checkbox-custom {
+  // max-width: fit-content;
+}
+label.form-check-label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 28px;
+  margin-bottom: 0;
+  font-weight: normal;
+  cursor: pointer;
+  // line-height: 1;
+}
+label.form-check-label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  transition: transform 0.28s ease;
+  border-radius: 3px;
+  border: 2px solid  #069255;
+}
+label.form-check-label:after {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 6px;
+  border-bottom: 2px solid  #069255;
+  border-left: 2px solid  #069255;
+  transform: rotate(-45deg) scale(0) translateY(-50%);
+  transition: transform ease 0.25s;
+  position: absolute;
+  top: 50%;
+  left: 3px;
+}
+input.form-check-input {
+  width: auto;
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}
+input.form-check-input:checked ~ label:before {
+  border: 2px solid #069255;
+  background: #069255;
+}
+// input.form-check-input:checked:disabled ~ label:before {
+//   opacity: 0.7;
+// }
+input.form-check-input:checked ~ label:after {
+  transform: rotate(-45deg) scale(1) translate(25%, -50%);
+  border-bottom: 2px solid #fff;
+  border-left: 2px solid #fff;
+}
+.form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
+  color: #000;
+}
+input.form-check-input:focus + label::before {
+  outline: 0;
+}
+label.form-check-label.circle:before {
+  border-radius: 50%;
+}
+label {
+  display: flex;
+  .pageAvatar{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+}
+
+input.form-check-input:checked + label.form-check-label.dot:before {
+  background: unset !important;
+}
+
+label.form-check-label.dot:after {
+  border: unset !important;
+}
+
+input.form-check-input:checked + label.form-check-label.dot:after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background: #069255;
+  position: absolute;
+  top: 50% !important;
+  left: 4px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  border: unset;
+  opacity: 1;
+  -webkit-transform: scale(1);
+  transform: scale(1) translateY(-50%);
+  @media only screen and (max-width: 1441px) {
+    top: 6px;
+  }
+}
+
+.indeterminate {
+  label.form-check-label::before {
+    background: #fff;
+  }
+  label.form-check-label::after {
+    content: '';
+    display: block;
+    width: 9px;
+    height: 0;
+    transition: transform ease 0.25s;
+    position: absolute;
+    top: 50%;
+    left: 2px;
+    transform: rotate(0deg) scale(1) translate(25%, -50%);
+    border-bottom: 2px solid #069255;
+    border-left: 0px solid #069255;
+  }
+}

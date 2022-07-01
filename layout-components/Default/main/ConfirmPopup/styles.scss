@@ -1,0 +1,33 @@
+/deep/ {
+  .comfirmBox {
+    border: 0px;
+
+    &__body {
+      padding: 0;
+      border-radius: 5px;
+    }
+  }
+}
+
+.comfirmBox {
+  .comfirmBoxAction {
+    &__btn {
+      cursor: pointer;
+
+      &--confirm {
+        background: #00904a;
+        color: #fff;
+        font-weight: 500;
+
+        &.cancelButtonHidden {
+          width: 100%;
+        }
+      }
+
+      &--cancel {
+        border: 1px solid #00904a;
+        color: #00904a;
+      }
+    }
+  }
+}
