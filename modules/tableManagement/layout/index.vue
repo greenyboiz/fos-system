@@ -66,7 +66,7 @@
           <img src="@/assets/images/table-background.jpg" alt="">
         </div>
         <div class="add-button">
-          <button class="btn btn-success" @click="handleShowAddTablesModal()">
+          <button class="btn btn-success" @click="handleSave()">
             Lưu mã QR
           </button>
         </div>
@@ -97,7 +97,8 @@ export default {
       selectedTable: {
         id: null,
         qr_image: '',
-        qr_url: ''
+        qr_url: '',
+        numberOfSeat: 0,
       }
     };
   },
@@ -130,7 +131,7 @@ export default {
       this.deleteTable(val);
     },
 
-    handleShowAddTableModal() {
+    handleShowAddTablesModal() {
       this.$refs.addTableModalRef.show();
     },
 
@@ -138,7 +139,12 @@ export default {
       this.selectedTable.id = val.tableId;
       this.selectedTable.qr_image = val.qrCode.qrcodeImage;
       this.selectedTable.qr_url = val.qrCode.qrcodeLink;
+      this.selectedTable.numberOfSeat = val.numberOfSeats;
       this.isOpenQRCode = !this.isOpenQRCode;
+    },
+
+    handleSave() {
+
     },
 
     async getListTable() {

@@ -28,7 +28,7 @@ export default {
       },
       {
         src: 'https://unpkg.com/vue-multiselect@2.1.0',
-      }
+      },
     ],
   },
 
@@ -39,7 +39,9 @@ export default {
     // '~/assets/css/main.css',
     // SCSS file in the project
     // '~/assets/css/main.scss'
-    '@/assets/css/main.scss'
+    '@/assets/css/main.scss',
+    'vue-slick-carousel/dist/vue-slick-carousel.css',
+    'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
