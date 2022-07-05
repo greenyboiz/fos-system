@@ -1,5 +1,7 @@
 package fpt.edu.capstone.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import fpt.edu.capstone.entities.Category;
 import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.implementService.IDishesService;
@@ -11,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -23,9 +28,24 @@ public class DishesService implements IDishesService {
     private DishesRepository dishesRepository;
 
     @Autowired
+    private Cloudinary cloudinary;
+    @Autowired
     private CategoryRepository categoryRepository;
     @Override
     public Dishes addDishes(Dishes dishes) {
+        return dishesRepository.save(dishes);
+    }
+
+    @Override
+    public Dishes uploadDishesImage(MultipartFile file, Dishes dishes) {
+        try {
+            Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
+            String img = (String) r.get("secure_url");
+
+            dishes.setDishImage(img);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return dishesRepository.save(dishes);
     }
 

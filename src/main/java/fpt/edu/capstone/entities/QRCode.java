@@ -3,6 +3,7 @@ package fpt.edu.capstone.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -20,6 +21,12 @@ public class QRCode {
     @Column(name = "QRCodeImage")
     private String QRCodeImage;
 
+//    @Column(name = "QRCodeImage2",columnDefinition = "MEDIUMBLOB")
+//    private String QRCodeImage2;
+
     @Column(name = "QRCodeLink")
     private String QRCodeLink;
+
+//    @Transient
+//    private MultipartFile file;
 }
