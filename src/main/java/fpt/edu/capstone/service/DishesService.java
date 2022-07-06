@@ -41,7 +41,6 @@ public class DishesService implements IDishesService {
         try {
             Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
             String img = (String) r.get("secure_url");
-
             dishes.setDishImage(img);
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -7,8 +7,10 @@ import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.implementService.IDishesService;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,15 +35,25 @@ public class DishesController {
 //    }
 
     @PostMapping( value = "/dishes/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    private Dishes uploadDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
-        ObjectMapper objectMapper = new ObjectMapper();
-        Dishes dishes1 = new Dishes();
-        try {
-            dishes1 = objectMapper.readValue(dishes, Dishes.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+    private ResponseEntity<?> uploadDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
+        if(file.getSize() == 0){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("fail", "file null",true, null)
+            );
+        }else {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Dishes dishes1 = new Dishes();
+            try {
+                dishes1 = objectMapper.readValue(dishes, Dishes.class);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            Dishes dishes2 = iDishesService.uploadDishesImage(file,dishes1);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successfull",true, dishes2)
+            );
         }
-        return iDishesService.uploadDishesImage(file,dishes1);
+
     }
     @PutMapping("/dishes/update")
     private Dishes updateDishes(@RequestBody Dishes dishes){

@@ -21,9 +21,6 @@ public class QRCode {
     @Column(name = "QRCodeImage")
     private String QRCodeImage;
 
-//    @Column(name = "QRCodeImage2",columnDefinition = "MEDIUMBLOB")
-//    private String QRCodeImage2;
-
     @Column(name = "QRCodeLink")
     private String QRCodeLink;
 

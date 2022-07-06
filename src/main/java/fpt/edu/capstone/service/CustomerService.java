@@ -67,4 +67,9 @@ public class CustomerService implements ICustomerService {
             );
         }
     }
+
+    public Customer getCustomerById2(Long id) {
+        Customer customer = customerRepository.findById(id).get();
+        return customer;
+    }
 }
