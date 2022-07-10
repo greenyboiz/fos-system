@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 @Entity
@@ -36,4 +37,11 @@ public class CartItem {
     public BigDecimal getSubTotal(){
         return BigDecimal.valueOf(dishes.getSalePrice() * quantity);
     }
+
+
+    @Column(name = "createDate")
+    private Date createDate;
+
+    @Column(name = "lastUpdateDate")
+    private Date lastUpdateDate;
 }

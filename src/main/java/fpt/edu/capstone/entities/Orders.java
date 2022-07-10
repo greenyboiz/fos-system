@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Data
@@ -27,7 +28,7 @@ public class Orders {
     private QRCode qrCode;
 
     @Column(name = "submitTime")
-    private Date submitTime;
+    private Date submitTime = new Date(System.currentTimeMillis());
 
     @Column(name = "closeTime")
     private Date closeTime;
@@ -36,13 +37,10 @@ public class Orders {
     private BigDecimal otherFee;
 
     @Column(name = "status")
-    private Integer status;
+    private Integer status = 0;
 
     @Column(name = "description")
     private String description;
-
-    @Column(name = "numberOfCustomer")
-    private Integer numberOfCustomer;
 
     @Column(name = "orderDiscount")
     private Integer orderDiscount;

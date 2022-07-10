@@ -25,12 +25,12 @@ public class CartController {
     private CustomerService customerService;
 
     @GetMapping("/cart2")
-    private List<CartItem> showShoppingCart(@RequestBody Customer customer){
+    private List<CartItem> showShoppingCart2(@RequestBody Customer customer){
         return cartItemService.listCartItemByCustomer(customer);
     }
 
     @GetMapping("/cart")
-    private List<CartItem> showShoppingCart2(@RequestBody QRCode qrCode){
+    private List<CartItem> showShoppingCart(@RequestBody QRCode qrCode){
         return cartItemService.listCartItemByQRCode(qrCode);
     }
 
@@ -49,6 +49,20 @@ public class CartController {
     private ResponseEntity<?> addToCart(@RequestBody CartItem cartItem){
         CartItem cartItem1 = cartItemService.addDishesToCart(cartItem);
         if (cartItem1 == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "file null",false, null)
+            );
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successfull",true, cartItem1)
+            );
+        }
+    }
+
+    @DeleteMapping("cart/update")
+    private ResponseEntity<?> updateToCart(@RequestBody CartItem cartItem){
+        CartItem cartItem1 = cartItemService.updateDishesToCart(cartItem);
+        if (cartItem1.getQuantity() == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject("fail", "file null",false, null)
             );

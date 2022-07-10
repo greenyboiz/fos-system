@@ -1,7 +1,6 @@
 package fpt.edu.capstone.implementService;
 
 import fpt.edu.capstone.entities.Orders;
-import fpt.edu.capstone.entities.Tables;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.http.ResponseEntity;
 
@@ -15,6 +14,7 @@ public interface IOrdersService {
     public boolean deleteOrder(Long id);
 
     public List<Orders> getAllOrders();
-    public ResponseEntity<ResponseObject> getOrderById(Long id);
+    public Orders getOrderById(Long id);
 
+    public boolean checkOrderExist(Orders orders);
 }

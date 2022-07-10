@@ -31,13 +31,18 @@ public class OrderItem {
 
     @Column(name = "price")
     private BigDecimal price;
-
-    @Column(name = "orderItemStatus")
-    private Integer orderItemStatus;
+//
+//    @Column(name = "orderItemStatus")
+//    private Integer orderItemStatus;
 
     @Column(name = "createDate")
     private Date createDate;
 
     @Column(name = "lastUpdateDate")
     private Date lastUpdateDate;
+
+    @Transient
+    public BigDecimal getSubTotal(){
+        return BigDecimal.valueOf(dishes.getSalePrice() * quantity);
+    }
 }

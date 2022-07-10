@@ -1,10 +1,13 @@
 package fpt.edu.capstone.controller;
 
+import fpt.edu.capstone.entities.Customer;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.Tables;
+import fpt.edu.capstone.implementService.ICustomerService;
 import fpt.edu.capstone.implementService.IOrdersService;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +21,23 @@ public class OrdersController {
     @Autowired
     private IOrdersService iOrdersService;
 
+    @Autowired
+    private ICustomerService iCustomerService;
+
     @GetMapping("/orders")
     private List<Orders> getAllOrders(){
         return iOrdersService.getAllOrders();
     }
 
-    @PostMapping("/orders/add")
+    @PostMapping("/orders")
     private Orders saveOrders(@RequestBody Orders orders){
-        return iOrdersService.addOrder(orders);
+        boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
+        if (!checkOrderExist){
+            Customer customer = iCustomerService.addCustomer(orders.getCustomer());
+            orders.setCustomer(customer);
+            return iOrdersService.addOrder(orders);
+        }
+        return null;
     }
 
     @PutMapping("/orders/update")
@@ -39,8 +51,18 @@ public class OrdersController {
     }
 
     @GetMapping("/orders/{id}")
-    ResponseEntity<ResponseObject> findOrderById(@PathVariable Long id){
-        return iOrdersService.getOrderById(id);
+    public ResponseEntity<?> findOrderById(@PathVariable Long id){
+        Orders orders = iOrdersService.getOrderById(id);
+        if(orders != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, orders)
+            );
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "Can not find OrderID: "+id,false,"null")
+            );
+        }
+
     }
 
 }

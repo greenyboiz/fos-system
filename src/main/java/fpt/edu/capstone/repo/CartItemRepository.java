@@ -24,4 +24,7 @@ public interface CartItemRepository extends JpaRepository<CartItem,Long> {
 
     @Query("select c from CartItem c where c.qrCode.QRCodeId = ?1 and c.dishes.dishesId = ?2 ")
     public CartItem checkExistCartItem(Long qrCodeId, Long dishesId);
+
+    @Query("delete from CartItem c where c.dishes.dishesId = ?1")
+    public void removeDishesInCart(Long dishesId);
 }
