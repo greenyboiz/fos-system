@@ -25,19 +25,36 @@ public class OrdersController {
     private ICustomerService iCustomerService;
 
     @GetMapping("/orders")
-    private List<Orders> getAllOrders(){
-        return iOrdersService.getAllOrders();
+    private ResponseEntity<?> getAllOrders(){
+        List<Orders> orders = iOrdersService.getAllOrders();
+        if(orders != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, orders)
+            );
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "List order is empty ",false,"null")
+            );
+        }
     }
 
     @PostMapping("/orders")
-    private Orders saveOrders(@RequestBody Orders orders){
+    private ResponseEntity<?> saveOrders(@RequestBody Orders orders){
         boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
+//        boolean checkCustomerExistInOrder = iOrdersService.checkCustomerExistInOrder(orders);
+//        boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
         if (!checkOrderExist){
             Customer customer = iCustomerService.addCustomer(orders.getCustomer());
             orders.setCustomer(customer);
-            return iOrdersService.addOrder(orders);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "add order succsessfully",true, iOrdersService.addOrder(orders))
+            );
         }
-        return null;
+        else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                    new ResponseObject("fail", "Order is exist",false,"null")
+            );
+        }
     }
 
     @PutMapping("/orders/update")

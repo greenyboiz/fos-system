@@ -16,4 +16,6 @@ public interface ICustomerService {
     public List<Customer> getAllCustomer();
 
     public ResponseEntity<ResponseObject> getCustomerById(Long id);
+
+    boolean checkCustomerExist(Customer customer);
 }

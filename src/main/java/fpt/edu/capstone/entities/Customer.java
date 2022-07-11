@@ -23,6 +23,7 @@ public class Customer {
     @Column(name = "lastName")
     private String lastName;
 
+//    @Column(name = "contact",unique = true, nullable = false)
     @Column(name = "contact")
     private String contact;
 

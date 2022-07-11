@@ -1,5 +1,6 @@
 package fpt.edu.capstone.implementService;
 
+import fpt.edu.capstone.entities.Customer;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.http.ResponseEntity;
@@ -17,4 +18,6 @@ public interface IOrdersService {
     public Orders getOrderById(Long id);
 
     public boolean checkOrderExist(Orders orders);
+
+    boolean checkCustomerExistInOrder(Orders orders);
 }

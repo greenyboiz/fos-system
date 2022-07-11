@@ -68,8 +68,12 @@ public class CustomerService implements ICustomerService {
         }
     }
 
-    public Customer getCustomerById2(Long id) {
-        Customer customer = customerRepository.findById(id).get();
-        return customer;
+    @Override
+    public boolean checkCustomerExist(Customer customer) {
+        Customer customerNew = customerRepository.checkContactExist(customer.getContact());
+        if(customerNew != null){
+            return true;
+        }
+        return false;
     }
 }
