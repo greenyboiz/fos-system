@@ -18,8 +18,8 @@ public class PaymentService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-    public BigDecimal getTotalAmountByOrder(Orders orders){
-        BigDecimal total = orderItemRepository.findPaymentByOrderId(orders.getOrderId());
+    public BigDecimal getTotalAmountByOrder(Long oderId){
+        BigDecimal total = orderItemRepository.findPaymentByOrderId(oderId);
         return total;
     }
 

@@ -14,8 +14,8 @@ public class PaymentController {
     @Autowired
     private PaymentService paymentService;
 
-    @GetMapping("/payment")
-    public BigDecimal getTotal(@RequestBody Orders orders){
-        return paymentService.getTotalAmountByOrder(orders);
+    @GetMapping("/payment/{orderId}")
+    public BigDecimal getTotal(@PathVariable(name = "orderId") Long orderId){
+        return paymentService.getTotalAmountByOrder(orderId);
     }
 }
