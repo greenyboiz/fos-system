@@ -119,6 +119,16 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
+
+        .changeNum {
+          display: flex;
+          align-items: center;
+
+          input {
+            border: none;
+            width: 13px;
+          }
+        }
       }
     }
   }
@@ -212,4 +222,9 @@
 
 img {
   object-fit: cover;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
 }

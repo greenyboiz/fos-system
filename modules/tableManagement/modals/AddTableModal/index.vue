@@ -9,7 +9,47 @@
     hide-footer
     @hidden="handleHideModal"
   >
-
+    <div class="info-table">
+      <div class="info-table__detail">
+        <div class="info-table__item">
+          <label for="numOfSeat">Số lượng ghế:</label>
+          <input
+            id="numOfSeat"
+            v-model.number="formTable.numberOfSeats"
+            type="text"
+            placeholder="Nhập số ghế"
+          />
+        </div>
+        <div class="info-table__item">
+          <label for="link">QR Code Link:</label>
+          <input
+            id="link"
+            v-model="formTable.qrCode.qrcodeLink"
+            type="text"
+            placeholder="Nhập link QR"
+          />
+        </div>
+        <div class="info-table__item">
+          <label for="status">Trạng thái:</label>
+          <div class="d-flex" style="width: 100%">
+            <div v-for="(status) in statusType" :key="status.id">
+              <CustomCheckbox
+                v-model="statusSelected"
+                class="mr-2"
+                shape="circle"
+                type="radio"
+                styleCheck="dot"
+                :keyValue="`${status.id}s`"
+                :inputValue="status.id"
+                :customLabel="true"
+              >
+                <template slot="custom-label"> {{ status.name }} </template>
+              </CustomCheckbox>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div style="padding: 10px">
       <button class="staff__btn" :disabled="isLoading" @click="handleSave()">
         <!-- <Loading v-if="isLoading" color="white" /> -->
@@ -21,14 +61,14 @@
 
 <script>
 // import ImageOrDefault from '@/components/common/ImageOrDefault/index.vue';
-// import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
+import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import { tableManagementService } from '@/services';
 export default {
   name: 'AddUserModal',
 
   components: {
     // ImageOrDefault,
-    // CustomCheckbox,
+    CustomCheckbox,
   },
 
   props: {
@@ -41,22 +81,20 @@ export default {
   data() {
     return {
       formTable: {
-        fullName: '',
-        profileImage: '',
-        userName: '',
-        password: '',
-        contact: '',
-        email: '',
-        gender: '',
-        role: {
-          roleId: null,
-          roleName: '',
+        numberOfSeats: 0,
+        qrCode: {
+          qrcodeLink: ''
         },
         status: null,
       },
       modalTitle: '',
       isLoading: false,
       isDone: false,
+      statusSelected: null,
+      statusType: [
+        { id: 0, name: 'Còn trống' },
+        { id: 1, name: 'Đã đầy' }
+      ],
     };
   },
 
