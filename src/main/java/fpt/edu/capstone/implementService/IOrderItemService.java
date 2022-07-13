@@ -18,4 +18,6 @@ public interface IOrderItemService {
 
 
     List<OrderItem> getOrderItemByOrderId(Long id);
+
+    boolean deleteDishesInOrederItem(Long orderItemId);
 }

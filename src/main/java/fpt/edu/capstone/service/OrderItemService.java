@@ -41,7 +41,6 @@ public class OrderItemService implements IOrderItemService {
             }else{
                 orderItemList.add(orderItemRepository.save(order));
             }
-
         }
         return orderItemList;
     }
@@ -60,6 +59,16 @@ public class OrderItemService implements IOrderItemService {
             return orderItem;
         }
         return null;
+    }
+
+    @Override
+    public boolean deleteDishesInOrederItem(Long orderItemId) {
+        OrderItem orderItem = orderItemRepository.getOrderItemById(orderItemId);
+        if(orderItem != null){
+            orderItemRepository.delete(orderItem);
+            return true;
+        }
+        return false;
     }
 
 }

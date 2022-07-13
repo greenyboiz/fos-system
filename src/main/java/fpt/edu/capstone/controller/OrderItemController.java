@@ -62,4 +62,17 @@ public class OrderItemController {
     public OrderItem updateDishesToOrderItem(@RequestBody OrderItem orderItem){
         return iOrderItemService.updateDishesToOrderItem(orderItem);
     }
+
+    @DeleteMapping("/orderItem/{orderItemId}")
+    public ResponseEntity<?> deleteDishesInOrederItem(@PathVariable(name = "orderItemId") Long orderItemId){
+        boolean deleteDishesInOrederItem = iOrderItemService.deleteDishesInOrederItem(orderItemId);
+        if(deleteDishesInOrederItem == true){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successfull",true, null)
+            );
+        }else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "In OrderItem does not contain orderItemId: " + orderItemId,false, null)
+            );
+    }
 }

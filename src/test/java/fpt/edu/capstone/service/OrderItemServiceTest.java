@@ -57,6 +57,73 @@ public class OrderItemServiceTest {
 
     @Test
     public void getOrderItemById(){
-//        OrderItem actual = new OrderItem(1l, null,null);
+        Dishes actualDishes = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, null);
+        Customer actualCustomer = new Customer(1l,"minh","nguyet","065623266","mn@gmail.com","Ha Noi");
+        QRCode actualQRCode = new QRCode(1l,null,null);
+        Orders actualOrders = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"tuyệt vời",10);
+        OrderItem actual =new OrderItem(1l,actualOrders,actualDishes,2,null,null,null);
+
+        Mockito.when(orderItemRepository.getOrderItemById(actual.getOrderItemId())).thenReturn(actual);
+        OrderItem result = orderItemService.getOrderItemById(actual.getOrderItemId());
+
+        Assert.assertEquals(result,actual);
+    }
+
+    @Test
+    public void updateDishesToOrderItem(){
+        Dishes expectDishes = new Dishes(1l, "ga tan", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, null);
+        Dishes actualDishes = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, null);
+
+        Customer expectCustomer = new Customer(1l,"minh","nguyet","065623266","mn@gmail.com","Ha Noi");
+        Customer actualCustomer = new Customer(1l,"tang","nguyet","065623266","mn@gmail.com","Ha Noi");
+
+        QRCode expectQRCode = new QRCode(1l,null,null);
+        QRCode actualQRCode = new QRCode(1l,null,null);
+
+        Orders expectOrders = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
+        Orders actualOrders = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"tuyệt vời",10);
+
+
+        OrderItem expect = new OrderItem(1l,expectOrders,expectDishes,2,null,null,null);
+        OrderItem actual = new OrderItem(1l,actualOrders,actualDishes,3,null,null,null);
+
+        Mockito.when(orderItemRepository.getById(expect.getOrderItemId())).thenReturn(actual);
+        actual.setQuantity(expect.getQuantity());
+        Mockito.when(orderItemRepository.save(actual)).thenReturn(expect);
+
+        OrderItem result = orderItemService.updateDishesToOrderItem(expect);
+        Assert.assertEquals(result,actual);
+    }
+
+    @Test
+    public void getOrderItemByOrderId(){
+        Dishes actualDishes = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, null);
+        Customer actualCustomer = new Customer(1l,"minh","nguyet","065623266","mn@gmail.com","Ha Noi");
+        QRCode actualQRCode = new QRCode(1l,null,null);
+        Orders actualOrders = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"tuyệt vời",10);
+        List<OrderItem> actual = new ArrayList<>();
+        actual.add(new OrderItem(1l,actualOrders,actualDishes,2,null,null,null));
+
+        Mockito.when(orderItemRepository.getOrderItemByOrderId(actualOrders.getOrderId())).thenReturn(actual);
+
+        List<OrderItem> results = orderItemService.getOrderItemByOrderId(actualOrders.getOrderId());
+
+        Assert.assertEquals(results,actual);
+
+    }
+
+    @Test
+    public void deleteDishesInOrederItem(){
+        Dishes actualDishes = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, null);
+        Customer actualCustomer = new Customer(1l,"minh","nguyet","065623266","mn@gmail.com","Ha Noi");
+        QRCode actualQRCode = new QRCode(1l,null,null);
+        Orders actualOrders = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"tuyệt vời",10);
+        OrderItem actual = new OrderItem(1l,actualOrders,actualDishes,2,null,null,null);
+
+        Mockito.when(orderItemRepository.getOrderItemById(actual.getOrderItemId())).thenReturn(actual);
+//        Mockito.when(orderItemRepository.delete();)
+        boolean result = orderItemService.deleteDishesInOrederItem(actual.getOrderItemId());
+
+        Assert.assertEquals(result,true);
     }
 }
