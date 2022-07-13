@@ -71,4 +71,49 @@ public class OrderServiceTest {
 
         Assert.assertEquals(result,actual);
     }
+
+    @Test
+    public void updateOrder(){
+        Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
+        QRCode expectQRCode = new QRCode(1l,null,null);
+        Orders expect = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
+
+        Customer actualCustomer = new Customer(null,null,"0964697688",null,null);
+        QRCode actualQRCode = new QRCode(2l,null,null);
+        Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
+
+        Mockito.when(ordersRepository.getById(actual.getOrderId())).thenReturn(expect);
+        Mockito.when(ordersRepository.save(expect)).thenReturn(actual);
+
+        Orders result = ordersService.updateOrder(actual);
+        Assert.assertEquals(result,actual);
+    }
+
+    @Test
+    public void deleteOrder(){
+        Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
+        QRCode expectQRCode = new QRCode(1l,null,null);
+        Orders expect = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
+
+        Customer actualCustomer = new Customer(null,null,"0964697688",null,null);
+        QRCode actualQRCode = new QRCode(2l,null,null);
+        Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
+
+        Mockito.when(ordersRepository.getOrdersById(actual.getOrderId())).thenReturn(expect);
+//        Mockito.when(ordersRepository.delete(actual);)
+        boolean result = ordersService.deleteOrder(actual.getOrderId());
+        Assert.assertEquals(result,true);
+    }
+
+    @Test
+    public void checkOrderExist(){
+        Customer actualCustomer = new Customer(null,null,"0964697688",null,null);
+        QRCode actualQRCode = new QRCode(2l,null,null);
+        Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
+
+        Mockito.when(ordersRepository.findByCustomerIdAndQrCodeAndOrderStatus(actual.getCustomer().getContact(),actual.getQrCode().getQRCodeId())).thenReturn(actual);
+        boolean result = ordersService.checkOrderExist(actual);
+
+        Assert.assertEquals(result,true);
+    }
 }
