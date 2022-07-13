@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="campaign">
-      <VueSlickCarousel :arrows="false" :dots="true">
+      <VueSlickCarousel :arrows="false" :dots="true" :autoplay="true">
         <div class="campaign-item">
           <img src="@/assets/images/campaign.jpg" alt="" width="100%" />
         </div>
@@ -43,7 +43,7 @@
       <div class="menu__list">
         <div v-for="(val) in listDishes" :key="val.dishesId" class="menu-item">
           <div class="dishes-image">
-            <img src="@/assets/images/menu-image.png" alt="" width="100%">
+            <img :src="val.dishImage" alt="" width="243px" height="243px">
           </div>
           <div class="dishes-name">
             {{ val.dishesName }}
@@ -54,9 +54,9 @@
           <div class="dishes-orderNum">
             <span style="font-weight: 500">SL:</span>
             <div class="changeNum">
-              <span class="downNumber" @click="decreaseDish()"><i class="bi bi-dash-circle"></i></span>
-              <span>{{ numberOfDishes }}</span>
-              <span class="upNumber" @click="increaseDish()"><i class="bi bi-plus-circle"></i></span>
+              <span class="downNumber" @click="decreaseDish(val.numberOfDish)"><i class="bi bi-dash-circle"></i></span>
+              <span>{{ val.numberOfDish }}</span>
+              <span class="upNumber" @click="increaseDish(val.numberOfDish)"><i class="bi bi-plus-circle"></i></span>
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@
               <div class="spec-quantity">
                 <div class="changeNum">
                   <span class="downNumber" @click="decreaseDish()"><i class="bi bi-dash-circle"></i></span>
-                  <span>{{ numberOfDishes }}</span>
+                  <span>{{ spec.numberOfDish }}</span>
                   <span class="upNumber" @click="increaseDish()"><i class="bi bi-plus-circle"></i></span>
                 </div>
               </div>
@@ -107,6 +107,7 @@
 import VueSlickCarousel from 'vue-slick-carousel';
 import { menuManagementService } from '@/services';
 import StarFill from '@/components/CustomIcon/star-fill.vue';
+import { map } from 'lodash';
 export default {
   name: 'Page',
 
@@ -125,9 +126,9 @@ export default {
       selectedCategory: '',
       numberOfDishes: 0,
       bestSeller: [
-        { id: 1, name: 'Cocktail Bloody Marry', salePrice: 599999, star: 4.5 },
-        { id: 2, name: 'Cocktail None Bloody Marry', salePrice: 599999, star: 4.5 },
-        { id: 3, name: 'Cocktail Bloody None Marry', salePrice: 599999, star: 4.5 },
+        { id: 1, name: 'Cocktail Bloody Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
+        { id: 2, name: 'Cocktail None Bloody Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
+        { id: 3, name: 'Cocktail Bloody None Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
       ]
     };
   },
@@ -154,21 +155,28 @@ export default {
       this.searchText = '';
     },
 
-    decreaseDish() {
-      if (this.numberOfDishes === 0) {
-        return;
-      }
-      this.numberOfDishes--;
+    decreaseDish(val) {
+      // if (val === 0) {
+      //   return;
+      // }
+      // val--;
     },
 
-    increaseDish() {
-      this.numberOfDishes++;
+    increaseDish(val) {
+      // val++;
     },
 
     async getListDish() {
       const res = await menuManagementService.getListDish();
 
-      this.listDishes = res.data;
+      const dishesList = res.data;
+
+      map(dishesList, (item) => {
+        item.numberOfDish = 0;
+        return item;
+      });
+
+      this.listDishes = dishesList;
     },
 
     async getListCategory() {

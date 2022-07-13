@@ -49,6 +49,7 @@
       outline: none;
       width: 100%;
       margin-left: 5px;
+
       &::placeholder {
         color: #a3a1a1 !important;
       }
@@ -83,7 +84,6 @@
   }
 
 }
-
 
 .totalOrder {
   position: fixed;

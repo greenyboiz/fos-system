@@ -96,6 +96,7 @@
     margin-bottom: 1rem;
 
     .menu-item {
+      width: fit-content;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -104,7 +105,10 @@
       border-radius: 16px;
 
       .dishes-image {
-        width: 100%;
+        // width: fit-content;
+        img {
+          border-radius: 8px;
+        }
       }
 
       .dishes-price {
@@ -204,4 +208,8 @@
     font-size: 18px;
     border-radius: 8px;
   }
+}
+
+img {
+  object-fit: cover;
 }

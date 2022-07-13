@@ -49,6 +49,7 @@
       outline: none;
       width: 100%;
       margin-left: 5px;
+
       &::placeholder {
         color: #a3a1a1 !important;
       }
@@ -124,56 +125,58 @@
 }
 
 .totalOrder {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  padding: 15px;
+  transform: translateX(-50%);
+  box-shadow: 0px 32px 64px rgba(140, 140, 140, 0.73);
+
+  .payment-info {
     width: 100%;
-    padding: 15px;
-    transform: translateX(-50%);
-    box-shadow: 0px 32px 64px rgba(140, 140, 140, 0.73);
 
-    .payment-info {
-      width: 100%;
-
-      .info-item {
-        display: flex;
-        justify-content: space-between;
-        color: #B7B7B7;
-        margin-bottom: 0.5rem;
-      }
-
-      .info-total {
-        font-size: 20px;
-        font-weight: 500;
-        color: #000;
-        margin-bottom: 0.5rem;
-        display: flex;
-        justify-content: space-between;
-      }
-    }
-
-    .action-btn {
+    .info-item {
       display: flex;
       justify-content: space-between;
+      color: #B7B7B7;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-total {
+      font-size: 20px;
+      font-weight: 500;
+      color: #000;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .action-btn {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      width: 100%;
+      border: none;
+      background: #069255;
+      color: #fff;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 8px;
+    }
+
+    .btn-order {
+      width: 48%;
+    }
+
+    .btn-payment {
+      width: 48%;
 
       button {
-        width: 100%;
-        border: none;
-        background: #069255;
-        color: #fff;
-        padding: 10px;
-        font-size: 18px;
-        border-radius: 8px;
-      }
-
-      .btn-order {
-        width: 48%;
-      }
-      .btn-payment {
-        width: 48%;
-        button {
-          background: #E80000;
-        }
+        background: #E80000;
       }
     }
+  }
 }

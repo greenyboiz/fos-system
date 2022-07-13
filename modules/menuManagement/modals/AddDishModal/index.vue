@@ -45,34 +45,34 @@
           />
         </div>
         <div class="info-dish__item">
-          <label for="phone">Giá bán:</label>
+          <label for="salePrice">Giá bán:</label>
           <input
-            id="phone"
-            v-model="formDish.salePrice"
-            type="text"
+            id="salePrice"
+            v-model.number="formDish.salePrice"
+            type="number"
             placeholder="Nhập giá mua"
           />
         </div>
         <div class="info-dish__item">
-          <label for="phone">Giá mua:</label>
+          <label for="costPrice">Giá mua:</label>
           <input
-            id="phone"
-            v-model="formDish.costPrice"
-            type="text"
+            id="costPrice"
+            v-model.number="formDish.costPrice"
+            type="number"
             placeholder="Nhập giá bán"
           />
         </div>
         <div class="info-dish__item">
-          <label for="pass">Giảm giá:</label>
+          <label for="discount">Giảm giá:</label>
           <input
-            id="pass"
-            v-model="formDish.discount"
-            type="text"
+            id="discount"
+            v-model.number="formDish.discount"
+            type="number"
             placeholder="Nhập phần trăm giảm"
           />
         </div>
         <div class="info-dish__item">
-          <label for="pass">Phân loại:</label>
+          <label for="category">Phân loại:</label>
           <MultiSelect
             v-model="selectedCategory"
             placeholder=""
@@ -84,7 +84,7 @@
           />
         </div>
         <div class="info-dish__item">
-          <label for="pass">Trạng thái:</label>
+          <label for="status">Trạng thái:</label>
           <div class="d-flex" style="width: 100%">
             <div v-for="(status) in statusType" :key="status.id">
               <CustomCheckbox
@@ -144,7 +144,7 @@ export default {
         discount: 0,
         category: {},
         dishImage: '',
-        status: ''
+        status: null,
       },
       modalTitle: '',
       avatar: '',
@@ -165,7 +165,7 @@ export default {
   watch: {
     dishesId() {
       this.getDishById();
-    }
+    },
   },
 
   methods: {
@@ -192,6 +192,7 @@ export default {
       if (!file.length) return;
 
       this.formDish.dishImage = file[0];
+      console.log(file);
       this.avatar = URL.createObjectURL(file[0]);
       e.target.value = '';
     },
@@ -211,6 +212,7 @@ export default {
     async addDish() {
       this.formDish.status = this.statusSelected;
       this.formDish.category = this.selectedCategory;
+      this.formDish.dishImage = 'menu-p1.png';
       const requestParams = this.formDish;
 
       const res = await menuManagementService.addDish(requestParams);

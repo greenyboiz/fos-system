@@ -1,0 +1,118 @@
+::v-deep {
+  .checkbox-custom {
+    width: calc(100% - 20px);
+  }
+
+  label.form-check-label:before {
+    left: 100%;
+  }
+
+  input.form-check-input:checked+label.form-check-label.dot:after {
+    left: calc(100% + 4px);
+  }
+
+  label.form-check-label {
+    width: 100%;
+    padding-left: 0;
+  }
+}
+
+.payment {
+  padding: 12px;
+  position: relative;
+
+  &__header {
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 1.5rem;
+  }
+
+  &__method {
+    .method-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0px 32px 64px rgba(140, 136, 150, 0.33);
+      margin-bottom: 1.5rem;
+
+      .method-title {
+        padding-right: 0.5rem;
+        display: flex;
+        align-items: center;
+      }
+
+      .method-select {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.totalPrice {
+  width: 100%;
+  box-shadow: 0px 32px 64px rgba(140, 136, 150, 0.33);
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    color: #B7B7B7;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-total {
+    font-size: 20px;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.payment__info {
+
+  .banking-info {
+    width: 100%;
+    box-shadow: 0px 32px 64px rgba(140, 136, 150, 0.23);
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .cash-info {
+    bottom: 0;
+    position: fixed;
+    left: 50%;
+    width: 100%;
+    padding: 15px;
+    transform: translateX(-50%);
+
+    button {
+      width: 100%;
+      border: none;
+      background: #069255;
+      color: #fff;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 8px;
+    }
+  }
+
+  .scanQr-info {
+    width: 100%;
+    box-shadow: 0px 32px 64px rgba(140, 136, 150, 0.23);
+    padding: 46px;
+    border-radius: 10px;
+    text-align: center;
+
+    img {
+      width: 235px;
+      height: 235px;
+      object-fit: cover;
+    }
+  }
+}
