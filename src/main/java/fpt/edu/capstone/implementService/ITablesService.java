@@ -3,6 +3,7 @@ package fpt.edu.capstone.implementService;
 import fpt.edu.capstone.entities.Tables;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,4 +17,7 @@ public interface ITablesService {
     public List<Tables> getAllTables();
     public ResponseEntity<ResponseObject> getTableById(Long id);
 
+    boolean checkTableExist(Long id);
+
+    Tables addTableAndQRcodeImage(MultipartFile file, Tables tables);
 }

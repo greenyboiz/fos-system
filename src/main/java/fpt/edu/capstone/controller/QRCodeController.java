@@ -6,6 +6,7 @@ import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.implementService.IQRCodeService;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,16 +44,32 @@ public class QRCodeController {
         return iqrCodeService.saveImageToDB(file,qrCode);
     }
 
-    @PostMapping( value = "/qrcode/upload2", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    private QRCode uploadQRCode2(@RequestParam("file")MultipartFile file, @RequestPart("qrcode") String qrcode){
-        ObjectMapper objectMapper = new ObjectMapper();
-        QRCode qrCode = new QRCode();
-        try {
-            qrCode = objectMapper.readValue(qrcode, QRCode.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+    @PostMapping( value = "/qrcode", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
+    private ResponseEntity<?> addQRCode(@RequestParam("file")MultipartFile file, @RequestPart("qrcode") String qrcode){
+        if(file.getSize() == 0){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("fail", "file null",false, null)
+            );
+        }else {
+            ObjectMapper objectMapper = new ObjectMapper();
+            QRCode qrCode = new QRCode();
+            try {
+                qrCode = objectMapper.readValue(qrcode, QRCode.class);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(qrCode.getQRCodeImage());
+            if (!checkQRCodeExist){
+                iqrCodeService.addQRCodeToDB(file,qrCode);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("ok", "successfull",true, iqrCodeService.addQRCodeToDB(file,qrCode))
+                );
+            }else {
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("fail", "QRCode is exist",false, null)
+                );
+            }
         }
-        return iqrCodeService.saveImageToDB2(file,qrCode);
     }
 
 

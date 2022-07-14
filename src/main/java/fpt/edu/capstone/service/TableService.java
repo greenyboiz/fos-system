@@ -1,5 +1,7 @@
 package fpt.edu.capstone.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.entities.Tables;
 import fpt.edu.capstone.implementService.ITablesService;
@@ -10,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -21,6 +26,9 @@ public class TableService implements ITablesService {
 
     @Autowired
     private QRCodeRepository qrCodeRepository;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     @Override
     public Tables addTable(Tables table) {
@@ -48,6 +56,7 @@ public class TableService implements ITablesService {
         Tables table = tableRepository.getById(id);
         if(table != null){
             tableRepository.delete(table);
+            qrCodeRepository.delete(table.getQrCode());
             return true;
         }
         return false;
@@ -70,5 +79,26 @@ public class TableService implements ITablesService {
                     new ResponseObject("fail", "Can not find TableID: "+id,false,"null")
             );
         }
+    }
+
+    @Override
+    public boolean checkTableExist(Long id) {
+        Tables checkTableExist = tableRepository.findTableById(id);
+        if (checkTableExist != null){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Tables addTableAndQRcodeImage(MultipartFile file, Tables tables) {
+        try {
+            Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
+            String img = (String) r.get("secure_url");
+            tables.getQrCode().setQRCodeImage(img);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return tableRepository.save(tables);
     }
 }

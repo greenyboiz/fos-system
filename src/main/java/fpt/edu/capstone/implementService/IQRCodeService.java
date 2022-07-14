@@ -12,7 +12,7 @@ public interface IQRCodeService {
 
     public QRCode saveImageToDB(MultipartFile file, QRCode qrCode);
 
-    public QRCode saveImageToDB2(MultipartFile file, QRCode qrCode);
+    public QRCode addQRCodeToDB(MultipartFile file, QRCode qrCode);
 
     public QRCode updateQRCode(QRCode qrCode);
 
@@ -21,4 +21,5 @@ public interface IQRCodeService {
     public List<QRCode> getAllQRCodes();
     public ResponseEntity<ResponseObject> getQRCodeById(Long id);
 
+    boolean checkQRCodeExist(String qrCodeImage);
 }

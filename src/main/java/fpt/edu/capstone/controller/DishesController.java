@@ -38,7 +38,7 @@ public class DishesController {
     private ResponseEntity<?> uploadDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
         if(file.getSize() == 0){
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("fail", "file null",true, null)
+                    new ResponseObject("fail", "file null",false, null)
             );
         }else {
             ObjectMapper objectMapper = new ObjectMapper();

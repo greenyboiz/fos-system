@@ -55,13 +55,12 @@ public class QRCodeService implements IQRCodeService {
     }
 
     @Override
-    public QRCode saveImageToDB2(MultipartFile file, QRCode qrCode) {
+    public QRCode addQRCodeToDB(MultipartFile file, QRCode qrCode) {
+//        boolean checkQRCodeExist = qrCodeRepository.checkQRCodeExist(qrCode.getQRCodeImage());
         try {
             Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
             String img = (String) r.get("secure_url");
-//            qrCode.setQRCodeImage2(img);
             qrCode.setQRCodeImage(img);
-//            qrCode.setQRCodeLink(qrCode.getQRCodeLink());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -120,6 +119,15 @@ public class QRCodeService implements IQRCodeService {
                     new ResponseObject("fail", "Can not find QRCodeID: "+id,false,"null")
             );
         }
+    }
+
+    @Override
+    public boolean checkQRCodeExist(String qrCodeImage) {
+        QRCode qrCode = qrCodeRepository.checkQRCodeExist(qrCodeImage);
+        if(qrCode != null){
+            return true;
+        }
+        return false;
     }
 
 }
