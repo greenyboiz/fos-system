@@ -11,6 +11,8 @@
 <script>
 import DetailDish from '@/modules/clientView/DetailDish/index.vue';
 export default {
-  components: { DetailDish }
+  components: { DetailDish },
+
+  layout: 'default-no-header',
 };
 </script>

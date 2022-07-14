@@ -11,6 +11,8 @@
 <script>
 import Home from '@/modules/clientView/Home/index.vue';
 export default {
-  components: { Home }
+  components: { Home },
+
+  layout: 'default-no-header',
 };
 </script>

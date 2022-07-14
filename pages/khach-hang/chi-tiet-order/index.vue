@@ -11,6 +11,8 @@
 <script>
 import DetailOrder from '@/modules/clientView/DetailOrder/index.vue';
 export default {
-  components: { DetailOrder }
+  components: { DetailOrder },
+
+  layout: 'default-no-header',
 };
 </script>

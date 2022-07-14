@@ -38,7 +38,7 @@
                     <button
                       class="btn btn-sm btn-outline-secondary badge"
                       type="button"
-                      @click="remove(item.dishesId)"
+                      @click="remove(item.tableId)"
                     >
                       Delete
                     </button>
@@ -63,7 +63,7 @@
           <input v-model="selectedTable.qr_url" type="text">
         </div>
         <div class="qr-image mb-2">
-          <img src="@/assets/images/table-background.jpg" alt="">
+          <img :src="selectedTable.qr_image" alt="">
         </div>
         <div class="add-button">
           <button class="btn btn-success" @click="handleSave()">
@@ -124,7 +124,7 @@ export default {
 
   methods: {
     editClick(val) {
-      this.$refs.addTableModalRef.show('update');
+      // this.$refs.addTableModalRef.show('update');
     },
 
     remove(val) {

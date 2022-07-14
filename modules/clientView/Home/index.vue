@@ -1,27 +1,8 @@
 <template>
-  <div class="client-view">
+  <div class="client-home">
     <div class="headline">
       <div class="headline__title">MLD Restaurent</div>
       <div class="headline__support">Support</div>
-    </div>
-    <div class="searchArea">
-      <div class="searchBox d-flex align-items-center">
-        <img
-          class="searchBox__icon"
-          src="~/assets/icons/search_gray_icon.png"
-        />
-        <input
-          v-model="searchText"
-          class="searchBox__input"
-          placeholder="Tìm kiếm món ăn"
-        />
-        <div v-if="searchText" class="cursor-pointer" @click="removeKeyword()">
-          <img
-            class="searchBox__remove"
-            src="~/assets/icons/remove_search.svg"
-          />
-        </div>
-      </div>
     </div>
     <div class="campaign">
       <VueSlickCarousel :arrows="false" :dots="true" :autoplay="true">
@@ -33,75 +14,19 @@
         </div>
       </VueSlickCarousel>
     </div>
-    <div class="menu">
-      <div class="menu__category">
-        <div class="cate-all" :class="{ active: !catType }" @click="handleSelectAll()">Tất cả</div>
-        <div v-for="(item) in listCategory" :key="item.categoryId" class="cate-item" :class="{ active: catType === item.categoryName }" @click="handleSelectCategory(item)">
-          {{ item.categoryName }}
-        </div>
+    <div class="customer">
+      <div class="customer__item">
+        <label for="username">Họ và tên:</label>
+        <input id="username" type="text" placeholder="Nhập họ và tên" />
       </div>
-      <div class="menu__list">
-        <div v-for="(val) in listDishes" :key="val.dishesId" class="menu-item" @click="handleOpenDetailDish(val)">
-          <nuxt-link to="/khach-hang/chi-tiet-mon">
-            <div class="dishes-image">
-              <img :src="val.dishImage" alt="" width="165px" height="165px">
-            </div>
-            <div class="dishes-name">
-              {{ val.dishesName }}
-            </div>
-            <div class="dishes-price">
-              {{ val.salePrice }} VNĐ
-            </div>
-          </nuxt-link>
-            <div class="dishes-orderNum">
-              <span style="font-weight: 500">SL:</span>
-              <div class="changeNum">
-                <span class="downNumber mr-1" @click="decreaseDish(val)"><i class="bi bi-dash-circle"></i></span>
-                <input v-model="val.numberOfDish" type="number">
-                <span class="upNumber ml-1" @click="increaseDish(val)"><i class="bi bi-plus-circle"></i></span>
-              </div>
-            </div>
-        </div>
-      </div>
-      <div class="menu__paging">
-        <i class="bi bi-chevron-left"></i>
-        <span>1</span>
-        <i class="bi bi-chevron-right"></i>
+      <div class="customer__item">
+        <label for="phone">SĐT:</label>
+        <input id="phone" v-model="formData.customer.contact" type="text" placeholder="Nhập SĐT" required />
       </div>
     </div>
-    <div class="special">
-      <div class="special__head">
-        <div class="head-title">Đặc biệt</div>
-        <div class="head-seeAll">Xem tất cả</div>
-      </div>
-      <div class="special__list">
-        <div v-for="spec in bestSeller" :key="spec.id" class="special-item">
-          <div class="spec-image">
-            <img src="@/assets/images/menu-image.png" alt="" width="96px">
-          </div>
-          <div class="spec-info">
-            <div class="spec-name">{{ spec.name }}</div>
-            <div class="spec-price">{{ spec.salePrice }} VNĐ</div>
-            <div class="spec-qua">
-              <div class="spec-quality">
-                <StarFill :currentColor="'#EEC800'" />
-                {{ spec.star }}
-              </div>
-              <div class="spec-quantity">
-                <div class="changeNum">
-                  <span class="downNumber" @click="decreaseDish()"><i class="bi bi-dash-circle"></i></span>
-                  <span>{{ spec.numberOfDish }}</span>
-                  <span class="upNumber" @click="increaseDish()"><i class="bi bi-plus-circle"></i></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="totalOrder">
-      <nuxt-link to="/khach-hang/chi-tiet-order">
-        <button>Bạn đã order ({{ totalOrder }})</button>
+    <div class="getDish" @click="postOrder()">
+      <nuxt-link to="khach-hang/order">
+        <button>Gọi món</button>
       </nuxt-link>
     </div>
   </div>
@@ -110,33 +35,26 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import VueSlickCarousel from 'vue-slick-carousel';
-import { menuManagementService } from '@/services';
-import StarFill from '@/components/CustomIcon/star-fill.vue';
-import { map, filter, reduce } from 'lodash';
+import { orderService } from '@/services';
 export default {
   name: 'Page',
 
   components: {
     VueSlickCarousel,
-    StarFill
   },
 
   layout: 'default-no-header',
 
   data() {
     return {
-      searchText: '',
-      listDishes: [],
-      totalDishes: [],
-      listCategory: [],
-      dishId: null,
-      catType: '',
-      numberOfDishes: 0,
-      bestSeller: [
-        { id: 1, name: 'Cocktail Bloody Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
-        { id: 2, name: 'Cocktail None Bloody Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
-        { id: 3, name: 'Cocktail Bloody None Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
-      ]
+      formData: {
+        customer: {
+          contact: '',
+        },
+        qrCode: {
+          qrcodeId: 1,
+        }
+      },
     };
   },
 
@@ -147,77 +65,33 @@ export default {
   },
 
   computed: {
-    totalOrder() {
-      const totalDish = map(this.listDishes, (item) => item.numberOfDish);
-      const total = 0;
-      const totalNum = reduce(totalDish, (pre, cur) => pre + cur, total);
-      return totalNum;
-    }
-  },
-
-  mounted() {
-    this.getListCategory();
-    this.getListDish();
+    ...mapState('clientView', {
+      orderId: (state) => state.orderId,
+    }),
   },
 
   methods: {
     ...mapMutations('clientView', {
-      updateDishId: 'updateDishId'
+      updateOrderId: 'updateOrderId'
     }),
 
-    removeKeyword() {
-      this.searchText = '';
-    },
+    async postOrder() {
+      const requestParam = {
+        customer: {
+            contact: this.formData.customer.contact
+        },
+        qrCode: {
+            qrcodeId: this.formData.qrCode.qrcodeId
+        },
+      };
 
-    decreaseDish(val) {
-      if (val.numberOfDish === 0) {
-        return;
-      }
-      val.numberOfDish--;
-    },
+      const res = await orderService.postOrder(requestParam);
 
-    increaseDish(val) {
-      val.numberOfDish++;
-    },
-
-    handleOpenDetailDish(val) {
-      this.dishId = val.dishesId;
-      this.updateDishId(val.dishesId);
-    },
-
-    handleSelectAll() {
-      this.catType = '';
-      this.getListDish();
-    },
-
-    async getListDish() {
-      const res = await menuManagementService.getListDish();
-
-      const dishesList = res.data;
-
-      map(dishesList, (item) => {
-        item.numberOfDish = 0;
-        return item;
-      });
-
-      this.listDishes = dishesList;
-      this.totalDishes = dishesList;
-    },
-
-    async getListCategory() {
-      const res = await menuManagementService.getListCategory();
-
-      if (res.status === 200) {
-        this.listCategory = res.data;
+      if (res.success) {
+        this.updateOrderId(res.data.orderId);
       }
     },
-
-    handleSelectCategory(val) {
-      this.catType = val.categoryName;
-      const filterDish = filter(this.totalDishes, (item) => item.category.categoryName === this.catType);
-      this.listDishes = filterDish;
-    }
-  },
+  }
 };
 </script>
 
