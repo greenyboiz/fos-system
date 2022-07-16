@@ -32,7 +32,7 @@ public class FOSUserService implements IFOSUserService {
             FOSUser fosUser1 = fosUserRepository.getById(fosUser.getUserId());
             if(fosUser1 != null){
                 fosUser1.setFullName(fosUser.getFullName());
-                fosUser1.setUserName(fosUser.getUserName());
+//                fosUser1.setUserName(fosUser.getUserName());
                 fosUser1.setPassword(fosUser.getPassword());
                 fosUser1.setRole(role);
                 fosUser1.setContact(fosUser.getContact());
@@ -75,5 +75,14 @@ public class FOSUserService implements IFOSUserService {
                     new ResponseObject("fail", "Can not find FOSUserID: "+id,false,"null")
             );
         }
+    }
+
+    @Override
+    public boolean checkExistUserByUserNameAndContactAndEmail(FOSUser fosUser) {
+        FOSUser fosUser1 = fosUserRepository.checkExistUserByUserNameAndContactAndEmail(fosUser.getUserName(), fosUser.getContact(),fosUser.getEmail());
+        if (fosUser1 != null){
+            return true;
+        }
+        return false;
     }
 }

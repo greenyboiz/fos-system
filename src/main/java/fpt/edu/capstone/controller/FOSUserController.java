@@ -1,9 +1,13 @@
 package fpt.edu.capstone.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.entities.FOSUser;
 import fpt.edu.capstone.implementService.IFOSUserService;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,14 +21,57 @@ public class FOSUserController {
     private IFOSUserService ifosUserService;
 
     @GetMapping("/users")
-    private List<FOSUser> getAllFOSUser(){
-        return ifosUserService.getAllFOSUser();
+    private ResponseEntity<?> getAllFOSUser(){
+        List<FOSUser> fosUserList = ifosUserService.getAllFOSUser();
+        if (fosUserList != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successfull",true, fosUserList)
+            );
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("fail", "Does not exist any account",true, fosUserList)
+            );
+        }
     }
 
-    @PostMapping("/users/add")
-    private FOSUser saveFOSUser(@RequestBody FOSUser fosUser){
-        return ifosUserService.addFOSUser(fosUser);
+    @PostMapping("/users/add1")
+    private ResponseEntity<?> saveFOSUser(@RequestBody FOSUser fosUser){
+        boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
+        if(!checkExistUser){
+            FOSUser fosUserAdd = ifosUserService.addFOSUser(fosUser);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successfull",true, fosUserAdd)
+            );
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("fail", "Account exist",false, null)
+            );
+        }
+
     }
+
+//    @PostMapping("/users/add")
+//    private ResponseEntity<?> addFOSUser(@RequestBody FOSUser fosUser){
+//        if(file.getSize() == 0){
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("fail", "file image null",false, null)
+//            );
+//        }else {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            Dishes dishes1 = new Dishes();
+//            try {
+//                dishes1 = objectMapper.readValue(dishes, Dishes.class);
+//            } catch (JsonProcessingException e) {
+//                throw new RuntimeException(e);
+//            }
+//            Dishes dishes2 = iDishesService.uploadDishesImage(file,dishes1);
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "successfull",true, dishes2)
+//            );
+//        }
+//
+//    }
 
     @PutMapping("/users/update")
     private FOSUser updateFOSUser(@RequestBody FOSUser fosUser){

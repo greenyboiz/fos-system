@@ -16,4 +16,6 @@ public interface IFOSUserService {
     public List<FOSUser> getAllFOSUser();
 
     public ResponseEntity<ResponseObject> getFOSUserById(Long id);
+
+    boolean checkExistUserByUserNameAndContactAndEmail(FOSUser fosUser);
 }

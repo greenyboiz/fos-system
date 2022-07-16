@@ -46,19 +46,20 @@ public class QRCodeController {
 
     @PostMapping( value = "/qrcode", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
     private ResponseEntity<?> addQRCode(@RequestParam("file")MultipartFile file, @RequestPart("qrcode") String qrcode){
+        ObjectMapper objectMapper = new ObjectMapper();
+        QRCode qrCode = new QRCode();
+        try {
+            qrCode = objectMapper.readValue(qrcode, QRCode.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(qrCode.getQRCodeImage());
         if(file.getSize() == 0){
+            iqrCodeService.addQRCode(qrCode);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("fail", "file null",false, null)
+                    new ResponseObject("ok", "file imange is null",true, iqrCodeService.addQRCode(qrCode))
             );
         }else {
-            ObjectMapper objectMapper = new ObjectMapper();
-            QRCode qrCode = new QRCode();
-            try {
-                qrCode = objectMapper.readValue(qrcode, QRCode.class);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-            boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(qrCode.getQRCodeImage());
             if (!checkQRCodeExist){
                 iqrCodeService.addQRCodeToDB(file,qrCode);
                 return ResponseEntity.status(HttpStatus.OK).body(

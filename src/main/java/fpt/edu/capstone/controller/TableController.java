@@ -52,6 +52,7 @@ public class TableController {
             }
             iqrCodeService.addQRCode(tables.getQrCode());
             Tables tables1 = iTablesService.addTableAndQRcodeImage(file,tables);
+
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "successfull",true, tables1)
             );
@@ -80,8 +81,17 @@ public class TableController {
     }
 
     @GetMapping("/tables/{id}")
-    ResponseEntity<ResponseObject> findTableById(@PathVariable Long id){
-        return iTablesService.getTableById(id);
+    public ResponseEntity<?> findTableById(@PathVariable Long id){
+        Tables tables = iTablesService.getTableById(id);
+        if (tables != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successfull",true, tables)
+            );
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("fail", "table id = " + id + " not exist",false, null)
+            );
+        }
     }
 
 }

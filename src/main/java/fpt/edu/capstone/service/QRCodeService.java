@@ -61,6 +61,7 @@ public class QRCodeService implements IQRCodeService {
             Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
             String img = (String) r.get("secure_url");
             qrCode.setQRCodeImage(img);
+            qrCode.setQRCodeLink("link"+ qrCode.getQRCodeId());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

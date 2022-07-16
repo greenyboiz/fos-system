@@ -15,7 +15,7 @@ public interface ITablesService {
     public boolean deleteTable(Long id);
 
     public List<Tables> getAllTables();
-    public ResponseEntity<ResponseObject> getTableById(Long id);
+    public Tables getTableById(Long id);
 
     boolean checkTableExist(Long id);
 

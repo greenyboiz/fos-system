@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface TableRepository extends JpaRepository<Tables, Long> {
     @Query("select c from Tables c where c.tableId = ?1")
     Tables findTableById(Long id);
+
 }

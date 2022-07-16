@@ -36,18 +36,20 @@ public class DishesController {
 
     @PostMapping( value = "/dishes/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
     private ResponseEntity<?> uploadDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
+        ObjectMapper objectMapper = new ObjectMapper();
+        Dishes dishes1 = new Dishes();
+        try {
+            dishes1 = objectMapper.readValue(dishes, Dishes.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         if(file.getSize() == 0){
+            iDishesService.addDishes(dishes1);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("fail", "file null",false, null)
+                    new ResponseObject("ok", "file imange of dishes null",true, iDishesService.addDishes(dishes1))
             );
         }else {
-            ObjectMapper objectMapper = new ObjectMapper();
-            Dishes dishes1 = new Dishes();
-            try {
-                dishes1 = objectMapper.readValue(dishes, Dishes.class);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
+
             Dishes dishes2 = iDishesService.uploadDishesImage(file,dishes1);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "successfull",true, dishes2)

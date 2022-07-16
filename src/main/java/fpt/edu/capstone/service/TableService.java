@@ -68,17 +68,8 @@ public class TableService implements ITablesService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> getTableById(Long id) {
-        Optional<Tables> table = tableRepository.findById(id);
-        if(table.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, table)
-            );
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", "Can not find TableID: "+id,false,"null")
-            );
-        }
+    public Tables getTableById(Long id) {
+        return tableRepository.findTableById(id);
     }
 
     @Override
