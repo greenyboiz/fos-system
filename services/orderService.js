@@ -18,6 +18,18 @@ class OrderService {
 
     return res.data;
   }
+
+  async postOrderItem(params) {
+    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/orderItem', params);
+
+    return res;
+  }
+
+  async getTotalPayment(orderId) {
+    const res =  await axios.get(`https://project-for-fos-mld.herokuapp.com/api/payment/${orderId}`);
+
+    return res;
+  }
 }
 
 export const orderService = new OrderService();

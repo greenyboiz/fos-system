@@ -25,24 +25,24 @@
     </div>
     <div class="special">
       <div class="special__list">
-        <div v-for="spec in bestSeller" :key="spec.id" class="special-item">
+        <div v-for="spec in orderItemList" :key="spec.id" class="special-item">
           <div class="spec-image">
-            <img src="@/assets/images/menu-image.png" alt="" width="96px">
+            <img :src="spec.dishes.dishImage" alt="" width="96px">
           </div>
           <div class="spec-info">
-            <div class="spec-name">{{ spec.name }}</div>
+            <div class="spec-name">{{ spec.dishes.dishesName }}</div>
             <div class="spec-price">
-              <div class="spec-cost">{{ spec.salePrice }} VNĐ</div>
-              <div class="spec-remove">
+              <div class="spec-cost">{{ spec.dishes.salePrice }} VNĐ</div>
+              <div class="spec-remove" @click="handleRemoveOrderItem()">
                 <Trash />
               </div>
             </div>
             <div class="spec-qua">
               <div class="spec-quantity">
                 <div class="changeNum">
-                  <span class="downNumber" @click="decreaseDish()"><i class="bi bi-dash-circle"></i></span>
-                  <span>{{ numberOfDishes }}</span>
-                  <span class="upNumber" @click="increaseDish()"><i class="bi bi-plus-circle"></i></span>
+                  <span class="downNumber" @click="decreaseDish(spec)"><i class="bi bi-dash-circle"></i></span>
+                  <span>{{ spec.quantity }}</span>
+                  <span class="upNumber" @click="increaseDish(spec)"><i class="bi bi-plus-circle"></i></span>
                 </div>
               </div>
             </div>
@@ -54,7 +54,7 @@
       <div class="payment-info">
         <div class="info-item">
           <div class="info-item_title">Giá:</div>
-          <div class="info-item_number">2.500.000 VNĐ</div>
+          <div class="info-item_number">{{ totalPriceOrder || 0 }} VNĐ</div>
         </div>
         <div class="info-item">
           <div class="info-item_title">VAT:</div>
@@ -62,7 +62,7 @@
         </div>
         <div class="info-total">
           <div class="info-item_title">Tổng cộng:</div>
-          <div class="info-item_number">2.750.000 VNĐ</div>
+          <div class="info-item_number">{{ (totalPriceOrder + (totalPriceOrder * 10) / 100) || 0 }} VNĐ</div>
         </div>
       </div>
       <div class="action-btn">
@@ -78,8 +78,8 @@
 </template>
 
 <script>
-import { menuManagementService } from '@/services';
 import Trash from '@/components/CustomIcon/trash.vue';
+import { mapState, mapMutations } from 'vuex';
 export default {
   name: 'Page',
 
@@ -92,15 +92,8 @@ export default {
   data() {
     return {
       searchText: '',
-      listDishes: [],
-      listCategory: [],
-      selectedCategory: '',
       numberOfDishes: 0,
-      bestSeller: [
-        { id: 1, name: 'Cocktail Bloody Marry', salePrice: 599999, star: 4.5 },
-        { id: 2, name: 'Cocktail None Bloody Marry', salePrice: 599999, star: 4.5 },
-        { id: 3, name: 'Cocktail Bloody None Marry', salePrice: 599999, star: 4.5 },
-      ]
+      orderList: [],
     };
   },
 
@@ -111,49 +104,41 @@ export default {
   },
 
   computed: {
-    totalOrder() {
-      return 10;
-    }
+    ...mapState('clientView', {
+      orderId: (state) => state.orderId,
+      totalPriceOrder: (state) => state.totalPriceOrder,
+      orderItemList: (state) => state.orderItemList,
+    }),
   },
 
   mounted() {
-    this.getListCategory();
-    this.getListDish();
+    console.log(this.orderItemList);
   },
 
   methods: {
+    ...mapMutations('clientView', {
+      updateTotalPriceOrder: 'updateTotalPriceOrder',
+    }),
+
     removeKeyword() {
       this.searchText = '';
     },
 
-    decreaseDish() {
-      if (this.numberOfDishes === 0) {
+    decreaseDish(val) {
+      if (val.quantity === 0) {
         return;
       }
-      this.numberOfDishes--;
+      val.quantity--;
     },
 
-    increaseDish() {
-      this.numberOfDishes++;
+    increaseDish(val) {
+      val.quantity++;
     },
 
-    async getListDish() {
-      const res = await menuManagementService.getListDish();
+    handleRemoveOrderItem() {
 
-      this.listDishes = res.data;
-    },
-
-    async getListCategory() {
-      const res = await menuManagementService.getListCategory();
-
-      if (res.status === 200) {
-        this.listCategory = res.data;
-      }
-    },
-
-    handleSelectCategory(val) {
-      this.selectedCategory = val.categoryName;
     }
+
   },
 };
 </script>

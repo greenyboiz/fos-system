@@ -24,8 +24,8 @@
         <input id="phone" v-model="formData.customer.contact" type="text" placeholder="Nhập SĐT" required />
       </div>
     </div>
-    <div class="getDish" @click="postOrder()">
-      <nuxt-link to="khach-hang/order">
+    <div class="getDish" @click="handleGetOrder()">
+      <nuxt-link v-if="formData.customer.contact" :to="{ path: '/khach-hang/order', params: { id: orderId } }">
         <button>Gọi món</button>
       </nuxt-link>
     </div>
@@ -36,6 +36,7 @@
 import { mapState, mapMutations } from 'vuex';
 import VueSlickCarousel from 'vue-slick-carousel';
 import { orderService } from '@/services';
+import { isEmpty } from 'lodash';
 export default {
   name: 'Page',
 
@@ -91,6 +92,13 @@ export default {
         this.updateOrderId(res.data.orderId);
       }
     },
+
+    handleGetOrder() {
+      if (isEmpty(this.formData.customer.contact)) {
+        return;
+      }
+      this.postOrder();
+    }
   }
 };
 </script>

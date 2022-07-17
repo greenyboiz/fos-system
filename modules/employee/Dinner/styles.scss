@@ -1,0 +1,30 @@
+.dinner {
+  border-top: 1px solid #9b9b9b;
+  padding-top: 20px;
+}
+
+.choice {
+  &__btn {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ababab;
+    border-radius: 5px;
+    background: #fff;
+    margin: 0 20px 20px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #7a7a7a;
+  }
+}
+
+.had {
+  background: #e9693d;
+  border: none;
+  color: #fff;
+}
+
+.statue {
+  background: #eebf5c;
+  border: none;
+  color: #fff;
+}

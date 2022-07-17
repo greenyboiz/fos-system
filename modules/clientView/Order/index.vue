@@ -99,7 +99,7 @@
         </div>
       </div>
     </div>
-    <div class="totalOrder">
+    <div class="totalOrder" @click="handleOpenOrderList()">
       <nuxt-link to="/khach-hang/chi-tiet-order">
         <button>Bạn đã order ({{ totalOrder }})</button>
       </nuxt-link>
@@ -149,6 +149,7 @@ export default {
   computed: {
     ...mapState('clientView', {
       orderId: (state) => state.orderId,
+      orderItemList: (state) => state.orderItemList,
     }),
 
     totalOrder() {
@@ -166,7 +167,10 @@ export default {
 
   methods: {
     ...mapMutations('clientView', {
-      updateDishId: 'updateDishId'
+      updateDishId: 'updateDishId',
+      updateOrderId: 'updateOrderId',
+      updateTotalPriceOrder: 'updateTotalPriceOrder',
+      updateOrderItemList: 'updateOrderItemList',
     }),
 
     removeKeyword() {
@@ -182,7 +186,8 @@ export default {
 
     increaseDish(val) {
       val.numberOfDish++;
-      this.getOrderItemList();
+      // this.getOrderItemList();
+      // this.postOrderItem();
     },
 
     handleOpenDetailDish(val) {
@@ -217,11 +222,54 @@ export default {
       }
     },
 
-    async getOrderItemList() {
-      const res = await orderService.getOrderItem(this.orderId);
+    async postOrderItem() {
+      const test = [];
+      filter(this.totalDishes, (item) => {
+        if (item.numberOfDish > 0) {
+          test.push({
+            'orders': {
+                'orderId': this.orderId
+            },
+            'dishes': {
+                'dishesId': item.dishesId
+            },
+            'quantity': item.numberOfDish
+          });
+        }
+      });
+      console.log(test);
+      const requestParam = {
+        'list': test
+      };
+
+      const res = await orderService.postOrderItem(requestParam);
+
+      if (res.status === 200) {
+        this.updateOrderId(this.orderId);
+        console.log(this.orderId);
+        this.getOrderItemList(this.orderId);
+        this.getTotalPayment(this.orderId);
+      }
+    },
+
+    handleOpenOrderList() {
+      this.postOrderItem();
+    },
+
+    async getOrderItemList(orderId) {
+      const res = await orderService.getOrderItem(orderId);
 
       if (res.success) {
-        console.log(res.data);
+        const orderList = res.data;
+        this.updateOrderItemList(orderList);
+      }
+    },
+
+    async getTotalPayment(orderId) {
+      const res = await orderService.getTotalPayment(orderId);
+
+      if (res.status === 200) {
+        this.updateTotalPriceOrder(res.data);
       }
     },
 

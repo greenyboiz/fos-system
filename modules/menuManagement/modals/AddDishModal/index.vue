@@ -192,7 +192,6 @@ export default {
       if (!file.length) return;
 
       this.formDish.dishImage = file[0];
-      console.log(file);
       this.avatar = URL.createObjectURL(file[0]);
       e.target.value = '';
     },

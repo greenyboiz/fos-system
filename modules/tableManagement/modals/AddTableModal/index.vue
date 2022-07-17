@@ -114,8 +114,7 @@ export default {
     },
 
     handleHideModal() {
-      this.formTable = {
-      };
+      this.formTable = {};
       this.$refs.addTable.hide();
     },
 
@@ -146,7 +145,6 @@ export default {
     },
 
     async getTableById() {
-      console.log(this.tableId);
       const res = await tableManagementService.getTableById(this.tableId);
 
       if (res.success) {
