@@ -35,7 +35,7 @@ public class DishesController {
 //    }
 
     @PostMapping( value = "/dishes/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    private ResponseEntity<?> uploadDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
+    private ResponseEntity<?> addDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
         ObjectMapper objectMapper = new ObjectMapper();
         Dishes dishes1 = new Dishes();
         try {

@@ -45,12 +45,9 @@ public class FOSUserController {
                     new ResponseObject("ok", "successfull",true, fosUserAdd)
             );
         }
-        else
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("fail", "Account exist",false, null)
-            );
-
-
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("fail", "Account exist",false, null)
+        );
     }
 
     @PostMapping( value = "/users/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -62,13 +59,18 @@ public class FOSUserController {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+        boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
         if(file.getSize() == 0){
-            ifosUserService.addFOSUser(fosUser);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "file image null",true, ifosUserService.addFOSUser(fosUser))
+            if(!checkExistUser){
+                ifosUserService.addFOSUser(fosUser);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("ok", "file image null",true, ifosUserService.addFOSUser(fosUser))
+                );
+            }
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                    new ResponseObject("fail", "Account exist",false, null)
             );
         }else {
-            boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
             if(!checkExistUser){
                 FOSUser fosUser1 = ifosUserService.addFOSUserImage(file,fosUser);
                 return ResponseEntity.status(HttpStatus.OK).body(
@@ -79,7 +81,6 @@ public class FOSUserController {
                     new ResponseObject("fail", "Account exist",false, null)
             );
         }
-
     }
 
     @PutMapping("/users/update")

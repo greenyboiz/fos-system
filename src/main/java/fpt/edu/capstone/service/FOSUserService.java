@@ -57,8 +57,7 @@ public class FOSUserService implements IFOSUserService {
 
     @Override
     public boolean deleteFOSUser(Long id) {
-//        FOSUser fosUser = fosUserRepository.findById(id).orElseThrow(()->new RuntimeException("Can not find FosUser with id: " + id));
-        FOSUser fosUser = fosUserRepository.getById(id);
+        FOSUser fosUser = fosUserRepository.findFOSUserById(id);
         if(fosUser != null){
             fosUserRepository.delete(fosUser);
             return true;

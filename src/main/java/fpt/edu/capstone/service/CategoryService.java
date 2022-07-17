@@ -45,7 +45,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public Category uploadUpdateCategory(MultipartFile file, Category category) {
         if(category != null){
-            Category category1 = categoryRepository.getById(category.getCategoryId());
+            Category category1 = categoryRepository.findByCategoryId(category.getCategoryId());
             if(category1 != null){
                 try {
                     Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
@@ -78,7 +78,7 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public boolean deleteCategory(Long id) {
-        Category category = categoryRepository.getById(id);
+        Category category = categoryRepository.findByCategoryId(id);
         if(category != null){
             categoryRepository.delete(category);
             return true;

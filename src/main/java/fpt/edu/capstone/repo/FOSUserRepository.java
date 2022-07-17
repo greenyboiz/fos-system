@@ -16,4 +16,6 @@ public interface FOSUserRepository extends JpaRepository<FOSUser, Long> {
 
     FOSUser findByUserName(String username);
 
+    @Query("select c from FOSUser c where c.userId = ?1")
+    FOSUser findFOSUserById(Long id);
 }

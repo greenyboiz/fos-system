@@ -7,6 +7,7 @@ import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.implementService.ICategoryService;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class CategoryController {
 //    }
 
     @PostMapping( value = "/category/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    private Category addCategory(@RequestParam("file") MultipartFile file, @RequestPart("category") String category){
+    private ResponseEntity<?> addCategory(@RequestParam("file") MultipartFile file, @RequestPart("category") String category){
         ObjectMapper objectMapper = new ObjectMapper();
         Category category1 = new Category();
         try {
@@ -40,7 +41,16 @@ public class CategoryController {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        return iCategoryService.uploadImageCategory(file,category1);
+        if(file.getSize() == 0){
+            iCategoryService.addCategory(category1);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "file image null",true, iCategoryService.addCategory(category1))
+            );
+        }
+        iCategoryService.uploadImageCategory(file,category1);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "successfull",true, iCategoryService.uploadImageCategory(file,category1))
+        );
     }
 
     @PutMapping(value = "/category/update1", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
