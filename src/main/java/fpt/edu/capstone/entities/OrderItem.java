@@ -36,7 +36,7 @@ public class OrderItem {
 //    private Integer orderItemStatus;
 
     @Column(name = "createDate")
-    private Date createDate;
+    private Date createDate = new Date(System.currentTimeMillis());
 
     @Column(name = "lastUpdateDate")
     private Date lastUpdateDate;

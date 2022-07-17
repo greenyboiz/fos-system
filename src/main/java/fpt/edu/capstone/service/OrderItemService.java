@@ -1,7 +1,9 @@
 package fpt.edu.capstone.service;
 
+import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.entities.OrderItem;
 import fpt.edu.capstone.implementService.IOrderItemService;
+import fpt.edu.capstone.repo.DishesRepository;
 import fpt.edu.capstone.repo.OrderItemRepository;
 import fpt.edu.capstone.repo.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ import java.util.List;
 public class OrderItemService implements IOrderItemService {
     @Autowired
     private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private DishesRepository dishesRepository;
 
     @Override
     public List<OrderItem> listOrderItems() {
@@ -35,11 +40,13 @@ public class OrderItemService implements IOrderItemService {
         for (OrderItem order: list
              ) {
             OrderItem orderItem = orderItemRepository.findOrderItemByOrderIdAndDishesId(order.getDishes().getDishesId(), order.getOrders().getOrderId());
-            orderItem.setPrice(orderItem.getDishes().getSalePrice());
+            Dishes dishes = dishesRepository.findDishesById(order.getDishes().getDishesId());
             if (orderItem != null){
+                orderItem.setPrice(orderItem.getDishes().getSalePrice());
                 orderItem.setQuantity(order.getQuantity() + orderItem.getQuantity());
                 orderItemList.add(orderItemRepository.save(orderItem));
             }else{
+                order.setPrice(dishes.getSalePrice());
                 orderItemList.add(orderItemRepository.save(order));
             }
         }
