@@ -3,6 +3,7 @@ package fpt.edu.capstone.implementService;
 import fpt.edu.capstone.entities.FOSUser;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface IFOSUserService {
     public ResponseEntity<ResponseObject> getFOSUserById(Long id);
 
     boolean checkExistUserByUserNameAndContactAndEmail(FOSUser fosUser);
+
+    FOSUser addFOSUserImage(MultipartFile file, FOSUser fosUser);
 }

@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ResponseObject {
-    private String status;
-    private String message;
-    private boolean success;
-    private Object data;
+public class JwtResponse {
+    private String token;
 }

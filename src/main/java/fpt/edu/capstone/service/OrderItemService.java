@@ -35,6 +35,7 @@ public class OrderItemService implements IOrderItemService {
         for (OrderItem order: list
              ) {
             OrderItem orderItem = orderItemRepository.findOrderItemByOrderIdAndDishesId(order.getDishes().getDishesId(), order.getOrders().getOrderId());
+            orderItem.setPrice(orderItem.getDishes().getSalePrice());
             if (orderItem != null){
                 orderItem.setQuantity(order.getQuantity() + orderItem.getQuantity());
                 orderItemList.add(orderItemRepository.save(orderItem));

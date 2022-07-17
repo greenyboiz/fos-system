@@ -8,8 +8,10 @@ import fpt.edu.capstone.implementService.IFOSUserService;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -43,35 +45,42 @@ public class FOSUserController {
                     new ResponseObject("ok", "successfull",true, fosUserAdd)
             );
         }
-        else {
+        else
             return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("fail", "Account exist",false, null)
+            );
+
+
+    }
+
+    @PostMapping( value = "/users/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
+    private ResponseEntity<?> addFOSUser(@RequestParam("file") MultipartFile file, @RequestPart("users") String users){
+        ObjectMapper objectMapper = new ObjectMapper();
+        FOSUser fosUser = new FOSUser();
+        try {
+            fosUser = objectMapper.readValue(users, FOSUser.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        if(file.getSize() == 0){
+            ifosUserService.addFOSUser(fosUser);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "file image null",true, ifosUserService.addFOSUser(fosUser))
+            );
+        }else {
+            boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
+            if(!checkExistUser){
+                FOSUser fosUser1 = ifosUserService.addFOSUserImage(file,fosUser);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("ok", "successfull",true, fosUser1)
+                );
+            }
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
                     new ResponseObject("fail", "Account exist",false, null)
             );
         }
 
     }
-
-//    @PostMapping("/users/add")
-//    private ResponseEntity<?> addFOSUser(@RequestBody FOSUser fosUser){
-//        if(file.getSize() == 0){
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("fail", "file image null",false, null)
-//            );
-//        }else {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            Dishes dishes1 = new Dishes();
-//            try {
-//                dishes1 = objectMapper.readValue(dishes, Dishes.class);
-//            } catch (JsonProcessingException e) {
-//                throw new RuntimeException(e);
-//            }
-//            Dishes dishes2 = iDishesService.uploadDishesImage(file,dishes1);
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "successfull",true, dishes2)
-//            );
-//        }
-//
-//    }
 
     @PutMapping("/users/update")
     private FOSUser updateFOSUser(@RequestBody FOSUser fosUser){

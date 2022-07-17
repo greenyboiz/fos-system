@@ -41,8 +41,9 @@ public class OrderItem {
     @Column(name = "lastUpdateDate")
     private Date lastUpdateDate;
 
-    @Transient
-    public BigDecimal getSubTotal(){
-        return BigDecimal.valueOf(dishes.getSalePrice() * quantity);
-    }
+//    @Transient
+//    public BigDecimal getSubTotal(){
+//        int i = dishes.getSalePrice() * quantity;
+//        return i;
+//    }
 }

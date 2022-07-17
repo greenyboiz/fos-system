@@ -1,5 +1,7 @@
 package fpt.edu.capstone.service;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import fpt.edu.capstone.entities.FOSUser;
 import fpt.edu.capstone.entities.Role;
 import fpt.edu.capstone.implementService.IFOSUserService;
@@ -10,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -20,6 +25,9 @@ public class FOSUserService implements IFOSUserService {
     public FOSUserRepository fosUserRepository;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private Cloudinary cloudinary;
     @Override
     public FOSUser addFOSUser(FOSUser fosUser) {
         return fosUserRepository.save(fosUser);
@@ -84,5 +92,17 @@ public class FOSUserService implements IFOSUserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public FOSUser addFOSUserImage(MultipartFile file, FOSUser fosUser) {
+        try {
+            Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
+            String img = (String) r.get("secure_url");
+            fosUser.setProfileImage(img);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return fosUserRepository.save(fosUser);
     }
 }

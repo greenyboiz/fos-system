@@ -33,10 +33,11 @@ public class CartItem {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Transient
-    public BigDecimal getSubTotal(){
-        return BigDecimal.valueOf(dishes.getSalePrice() * quantity);
-    }
+//    @Transient
+//    public BigDecimal getSubTotal(){
+//        int i = dishes.getSalePrice() * quantity;
+//        return i;
+//    }
 
 
     @Column(name = "createDate")

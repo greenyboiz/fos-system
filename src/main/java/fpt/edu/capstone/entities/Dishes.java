@@ -3,6 +3,7 @@ package fpt.edu.capstone.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Data
 @Entity
@@ -25,10 +26,10 @@ public class Dishes {
     private String dishImage;
 
     @Column(name = "salePrice")
-    private Long salePrice;
+    private BigDecimal salePrice;
 
     @Column(name = "costPrice")
-    private Long costPrice;
+    private BigDecimal costPrice;
 
     @Column(name = "discount")
     private Long discount;
@@ -40,7 +41,7 @@ public class Dishes {
     @JoinColumn(name = "categoryId", nullable = true)
     private Category category;
 
-    public Dishes(String dishesName, String description, String dishImage, Long salePrice, Long costPrice, Long discount, Integer status, Category category) {
+    public Dishes(String dishesName, String description, String dishImage, BigDecimal salePrice, BigDecimal costPrice, Long discount, Integer status, Category category) {
         this.dishesName = dishesName;
         this.description = description;
         this.dishImage = dishImage;
