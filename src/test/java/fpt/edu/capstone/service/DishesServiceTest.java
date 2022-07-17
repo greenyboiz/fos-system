@@ -34,10 +34,10 @@ public class DishesServiceTest {
     @Test
     public void getAllDishesTest(){
         List<Dishes> expect = new ArrayList<>();
-        expect.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, null));
+        expect.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, null));
 
         List<Dishes> actual = new ArrayList<>();
-        actual.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, null));
+        actual.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, null));
 
         Mockito.when(dishesRepository.findAll()).thenReturn(actual);
         List<Dishes> results = dishesService.getAllDishes();
@@ -50,8 +50,8 @@ public class DishesServiceTest {
         Category expectCategory = new Category(1l,"ga","img ga 1");
         Category actualCategory = new Category(2l,"lon","img lon 1");
 
-        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, expectCategory);
-        Dishes actual = new Dishes( "ga tan cao cap", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, actualCategory);
+        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, expectCategory);
+        Dishes actual = new Dishes( "ga tan cao cap", "ngon ngon", "image1", null, null, 10l, 1, actualCategory);
 
         Mockito.when(dishesRepository.save(actual)).thenReturn(expect);
         Dishes result = dishesService.addDishes(actual);
@@ -64,8 +64,8 @@ public class DishesServiceTest {
         Category expectCategory = new Category(1l,"ga","img ga 1");
         Category actualCategory = new Category(2l,"lon","img lon 1");
 
-        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, expectCategory);
-        Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, actualCategory);
+        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, expectCategory);
+        Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, 1, actualCategory);
 
         Mockito.when(categoryRepository.findByCategoryId(actual.getCategory().getCategoryId())).thenReturn(actualCategory);
         Mockito.when(dishesRepository.getById(actual.getDishesId())).thenReturn(expect);
@@ -80,8 +80,8 @@ public class DishesServiceTest {
         Category expectCategory = new Category(1l,"ga","img ga 1");
         Category actualCategory = new Category(2l,"lon","img lon 1");
 
-        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, expectCategory);
-        Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, actualCategory);
+        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, expectCategory);
+        Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, 1, actualCategory);
 
         Mockito.when(dishesRepository.getById(expect.getDishesId())).thenReturn(actual);
 //        Mockito.when(dishesRepository.delete(actual);)

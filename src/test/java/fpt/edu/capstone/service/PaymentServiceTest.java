@@ -27,17 +27,17 @@ public class PaymentServiceTest {
 
     @Test
     public void getTotalAmountByOrder(){
-        Dishes actualDishes = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", 250000l, 120000l, 10l, 1, null);
+        Dishes actualDishes = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, 1, null);
         Customer actualCustomer = new Customer(1l,"minh","nguyet","065623266","mn@gmail.com","Ha Noi");
         QRCode actualQRCode = new QRCode(1l,null,null);
         Orders actualOrders = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"tuyệt vời",10);
         OrderItem actual = new OrderItem(1l,actualOrders,actualDishes,2,null,null,null);
 
-        Mockito.when(orderItemRepository.findPaymentByOrderId(actual.getOrderItemId())).thenReturn(actual.getSubTotal());
+        Mockito.when(orderItemRepository.findPaymentByOrderId(actual.getOrderItemId())).thenReturn(actual.getDishes().getSalePrice());
 
         BigDecimal result = paymentService.getTotalAmountByOrder(actual.getOrderItemId());
 
-        Assert.assertEquals(result,actual.getSubTotal());
+        Assert.assertEquals(result,actual.getDishes().getSalePrice());
     }
 
 }

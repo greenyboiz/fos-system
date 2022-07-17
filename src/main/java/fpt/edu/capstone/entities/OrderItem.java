@@ -43,7 +43,6 @@ public class OrderItem {
 
 //    @Transient
 //    public BigDecimal getSubTotal(){
-//        int i = dishes.getSalePrice() * quantity;
-//        return i;
+//        return dishes.getSalePrice()* BigDecimal.va;
 //    }
 }
