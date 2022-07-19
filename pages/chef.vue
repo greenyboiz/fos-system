@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import Chef from '~/modules/chef/index.vue';
+import Chef from '@/modules/ChefScreen/index.vue';
 
 export default {
   name: 'Page',
