@@ -1,19 +1,20 @@
 <template>
-  <Employee />
+  <Chef />
 </template>
 
 <script>
-import Employee from '@/modules/employee/index.vue';
+import Chef from '~/modules/chef/index.vue';
+
 export default {
   name: 'Page',
 
   components: {
-    Employee,
+    Chef,
   },
 
   head() {
     return {
-      title: 'Nhân viên',
+      title: 'Chef',
     };
   },
 };

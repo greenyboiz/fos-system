@@ -2,17 +2,22 @@
   <Home />
 </template>
 
-<router>
-  {
-    name: 'clientView'
-  }
-</router>
+
 
 <script>
 import Home from '@/modules/clientView/Home/index.vue';
 export default {
+
+  key(route) {
+    return route.params.qrcodeId;
+  },
+
   components: { Home },
 
-  layout: 'default-no-header',
+  layout: 'default-no-header'
 };
 </script>
+
+<style>
+
+</style>

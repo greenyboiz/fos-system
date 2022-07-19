@@ -20,31 +20,34 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in listTable" :key="item.tableId" class="tw-cursor-pointer" @click="handleQRCode(item)">
-                <th scope="row">{{ item.tableId }}</th>
-                <td>{{ item.numberOfSeats }}</td>
-                <td>{{ item.status === 1 ? 'Còn trống' : 'Hết chỗ' }}</td>
-                <td class="align-items-center">
-                  <div class="btn-group align-top">
-                    <button
-                      class="btn btn-sm btn-outline-secondary badge"
-                      type="button"
-                      data-toggle="modal"
-                      data-target="#myModal"
-                      @click="editClick(item)"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      class="btn btn-sm btn-outline-secondary badge"
-                      type="button"
-                      @click="remove(item.tableId)"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
+              <template v-if="isLoading">
+                <div class="loading">
+                  <Loading />
+                </div>
+              </template>
+
+              <template v-else>
+                <tr v-for="item in listTable" :key="item.tableId" class="tw-cursor-pointer" @click="handleQRCode(item)">
+                  <th scope="row">{{ item.tableId }}</th>
+                  <td>{{ item.numberOfSeats }}</td>
+                  <td>{{ item.status === 1 ? 'Còn trống' : 'Hết chỗ' }}</td>
+                  <td class="align-items-center">
+                    <div class="btn-group align-top">
+                      <button
+                        class="btn__edit"
+                        data-toggle="modal"
+                        data-target="#myModal"
+                        @click="editClick(item.tableId)"
+                      >
+                        Edit
+                      </button>
+                      <button class="btn__delete" @click="remove(item.tableId)">
+                        <img src="@/assets/icons/delete.png" alt="" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </template>
             </tbody>
           </table>
         </div>
@@ -55,20 +58,19 @@
         </div>
       </div>
       <div v-if="isOpenQRCode" class="tableManagement__qr">
-        <div class="selected-table mb-2">
-          <span>Số bàn: {{ selectedTable.id }}</span>
+        <div class="qr">
+          <div class="qr__title title">Bàn số {{ selectedTable.id }}</div>
+          <div class="qr__link">
+            URL link: <input v-model="selectedTable.qr_url" placeholder="Vui lòng nhập link qr" type="text" />
+          </div>
+
+          <div class="add-button">
+            <button class="btn__add" @click="handleSave()">Lưu mã QR</button>
+          </div>
         </div>
-        <div class="table-link mb-2">
-          <span>URL Link</span>
-          <input v-model="selectedTable.qr_url" type="text">
-        </div>
-        <div class="qr-image mb-2">
-          <img :src="selectedTable.qr_image" alt="">
-        </div>
-        <div class="add-button">
-          <button class="btn btn-success" @click="handleSave()">
-            Lưu mã QR
-          </button>
+
+        <div class="qr__img">
+          <QrCode class="qr__code" :size="400" :text="selectedTable.qr_url" />
         </div>
       </div>
     </div>
@@ -77,14 +79,18 @@
 </template>
 
 <script>
+import Loading from '@/components/common/Loading/index.vue';
 import { tableManagementService } from '@/services';
 import AddTableModal from '../modals/AddTableModal/index.vue';
 import { filter } from 'lodash';
+import QrCode from 'vue-qrcode-component';
 export default {
   name: 'TableManagement',
 
   components: {
     AddTableModal,
+    QrCode,
+    Loading
   },
 
   data() {

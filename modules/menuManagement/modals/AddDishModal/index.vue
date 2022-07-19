@@ -211,7 +211,7 @@ export default {
     async addDish() {
       this.formDish.status = this.statusSelected;
       this.formDish.category = this.selectedCategory;
-      this.formDish.dishImage = 'menu-p1.png';
+      this.formDish.dishImage = '';
       const requestParams = this.formDish;
 
       const res = await menuManagementService.addDish(requestParams);

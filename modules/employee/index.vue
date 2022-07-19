@@ -12,11 +12,11 @@
       <div class="test">
         <!--  -->
         <div class="test__content">
-          <div v-for="item in listDishes" :key="'test' + item.dishesId" class="table__row">
-            <td>{{ item.dishesName }}</td>
-            <td>{{ item.discount }}</td>
-            <td>{{ item.salePrice }}</td>
-            <td>{{ item.costPrice }}</td>
+          <div v-for="item in listDishes" :key="'test' + item.orderItemId" class="table__row">
+            <td>{{ item.dishes.dishesName }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.dishes.salePrice }}</td>
+            <td>{{ item.dishes.salePrice * item.quantity }}</td>
           </div>
         </div>
 
@@ -24,7 +24,7 @@
         <div class="test__footer">
           <div class="intoMoney">
             Tổng:
-            <span> {{ totalMoney }} </span>
+            <span> {{ totalPriceOrder }} </span>
           </div>
 
           <div class="test__manipulation">
@@ -87,10 +87,10 @@
 </template>
 
 <script>
-import { employeeService } from '@/services';
-
-import Order from './Order/index.vue';
-import Dinner from './Dinner/index.vue';
+import { orderService } from '@/services';
+import { mapState, mapMutations } from 'vuex';
+import Order from '../../modules/employee/Order/index.vue';
+import Dinner from '../../modules/employee/Dinner/index.vue';
 
 export default {
   name: 'Page',
@@ -104,6 +104,7 @@ export default {
     return {
       listDishes: [],
       isChoice: true,
+      // orderId: null,
     };
   },
 
@@ -114,36 +115,44 @@ export default {
   },
 
   computed: {
-    totalMoney() {
-      if (this.listDishes.length > 0) {
-        const total = this.listDishes.reduce((accumulator, object) => {
-          return accumulator + object.costPrice;
-        }, 0);
+    ...mapState('clientView', {
+      orderId: (state) => state.orderId,
+      totalPriceOrder: (state) => state.totalPriceOrder,
+      orderItemList: (state) => state.orderItemList,
+    }),
+  },
 
-        return total;
-      }
+  created() {
+    this.$root.$on('orderId', this.onDoneOrder);
+  },
 
-      return 0;
-    },
+  beforeDestroy() {
+    this.$root.$off('orderId', this.onDoneOrder);
   },
 
   mounted() {
-    this.getListDishes();
+    // this.getListDishes();
+    console.log(this.orderId);
   },
 
   methods: {
     async getListDishes() {
-      const res = await employeeService.getDishes();
+      const res = await orderService.getOrderItem(this.orderId);
 
       console.log(res);
-      if (res.length > 0) {
-        this.listDishes = res;
+      if (res.success) {
+        this.listDishes = res.data;
       }
     },
 
     handleGetChoice(bol) {
       this.isChoice = bol;
     },
+
+    onDoneOrder(val) {
+      // this.orderId = val;
+      console.log(this.orderId);
+    }
   },
 };
 </script>

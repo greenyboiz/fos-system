@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="getDish" @click="handleGetOrder()">
-      <nuxt-link v-if="formData.customer.contact" :to="{ path: '/khach-hang/order', params: { id: orderId } }">
+      <nuxt-link to="/khach-hang/order">
         <button>Gọi món</button>
       </nuxt-link>
     </div>
@@ -71,6 +71,15 @@ export default {
     }),
   },
 
+  created() {
+    this.$router.push({
+      // name: 'specific_table',
+      params: {
+        qrcodeId: this.formData.qrCode.qrcodeId
+      }
+    });
+  },
+
   methods: {
     ...mapMutations('clientView', {
       updateOrderId: 'updateOrderId'
@@ -90,6 +99,12 @@ export default {
 
       if (res.success) {
         this.updateOrderId(res.data.orderId);
+        // this.$router.push({
+        //   name: 'specific_order',
+        //   params: {
+        //     orderId: res.data.orderId,
+        //   },
+        // });
       }
     },
 

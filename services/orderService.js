@@ -30,6 +30,12 @@ class OrderService {
 
     return res;
   }
+
+  async deleteOrder(orderId) {
+    const res =  await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/orders/delete/${orderId}`);
+
+    return res;
+  }
 }
 
 export const orderService = new OrderService();

@@ -66,11 +66,13 @@
         </div>
       </div>
       <div class="action-btn">
-        <div class="btn-order">
+        <div class="btn-order" @click="handleDoneOrder()">
           <button>ORDER</button>
         </div>
         <div class="btn-payment">
-          <button>Thanh toán</button>
+          <nuxt-link to="/khach-hang/thanh-toan">
+            <button>Thanh toán</button>
+          </nuxt-link>
         </div>
       </div>
     </div>
@@ -118,6 +120,7 @@ export default {
   methods: {
     ...mapMutations('clientView', {
       updateTotalPriceOrder: 'updateTotalPriceOrder',
+      updateOrderItemList: 'updateOrderItemList',
     }),
 
     removeKeyword() {
@@ -137,6 +140,10 @@ export default {
 
     handleRemoveOrderItem() {
 
+    },
+
+    handleDoneOrder() {
+      this.$root.$emit('orderId', this.orderId);
     }
 
   },
