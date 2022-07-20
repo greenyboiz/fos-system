@@ -104,7 +104,7 @@ export default {
     return {
       listDishes: [],
       isChoice: true,
-      // orderId: null,
+      spOrderId: null,
     };
   },
 
@@ -122,22 +122,24 @@ export default {
     }),
   },
 
-  created() {
-    this.$root.$on('orderId', this.onDoneOrder);
-  },
-
-  beforeDestroy() {
-    this.$root.$off('orderId', this.onDoneOrder);
+  watch: {
+    orderId: {
+      handler() {
+        this.spOrderId = this.orderId;
+        console.log(this.spOrderId);
+        this.getListDishes();
+      },
+      deep: true,
+    }
   },
 
   mounted() {
-    // this.getListDishes();
-    console.log(this.orderId);
+    // console.log(this.orderId);
   },
 
   methods: {
     async getListDishes() {
-      const res = await orderService.getOrderItem(this.orderId);
+      const res = await orderService.getOrderItem(this.spOrderId);
 
       console.log(res);
       if (res.success) {
@@ -148,11 +150,6 @@ export default {
     handleGetChoice(bol) {
       this.isChoice = bol;
     },
-
-    onDoneOrder(val) {
-      // this.orderId = val;
-      console.log(this.orderId);
-    }
   },
 };
 </script>

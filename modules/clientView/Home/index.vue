@@ -2,7 +2,7 @@
   <div class="client-home">
     <div class="headline">
       <div class="headline__title">MLD Restaurent</div>
-      <div class="headline__support">Support</div>
+      <div class="headline__support" @click="handleShowSupportModal()">Support</div>
     </div>
     <div class="campaign">
       <VueSlickCarousel :arrows="false" :dots="true" :autoplay="true">
@@ -29,6 +29,7 @@
         <button>Gọi món</button>
       </nuxt-link>
     </div>
+    <SupportModal ref="supportModalRef" />
   </div>
 </template>
 
@@ -37,11 +38,13 @@ import { mapState, mapMutations } from 'vuex';
 import VueSlickCarousel from 'vue-slick-carousel';
 import { orderService } from '@/services';
 import { isEmpty } from 'lodash';
+import SupportModal from '@/components/common/SupportModal/index.vue';
 export default {
   name: 'Page',
 
   components: {
     VueSlickCarousel,
+    SupportModal,
   },
 
   layout: 'default-no-header',
@@ -113,6 +116,10 @@ export default {
         return;
       }
       this.postOrder();
+    },
+
+    handleShowSupportModal() {
+      this.$refs.supportModalRef.show();
     }
   }
 };

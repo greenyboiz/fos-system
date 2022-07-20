@@ -1,0 +1,20 @@
+::v-deep {
+  .supportList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .support_item {
+      border: 1px solid #ababab;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      width: 15rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+}

@@ -143,7 +143,7 @@ export default {
     },
 
     handleDoneOrder() {
-      this.$root.$emit('orderId', this.orderId);
+      // this.$root.$emit('orderId', this.orderId);
     }
 
   },
