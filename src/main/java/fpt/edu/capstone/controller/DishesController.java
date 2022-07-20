@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,8 +24,9 @@ public class DishesController {
     @Autowired
     public IDishesService iDishesService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/dishes")
-    private List<Dishes> getAllDishes(){
+    public List<Dishes> getAllDishes(){
         return iDishesService.getAllDishes();
     }
 
@@ -34,8 +36,9 @@ public class DishesController {
 //        return iDishesService.addDishes(dishes);
 //    }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping( value = "/dishes/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    private ResponseEntity<?> addDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
+    public ResponseEntity<?> addDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
         ObjectMapper objectMapper = new ObjectMapper();
         Dishes dishes1 = new Dishes();
         try {
@@ -57,16 +60,19 @@ public class DishesController {
         }
 
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/dishes/update")
     private Dishes updateDishes(@RequestBody Dishes dishes){
         return iDishesService.updateDishes(dishes);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/dishes/delete/{id}")
     public boolean deleteDishes(@PathVariable("id") Long id){
         return iDishesService.deleteDishes(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/dishes/{id}")
     ResponseEntity<ResponseObject> findDishesById(@PathVariable Long id){
         return iDishesService.getDishesById(id);

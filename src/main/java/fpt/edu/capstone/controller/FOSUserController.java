@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,8 +23,9 @@ public class FOSUserController {
     @Autowired
     private IFOSUserService ifosUserService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users")
-    private ResponseEntity<?> getAllFOSUser(){
+    public ResponseEntity<?> getAllFOSUser(){
         List<FOSUser> fosUserList = ifosUserService.getAllFOSUser();
         if (fosUserList != null){
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -36,6 +38,7 @@ public class FOSUserController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/users/add1")
     private ResponseEntity<?> saveFOSUser(@RequestBody FOSUser fosUser){
         boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
@@ -50,8 +53,9 @@ public class FOSUserController {
         );
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping( value = "/users/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    private ResponseEntity<?> addFOSUser(@RequestParam("file") MultipartFile file, @RequestPart("users") String users){
+    public ResponseEntity<?> addFOSUser(@RequestParam("file") MultipartFile file, @RequestPart("users") String users){
         ObjectMapper objectMapper = new ObjectMapper();
         FOSUser fosUser = new FOSUser();
         try {
@@ -83,16 +87,19 @@ public class FOSUserController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/users/update")
     private FOSUser updateFOSUser(@RequestBody FOSUser fosUser){
         return ifosUserService.updateFOSUser(fosUser);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/users/delete/{id}")
     public boolean deleteFOSUser(@PathVariable("id") Long id){
         return ifosUserService.deleteFOSUser(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users/{id}")
     ResponseEntity<ResponseObject> findFOSUserById(@PathVariable Long id){
         return ifosUserService.getFOSUserById(id);

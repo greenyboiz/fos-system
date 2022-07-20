@@ -65,7 +65,7 @@ public class CategoryService implements ICategoryService {
     @Override
     public Category updateCategory(Category category) {
         if(category != null){
-            Category category1 = categoryRepository.getById(category.getCategoryId());
+            Category category1 = categoryRepository.findByCategoryId(category.getCategoryId());
             if(category1 != null){
                 category1.setCategoryName(category.getCategoryName());
                 category1.setCategoryImage(category.getCategoryImage());

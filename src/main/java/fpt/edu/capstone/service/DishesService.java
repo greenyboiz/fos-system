@@ -52,7 +52,7 @@ public class DishesService implements IDishesService {
     public Dishes updateDishes(Dishes dishes) {
         Category category = categoryRepository.findByCategoryId(dishes.getCategory().getCategoryId());
         if(dishes != null){
-            Dishes dishes1 = dishesRepository.getById(dishes.getDishesId());
+            Dishes dishes1 = dishesRepository.findDishesById(dishes.getDishesId());
             if(dishes1 != null){
                 dishes1.setDishesName(dishes.getDishesName());
                 dishes1.setDescription(dishes.getDescription());
@@ -71,7 +71,7 @@ public class DishesService implements IDishesService {
 
     @Override
     public boolean deleteDishes(Long id) {
-        Dishes dishes = dishesRepository.getById(id);
+        Dishes dishes = dishesRepository.findDishesById(id);
         if(dishes != null){
             dishesRepository.delete(dishes);
             return true;

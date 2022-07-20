@@ -1,11 +1,16 @@
 package fpt.edu.capstone.entities;
 
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+@Data
 public class FOSUserPrincipal implements UserDetails {
     private FOSUser fosUser;
 
@@ -15,8 +20,11 @@ public class FOSUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add((GrantedAuthority)new SimpleGrantedAuthority(this.fosUser.getRole().getRoleName()));
+        return authorities;
     }
+
 
     @Override
     public String getPassword() {

@@ -25,7 +25,7 @@ public class CustomerService implements ICustomerService {
     @Override
     public Customer updateCustomer(Customer customer) {
         if(customer != null){
-            Customer customer1 = customerRepository.getById(customer.getCustomerId());
+            Customer customer1 = customerRepository.findByCustomerId(customer.getCustomerId());
             if(customer1 != null){
                 customer1.setFirstName(customer.getFirstName());
                 customer1.setLastName(customer.getLastName());
@@ -41,7 +41,7 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public boolean deleteCustomer(Long id) {
-        Customer customer = customerRepository.getById(id);
+        Customer customer = customerRepository.findByCustomerId(id);
         if(customer != null){
             customerRepository.delete(customer);
             return true;

@@ -59,7 +59,7 @@ public class CustomerServiceTest {
         Mockito.when(customerRepository.save(actual)).thenReturn(expect);
 
         Customer result = customerService.updateCustomer(actual);
-        Assert.assertEquals(result,actual);
+        Assert.assertEquals(result,expect);
     }
 
     @Test

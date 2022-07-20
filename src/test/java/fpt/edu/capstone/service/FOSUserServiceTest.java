@@ -97,10 +97,10 @@ public class FOSUserServiceTest {
     public void deleteFOSUserByIdTest(){
         FOSUser fosUser = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
         FOSUser actual = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
-//        fosUserService.deleteFOSUser(fosUser.getUserId());
-//        Mockito.when(fosUserService.deleteFOSUser(fosUser.getUserId())).thenReturn(true);
         Mockito.when(fosUserRepository.getById(fosUser.getUserId())).thenReturn(actual);
-//        Mockito.when(fosUserRepository.delete(actual)).thenReturn(true);
+
+        fosUserRepository.delete(fosUser);
+//        Mockito.when(fosUserRepository.delete(fosUser)).thenReturn(actual);
 
         Boolean result = fosUserService.deleteFOSUser(actual.getUserId());
 

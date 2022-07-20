@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,8 +23,9 @@ public class CategoryController {
     @Autowired
     private ICategoryService iCategoryService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/category")
-    private List<Category> getAlllCategories(){
+    public List<Category> getAlllCategories(){
         return iCategoryService.getAllCategory();
     }
 
@@ -32,6 +34,7 @@ public class CategoryController {
 //        return iCategoryService.addCategory(category);
 //    }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping( value = "/category/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
     private ResponseEntity<?> addCategory(@RequestParam("file") MultipartFile file, @RequestPart("category") String category){
         ObjectMapper objectMapper = new ObjectMapper();
@@ -53,6 +56,7 @@ public class CategoryController {
         );
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/category/update1", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
     private Category updateCategory(@RequestParam("file") MultipartFile file, @RequestPart("category") String category){
         ObjectMapper objectMapper = new ObjectMapper();
@@ -65,16 +69,19 @@ public class CategoryController {
         return iCategoryService.uploadUpdateCategory(file,category1);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/category/update")
     private Category updateCategory(@RequestBody Category category){
         return iCategoryService.updateCategory(category);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/category/delete/{id}")
     public boolean deleteCategory(@PathVariable("id") Long id){
         return iCategoryService.deleteCategory(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/category/{id}")
     ResponseEntity<ResponseObject> findTableById(@PathVariable Long id){
         return iCategoryService.getCategoryById(id);
