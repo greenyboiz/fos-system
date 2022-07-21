@@ -2,12 +2,16 @@ package fpt.edu.capstone.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fpt.edu.capstone.dto.OrderDTO;
 import fpt.edu.capstone.entities.Dishes;
+import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.entities.Tables;
+import fpt.edu.capstone.implementService.IOrdersService;
 import fpt.edu.capstone.implementService.IQRCodeService;
 import fpt.edu.capstone.implementService.ITablesService;
 import fpt.edu.capstone.response.ResponseObject;
+import fpt.edu.capstone.response.ResponseOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,9 +31,28 @@ public class TableController {
     @Autowired
     private IQRCodeService iqrCodeService;
 
+    @Autowired
+    private IOrdersService iOrdersService;
+
     @GetMapping("/tables")
     private List<Tables> getAllTables(){
         return iTablesService.getAllTables();
+    }
+
+    @GetMapping("/tableByOrder/{tableId}")
+    public ResponseEntity<?> getTableByOrderId(@PathVariable("tableId") Long tableId){
+        Long qrCodeId = iTablesService.getQRCodeIdByTableId(tableId);
+        Orders orderId = iOrdersService.getOrderIdByQRCodeId(qrCodeId);
+        if(orderId != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successful",true, orderId)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Order not exist",false, null)
+        );
+
+
     }
     @PostMapping("/tables/add")
     private Tables saveTable(@RequestBody Tables table){

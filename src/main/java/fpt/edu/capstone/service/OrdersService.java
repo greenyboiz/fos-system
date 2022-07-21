@@ -1,5 +1,6 @@
 package fpt.edu.capstone.service;
 
+import fpt.edu.capstone.dto.OrderDTO;
 import fpt.edu.capstone.entities.Customer;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.QRCode;
@@ -89,5 +90,14 @@ public class OrdersService implements IOrdersService {
     public boolean checkCustomerExistInOrder(Orders orders) {
         Orders orders1 = ordersRepository.findCustomerByContactInOrder(orders.getCustomer().getContact());
         return orders1 == null ? false : true;
+    }
+
+    @Override
+    public Orders getOrderIdByQRCodeId(Long qrCodeId) {
+        Orders orderId = ordersRepository.findOrderIdByQRCodeId(qrCodeId);
+        if(orderId != null){
+            return orderId;
+        }
+        return null;
     }
 }

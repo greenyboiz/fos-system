@@ -20,4 +20,6 @@ public interface ITablesService {
     boolean checkTableExist(Long id);
 
     Tables addTableAndQRcodeImage(MultipartFile file, Tables tables);
+
+    Long getQRCodeIdByTableId(Long tableId);
 }

@@ -1,5 +1,6 @@
 package fpt.edu.capstone.implementService;
 
+import fpt.edu.capstone.dto.OrderDTO;
 import fpt.edu.capstone.entities.Customer;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.response.ResponseObject;
@@ -20,4 +21,6 @@ public interface IOrdersService {
     public boolean checkOrderExist(Orders orders);
 
     boolean checkCustomerExistInOrder(Orders orders);
+
+    Orders getOrderIdByQRCodeId(Long qrCodeId);
 }

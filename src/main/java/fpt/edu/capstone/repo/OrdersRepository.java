@@ -1,5 +1,6 @@
 package fpt.edu.capstone.repo;
 
+import fpt.edu.capstone.dto.OrderDTO;
 import fpt.edu.capstone.entities.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,7 @@ public interface OrdersRepository extends JpaRepository<Orders,Long> {
 
     @Query("select c from Orders c where c.customer.contact = ?1")
     Orders findCustomerByContactInOrder(String contact);
+
+    @Query("select c from Orders c where c.qrCode.QRCodeId = ?1")
+    Orders findOrderIdByQRCodeId(Long qrCodeId);
 }

@@ -92,4 +92,13 @@ public class TableService implements ITablesService {
         }
         return tableRepository.save(tables);
     }
+
+    @Override
+    public Long getQRCodeIdByTableId(Long tableId) {
+        Long qrCodeId = tableRepository.findQRCodeIdByTableId(tableId);
+        if(qrCodeId != null){
+            return qrCodeId;
+        }
+        return null;
+    }
 }

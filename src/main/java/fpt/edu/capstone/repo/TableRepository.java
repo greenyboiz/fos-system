@@ -10,4 +10,6 @@ public interface TableRepository extends JpaRepository<Tables, Long> {
     @Query("select c from Tables c where c.tableId = ?1")
     Tables findTableById(Long id);
 
+    @Query("select c.qrCode.QRCodeId from Tables c where c.tableId = ?1")
+    Long findQRCodeIdByTableId(Long tableId);
 }
