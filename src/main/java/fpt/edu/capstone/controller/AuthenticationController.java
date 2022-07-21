@@ -30,6 +30,7 @@ public class AuthenticationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired

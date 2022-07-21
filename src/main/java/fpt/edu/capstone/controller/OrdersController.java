@@ -9,6 +9,7 @@ import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,8 +43,8 @@ public class OrdersController {
     private ResponseEntity<?> saveOrders(@RequestBody Orders orders){
         boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
 //        boolean checkCustomerExistInOrder = iOrdersService.checkCustomerExistInOrder(orders);
-//        boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
-        if (!checkOrderExist){
+        boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
+        if (!checkOrderExist && !checkCustomerExist){
             Customer customer = iCustomerService.addCustomer(orders.getCustomer());
             orders.setCustomer(customer);
             return ResponseEntity.status(HttpStatus.OK).body(

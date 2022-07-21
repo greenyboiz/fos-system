@@ -47,6 +47,9 @@ public class JwtUserDetailsService implements UserDetailsService {
         if(user == null) {
             throw new UsernameNotFoundException("Username not found");
         }
+//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//        authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
+//        return new User(user.getUserName(),user.getPassword(),authorities);
 
         FOSUserPrincipal userPrincipal = new FOSUserPrincipal(user);
         return userPrincipal;

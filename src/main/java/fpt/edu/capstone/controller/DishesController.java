@@ -24,7 +24,6 @@ public class DishesController {
     @Autowired
     public IDishesService iDishesService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/dishes")
     public List<Dishes> getAllDishes(){
         return iDishesService.getAllDishes();
@@ -60,6 +59,7 @@ public class DishesController {
         }
 
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/dishes/update")
     private Dishes updateDishes(@RequestBody Dishes dishes){
@@ -72,7 +72,6 @@ public class DishesController {
         return iDishesService.deleteDishes(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/dishes/{id}")
     ResponseEntity<ResponseObject> findDishesById(@PathVariable Long id){
         return iDishesService.getDishesById(id);

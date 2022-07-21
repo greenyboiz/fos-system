@@ -42,10 +42,10 @@ public class TableController {
     @GetMapping("/tableByOrder/{tableId}")
     public ResponseEntity<?> getTableByOrderId(@PathVariable("tableId") Long tableId){
         Long qrCodeId = iTablesService.getQRCodeIdByTableId(tableId);
-        Orders orderId = iOrdersService.getOrderIdByQRCodeId(qrCodeId);
-        if(orderId != null){
+        Orders order = iOrdersService.getOrderIdByQRCodeId(qrCodeId);
+        if(order != null){
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "successful",true, orderId)
+                    new ResponseObject("ok", "successful",true, order)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
