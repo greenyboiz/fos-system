@@ -32,7 +32,11 @@ export default {
 
   methods: {
     async getListTable() {
-      const res = await tableManagementService.getListTable();
+      const res = await tableManagementService.getListTable({
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        }
+      });
 
       // console.log(res);
       this.listTable = res.data;
@@ -49,7 +53,7 @@ export default {
     },
 
     onSelectTable(tableId) {
-      
+
     }
   },
 };

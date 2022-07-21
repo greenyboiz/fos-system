@@ -1,112 +1,164 @@
-.login-section {
-  background: #fff;
-  border-radius: 10px;
-  width: 25rem;
+.container {
+  font-size: 16px;
+  background: #069255;
+  height: 100vh;
+  min-width: 100vw;
+  display: grid;
+  place-items: center;
 
-  .section-heading {
-    border-bottom: 1px solid #E5E5E5;
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-    position: relative;
+  .login-screen {
+    display: grid;
+    place-items: center;
+    width: Min(350px, 90%);
 
-    i {
-      cursor: pointer;
-      position: absolute;
-      left: 15px;
-      font-size: 2rem;
-      color: #069255;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-  }
+    .login-container {
+      height: 270px;
+      background: #fff;
+      padding: 25px 15px;
+      border-radius: 10px;
+      width: 100%;
 
-  .section-form {
-    padding: 15px;
+      .login-form {
+        .form-group {
+          .login-input-text {
+            margin: 0;
+            color: #219653;
+            font-size: 1rem;
+          }
+        }
 
-    .field-item {
-      margin-bottom: 15px;
+        &__forget-pwd {
+          justify-content: flex-end;
+          display: flex;
 
-      &:last-child {
-        margin-bottom: 0;
-      }
+          p {
+            &:focus {
+              outline: none;
+            }
+          }
+        }
 
-      .field-input {
-        position: relative;
+        .form-control {
+          display: block;
+          width: 100%;
+          border: none;
+          border-bottom: 1px solid #d6d6d6;
+          background-color: #fff;
+          border-radius: 0;
+          margin-top: 24px;
+          padding: 0;
+          line-height: 1.2;
+          font-size: 1rem;
+          height: 1.5rem;
 
-        &__action {
-          position: absolute;
-          right: 5px;
-          top: 2px;
+          &:focus {
+            border-bottom: 1px solid #219653;
+          }
+        }
 
-          .forget-password {
-            cursor: pointer;
-            text-decoration: underline;
-            color: #069255;
+        .form-group {
+          input {
+            outline: none;
+          }
+        }
+
+        .login-text {
+          font-size: 1.5rem;
+          font-weight: 500;
+        }
+
+        .clickable-font {
+          color: #219653;
+          cursor: pointer;
+        }
+
+        &__btn-login {
+          opacity: 1;
+          background: #219653;
+          border-radius: 6px;
+          width: 100%;
+          color: #fff;
+          padding: 6px 0;
+          border: none;
+          outline: none;
+          font-weight: 400;
+
+          &:disabled {
+            opacity: 0.3;
           }
         }
       }
+    }
 
-      .field-title {
-        color: #5C5C5C;
-        font-weight: 600;
-        margin-bottom: 5px;
+    .header {
+      margin-bottom: 45px;
+
+      .logo {
+        width: 214px;
+        height: 62px;
       }
+    }
+  }
+}
 
-      input {
-        border: none;
-        width: 100%;
-        border-bottom: 1px solid #E8E8E8;
+/deep/ .modal-dialog {
+  border-radius: 6px;
 
-        &::placeholder {
-          color: #ABABAB;
-        }
+  .modal-header {
+    background-color: #219653;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    place-items: center;
 
-        &:focus {
-          border-bottom: 1px solid #069255;
-        }
-      }
+    .close {
+      color: #fff;
+      opacity: 1;
+      font-size: 2rem;
+      margin-left: -32px;
 
-      .error {
-        display: inline-block;
-        padding-top: 3px;
-        color: #EB5757;
-        font-size: 13px;
-      }
-
-      &--error {
-        input {
-          border-bottom: 1px solid #EB5757;
-        }
+      &:focus {
+        outline: none;
       }
     }
   }
 
-  .section-footer {
-    padding: 15px;
+  .forget-pwd-container {
+    display: grid;
+    place-items: center;
 
-    button {
-      border: none;
-      background: #069255;
+    &__btn {
+      width: 50%;
+      background-color: #219653;
+      border-radius: 6px;
       color: #fff;
-      border-radius: 5px;
-      height: 40px;
-      width: 100%;
+      border: none;
+      padding: 4px 0;
 
       &:disabled {
-        background: #ABABAB;
+        opacity: 0.3;
+      }
+
+      &:focus {
+        outline: none;
       }
     }
-  }
 
-  .register-shop {
-    text-align: center;
-    padding-bottom: 15px;
+    &__label {
+      display: grid;
+      place-items: center;
+      width: 100%;
+    }
 
-    &__link {
-      color: #069255;
-      cursor: pointer;
+    &__input {
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #d3d3d3;
+      line-height: 2;
     }
   }
+}
+
+.center-items {
+  display: grid;
+  place-items: center;
 }

@@ -76,7 +76,6 @@ export default {
 
   created() {
     this.$router.push({
-      // name: 'specific_table',
       params: {
         qrcodeId: this.formData.qrCode.qrcodeId
       }

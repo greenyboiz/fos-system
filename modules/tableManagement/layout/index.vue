@@ -154,7 +154,11 @@ export default {
     },
 
     async getListTable() {
-      const res = await tableManagementService.getListTable();
+      const res = await tableManagementService.getListTable({
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        }
+      });
 
       this.listTable = res.data;
     },

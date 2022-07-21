@@ -2,8 +2,6 @@
   <Home />
 </template>
 
-
-
 <script>
 import Home from '@/modules/clientView/Home/index.vue';
 export default {
@@ -11,6 +9,8 @@ export default {
   key(route) {
     return route.params.qrcodeId;
   },
+
+  auth: false,
 
   components: { Home },
 

@@ -1,10 +1,5 @@
 <template>
-  <div class="container">
-    <div class="login-screen">
-      <div class="header">MLD Restaurent</div>
-      <LoginPage />
-    </div>
-  </div>
+  <LoginPage />
 </template>
 
 <script>
@@ -17,20 +12,7 @@ export default {
   },
 
   layout: 'default-no-header',
+
+  auth: false,
 };
 </script>
-
-<style lang="scss" scoped>
-.container {
-  background: #069255;
-  height: 100vh;
-  min-width: 100vw;
-  display: grid;
-  place-items: center;
-
-  .login-screen {
-    display: grid;
-    place-items: center;
-  }
-}
-</style>

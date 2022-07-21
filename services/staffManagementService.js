@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 class StaffManagementService {
-  async getListUser() {
-    const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/users');
+  async getListUser(params) {
+    const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/users', params);
 
-    return res;
+    return res.data;
   }
 
   async addUser(params) {

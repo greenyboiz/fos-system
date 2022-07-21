@@ -17,17 +17,17 @@
       <div>
         <ul id="actionNav2" class="navbar-nav collapse navbar-collapse">
           <li>
-            <div v-click-outside="closeManageAccount" class="account-management__dropdown">
+            <div v-if="isAuthenticated" v-click-outside="closeManageAccount" class="account-management__dropdown">
               <div class="account-management__display d-flex align-items-center" @click="showManageAccount">
                 <div class="account-username px-2">
-                  manhnd128
+                  {{ loggedInUser.user.username }}
                 </div>
                 <div class="arrow-icon">
                   <ArrowDown :current-color="'#fff'" />
                 </div>
               </div>
               <div v-if="isShowManagementAccount" class="account-management__dropdown-menu text-left py-1">
-                <div class="dropdown-menu__item">
+                <div v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'" class="dropdown-menu__item">
                   <nuxt-link class="w-100 h-100 d-flex align-items-center text-nowrap" to="/quan-ly-tai-khoan">
                     <span class="icon mr-2"><manage-account-icon :width="21" :height="21" /></span> Quản lý tài khoản
                   </nuxt-link>
@@ -37,7 +37,7 @@
                     <span class="icon mr-2"><manage-account-icon :width="21" :height="21" /></span> Thông tin tài khoản
                   </nuxt-link>
                 </div>
-                <div class="dropdown-menu__item">
+                <div class="dropdown-menu__item" @click="logoutUser()">
                   <i class="icon bi bi-box-arrow-in-left mr-2"></i><span class="sign-out">Đăng xuất</span>
                 </div>
               </div>
@@ -89,6 +89,7 @@
 
 <script>
 import Vue from 'vue';
+import { mapGetters } from 'vuex';
 import vClickOutside from 'v-click-outside';
 import { ArrowDown, ManageAccountIcon, MenuDashboardIcon, MenuOrder } from '@/components/CustomIcon';
 Vue.use(vClickOutside);
@@ -108,6 +109,10 @@ export default {
     };
   },
 
+  computed: {
+    ...mapGetters(['isAuthenticated', 'loggedInUser'])
+  },
+
   methods: {
     showManageAccount() {
       this.isShowManagementAccount = !this.isShowManagementAccount;
@@ -115,6 +120,10 @@ export default {
 
     closeManageAccount() {
       this.isShowManagementAccount = false;
+    },
+
+    async logoutUser() {
+      await this.$auth.logout();
     }
   }
 };

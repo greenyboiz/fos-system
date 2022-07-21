@@ -185,7 +185,11 @@ export default {
     },
 
     async getListUser() {
-      const res = await staffManagementService.getListUser();
+      const res = await staffManagementService.getListUser({
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        }
+      });
 
       this.listStaff = res.data;
     },

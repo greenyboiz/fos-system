@@ -66,12 +66,49 @@ export default {
     'bootstrap-vue/nuxt',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/toast',
+    '@nuxtjs/auth',
   ],
+
+  router: {
+    middleware: ['auth']
+  },
+
+  toast: {
+    theme: 'bubble',
+    position: 'bottom-center',
+    duration: 4000
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    baseURL: 'https://project-for-fos-mld.herokuapp.com/api/',
+    // debug: process.env.DEBUG || false,
+    // proxyHeaders: false,
+    // credentials: false,
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'login', method: 'post', propertyName: 'data.token' },
+          user: { url: 'userLogin', method: 'get', propertyName: 'data' },
+          logout: false
+        },
+        token: {
+          property: 'access_token',
+          global: true,
+          type: 'Bearer'
+        }
+      }
+    },
+    redirect: {
+      login: '/',
+      logout: '/',
+      callback: '/',
+      home: '/'
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

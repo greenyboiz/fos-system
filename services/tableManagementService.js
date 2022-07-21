@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 class TableManagementService {
-  async getListTable() {
-    const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/tables');
+  async getListTable(params) {
+    const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/tables', params);
 
     return res;
   }

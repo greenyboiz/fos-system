@@ -12,6 +12,8 @@ export default {
     OrderManagement,
   },
 
+  middleware: 'auth',
+
   head() {
     return {
       title: 'Đơn hàng',

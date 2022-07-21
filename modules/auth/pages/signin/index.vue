@@ -1,136 +1,129 @@
 <template>
-  <div class="w-100">
-    <template v-if="!isShowForgetPassword && !isShowVerification">
-      <Notification v-if="error" :message="error" />
-      <div class="login-section">
-        <div class="section-heading">Đăng nhập</div>
-
-        <div class="section-form">
-          <div class="field-item">
-            <div class="field-title">Tên tài khoản</div>
-            <input placeholder="Nhập tên tài khoản" autofocus/>
-            <!-- <template v-if="summited && !$v.username.email && !$v.username.phone">
-              <span v-if="!$v.username.required" class="error">Số điện thoại hoặc email không được để trống</span>
-              <span v-if="!$v.username.email && !$v.username.phone" class="error">Số điện thoại hoặc email sai định dạng</span>
-            </template> -->
-          </div>
-
-          <div class="field-item">
-            <div class="field-title">Mật khẩu</div>
-            <div class="field-input">
-              <input
-                autocomplete="do-not-autofill"
-                :type="!isShowPassword ? 'password' : 'text'"
-                placeholder="Nhập mật khẩu"
-              />
-              <div class="field-input__action">
-                <span class="forget-password pr-1" @click="handleForgetPassword">Quên mật khẩu?</span>
-                <span class="eye-icon" @click="isShowPassword = !isShowPassword">
-                  <EyeIcon v-if="isShowPassword"></EyeIcon>
-                  <HideEyeIcon v-else></HideEyeIcon>
-                </span>
-              </div>
-            </div>
-            <!-- <template v-if="summited && $v.password.$error">
-              <span v-if="!$v.password.required" class="error">Mật khẩu không được để trống</span>
-            </template> -->
-          </div>
-        </div>
-
-        <div class="section-footer">
-          <button class="btn-continue">Đăng nhập</button>
-        </div>
+  <div class="container">
+    <div class="login-screen">
+      <div class="header">
+        <!-- <img alt="" class="logo" src="~assets/images/moshop.png" /> -->
       </div>
-    </template>
-    <!-- <ForgetPassword
-      v-if="isShowForgetPassword"
-      :username="username"
-      @onUpdatePasswordSuccess="handleUpdatePasswordSuccess"
-      @onGoBack="handleUpdatePasswordSuccess"
-    ></ForgetPassword>
-    <InformationVerification
-      v-if="isShowVerification"
-      :formData="formData"
-      @onGoBack="handleGoBack"
-    ></InformationVerification> -->
+      <Notification v-if="error" :message="error" />
+      <form class="login-container" method="post" @submit.prevent="login">
+        <div class="login-form">
+          <div class="login-text text-center">Đăng nhập</div>
+          <div class="form-group mb-0">
+            <label v-show="username.length > 0" class="login-input-text" for="tel">
+              Tên tài khoản
+            </label>
+            <input
+              id="tel"
+              v-model="username"
+              :class="{ 'm-0': username.length > 0 }"
+              class="form-control"
+              name="username"
+              placeholder="Tên tài khoản"
+              type="text"
+            />
+          </div>
+          <div class="form-group pwd-div">
+            <label v-show="username.length > 0" class="login-input-text" for="pwd">Mật khẩu</label>
+            <input
+              id="pwd"
+              v-model="password"
+              :class="{ 'm-0': username.length > 0 }"
+              autocomplete="on"
+              class="form-control"
+              name="password"
+              placeholder="Mật khẩu"
+              type="password"
+            />
+          </div>
+          <div class="login-form__forget-pwd clickable-font">
+            <p v-b-modal.forget-pwd-modal>Quên mật khẩu?</p>
+          </div>
+          <div class="center-items">
+            <button
+              v-if="!startLogin"
+              :disabled="password.length === 0 || username.length === 0"
+              class="login-form__btn-login mx-auto"
+              type="submit"
+            >
+              Đăng nhập
+            </button>
+            <dashboard-loading v-else />
+          </div>
+        </div>
+      </form>
+    </div>
+    <b-modal id="forget-pwd-modal" centered hide-footer title="Quên mật khẩu">
+      <div class="forget-pwd-container">
+        <label class="forget-pwd-container__label">
+          Vui lòng điền email của bạn:
+          <input v-model="forgetPwdEmail" class="forget-pwd-container__input" type="text" />
+        </label>
+        <button :disabled="forgetPwdEmail.length === 0" class="forget-pwd-container__btn" @click="sendForgetPasswordRq">
+          Gửi yêu cầu
+        </button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
 <script>
-// import { required, minLength, email, sameAs } from 'vuelidate/lib/validators';
-// import { customValidator } from '@/plugins/validators';
-
-// import InformationVerification from '../Register/InformationVerification/index.vue';
-// import ForgetPassword from '../ForgetPassword/index.vue';
-import { EyeIcon, HideEyeIcon } from '@/modules/auth/icons';
 import Notification from '../../components/Notification.vue';
-
-// const { phone } = customValidator;
-
+import { authService } from '@/services';
+import auth from '~/middleware/auth';
 export default {
 
-  components: { EyeIcon, HideEyeIcon, Notification },
-
-  // eslint-disable-next-line vue/require-prop-types
-  props: ['dataRegister'],
+  components: {
+    Notification,
+  },
 
   data() {
     return {
-      formData: {},
+      isShowSignInModal: false,
       username: '',
       password: '',
-      isShowVerification: false,
-      isShowPassword: false,
-      isShowConfirmPassword: false,
-      isShowForgetPassword: false,
-      jwt: '',
-      summited: false,
-      isFinishRegister: true,
+      forgetPwdEmail: '',
       error: '',
+      startLogin: false,
+      isFinishRegister: true,
+      registerStep: 0,
     };
   },
-
-  // validations: {
-  //   username: {
-  //     required,
-  //     phone,
-  //     email
-  //   },
-  //   password: {
-  //     required,
-  //   },
-  // },
-
-  mounted() {
-    // if (this.dataRegister.email || this.dataRegister.password) {
-    //   this.username = this.dataRegister.email;
-    //   this.password = this.dataRegister.password;
-    // }
-  },
-
   methods: {
-    handleGoBack() {
-      this.isShowVerification = false;
+    validateEmail(email) {
+      // eslint-disable-next-line max-len
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
     },
 
-    handleBack() {
-      this.$emit('onGoBack');
+    sendForgetPasswordRq() {
+      if (!this.validateEmail(this.forgetPwdEmail)) {
+        this.$toast.error('Vui lòng điền đúng định dạng email!');
+        this.forgetPwdEmail = '';
+      }
     },
 
-    handleOpenVerifyInformation() {
-      this.isShowVerification = true;
+    getRegisterInfo() {
     },
 
-    handleForgetPassword() {
-      this.isShowForgetPassword = !this.isShowForgetPassword;
+    async getRegisterStep() {
     },
 
-    handleUpdatePasswordSuccess() {
-      this.isShowForgetPassword = false;
-    },
+    async login() {
+      const reqParams = {
+        userName: this.username,
+        password: this.password,
+      };
 
-    handleOpenRegister() {
-      this.$emit('onOpenRegister');
+      try {
+        await this.$auth.loginWith('local', {
+          data: reqParams
+        });
+        // localStorage.setItem('access_token', res.data.data.token);
+
+        // this.$router.push('/don-hang');
+      } catch (error) {
+        this.error = 'Tên tài khoản hoặc mật khẩu không chính xác';
+      }
     },
   },
 };
