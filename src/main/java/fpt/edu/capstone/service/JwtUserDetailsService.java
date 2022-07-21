@@ -1,9 +1,12 @@
 package fpt.edu.capstone.service;
 
+import fpt.edu.capstone.dto.CurrentUserDetailsDTO;
+import fpt.edu.capstone.entities.CurrentUserDetails;
 import fpt.edu.capstone.entities.FOSUser;
 import fpt.edu.capstone.entities.FOSUserPrincipal;
 import fpt.edu.capstone.implementService.IFOSUserService;
 import fpt.edu.capstone.repo.FOSUserRepository;
+import fpt.edu.capstone.until.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -55,5 +58,18 @@ public class JwtUserDetailsService implements UserDetailsService {
 //        newUser.setPassword(bcryptEncoder.encode(fosUser.getPassword()));
         fosUser.setPassword(bcryptEncoder.encode(fosUser.getPassword()));
         return fosUserRepository.save(fosUser);
+    }
+
+    public CurrentUserDetails getCurrentUser(){
+        FOSUser fosUser = fosUserRepository.findByUserName(CurrentUser.getCurrentUser().getName());
+        if (fosUser == null){
+            return null;
+        }
+        CurrentUserDetailsDTO currentUserDetailsDTO = new CurrentUserDetailsDTO();
+        currentUserDetailsDTO.setId(fosUser.getUserId());
+        currentUserDetailsDTO.setUsername(fosUser.getUserName());
+        currentUserDetailsDTO.setRoleName(fosUser.getRole().getRoleName());
+
+        return new CurrentUserDetails(currentUserDetailsDTO);
     }
 }

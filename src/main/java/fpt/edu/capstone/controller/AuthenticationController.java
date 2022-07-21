@@ -75,5 +75,15 @@ public class AuthenticationController {
                 .message("Get token signin: successfully!").success(true).data(jwtResponse).build());
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/userLogin")
+    public ResponseEntity<?> getCurrentUser() {
+        if (jwtUserDetailsService.getCurrentUser() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "Does not exist any account",true, null));
+        }
+//        return ResponseEntity.ok(authenticationService.getCurrentUser());
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "successfull",true, jwtUserDetailsService.getCurrentUser()));
+    }
 
 }
