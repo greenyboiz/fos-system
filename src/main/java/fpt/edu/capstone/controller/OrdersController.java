@@ -45,14 +45,12 @@ public class OrdersController {
 
     @PostMapping("/orders")
     public ResponseEntity<?> saveOrders(@RequestBody Orders orders){
-
         boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
 //        boolean checkCustomerExistInOrder = iOrdersService.checkCustomerExistInOrder(orders);
-        boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
-        if (!checkOrderExist && !checkCustomerExist){
-//            Long qrCodeId = iOrdersService.getQRCodeIdByOrderId(orders.getOrderId());
-//            Tables tables = iTablesService.getTableByQRCodeId(qrCodeId);
-//            tables.setStatus("0");
+//        boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
+        if (!checkOrderExist){
+            Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
+            tables.setStatus("0");
             Customer customer = iCustomerService.addCustomer(orders.getCustomer());
             orders.setCustomer(customer);
             iOrdersService.addOrder(orders);
