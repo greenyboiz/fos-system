@@ -115,12 +115,17 @@ export default {
       };
 
       try {
-        await this.$auth.loginWith('local', {
+        const res = await this.$auth.loginWith('local', {
           data: reqParams
         });
-        // localStorage.setItem('access_token', res.data.data.token);
-
-        // this.$router.push('/don-hang');
+        const roleName = res.data.data.roleName;
+        if (roleName === 'ROLE_ADMIN') {
+          this.$router.push('/don-hang');
+        } else if (roleName === 'ROLE_STAFF') {
+          this.$router.push('/employee');
+        } else if (roleName === 'ROLE_CHEF') {
+          this.$router.push('/chef');
+        }
       } catch (error) {
         this.error = 'Tên tài khoản hoặc mật khẩu không chính xác';
       }

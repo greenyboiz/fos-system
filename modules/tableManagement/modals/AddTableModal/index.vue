@@ -13,27 +13,20 @@
       <div class="info-table__detail">
         <div class="info-table__item">
           <label for="numOfSeat">Số lượng ghế:</label>
-          <input
-            id="numOfSeat"
-            v-model.number="formTable.numberOfSeats"
-            type="text"
-            placeholder="Nhập số ghế"
-          />
+          <input id="numOfSeat" v-model.number="formTable.numberOfSeats" type="text" placeholder="Nhập số ghế" />
         </div>
+
         <div class="info-table__item">
           <label for="link">QR Code Link:</label>
-          <input
-            id="link"
-            v-model="formTable.qrCode.qrcodeLink"
-            type="text"
-            placeholder="Nhập link QR"
-          />
+          <input id="link" v-model="formTable.qrCode.qrcodeLink" type="text" placeholder="Nhập link QR" />
         </div>
-        <div class="info-table__item">
-          <label for="status">Trạng thái:</label>
-          <div class="d-flex" style="width: 100%">
-            <div v-for="(status) in statusType" :key="status.id">
+
+        <div class="info-table__item a">
+          <div class="b">Trạng thái:</div>
+          <div class="d-flex tw-justify-around" style="width: 100%">
+            <template v-for="status in statusType">
               <CustomCheckbox
+                :key="status.id"
                 v-model="statusSelected"
                 class="mr-2"
                 shape="circle"
@@ -45,9 +38,13 @@
               >
                 <template slot="custom-label"> {{ status.name }} </template>
               </CustomCheckbox>
-            </div>
+            </template>
           </div>
         </div>
+      </div>
+
+      <div class="info-table__qr">
+        <qr-code class="info-table__code" :size="250" :text="formTable.qrCode.qrcodeLink"></qr-code>
       </div>
     </div>
     <div style="padding: 10px">
@@ -63,19 +60,23 @@
 // import ImageOrDefault from '@/components/common/ImageOrDefault/index.vue';
 import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import { tableManagementService } from '@/services';
+import QrCode from 'vue-qrcode-component';
+import { toNumber } from 'lodash';
+
 export default {
   name: 'AddUserModal',
 
   components: {
     // ImageOrDefault,
     CustomCheckbox,
+    QrCode,
   },
 
   props: {
-    userId: {
+    tableId: {
       type: Number,
-      default: 0,
-    }
+      default: 1,
+    },
   },
 
   data() {
@@ -83,7 +84,7 @@ export default {
       formTable: {
         numberOfSeats: 0,
         qrCode: {
-          qrcodeLink: ''
+          qrcodeLink: '',
         },
         status: null,
       },
@@ -93,70 +94,91 @@ export default {
       statusSelected: null,
       statusType: [
         { id: 0, name: 'Còn trống' },
-        { id: 1, name: 'Đã đầy' }
+        { id: 1, name: 'Đã đầy' },
       ],
     };
-  },
-
-  computed: {
-  },
-
-  watch: {
-    tableId() {
-      this.getTableById();
-    }
   },
 
   methods: {
     show(title) {
       this.modalTitle = title;
       this.$refs.addTable.show();
+
+      if (this.modalTitle === 'update') {
+        this.getDetailTable();
+      }
     },
 
     handleHideModal() {
-      this.formTable = {};
+      this.formTable = {
+        numberOfSeats: 0,
+        qrCode: {
+          qrcodeLink: '',
+        },
+        status: null,
+      };
       this.$refs.addTable.hide();
     },
 
-    async addTable() {
-      const requestParams = this.formTable;
-
-      const res = await tableManagementService.addTable(requestParams);
-
-      if (res.status === 200) {
-        this.isDone = true;
-        this.$emit('doneAdd', this.isDone);
-      } else {
-        this.isDone = false;
-      }
-    },
-
-    async updateTable() {
-      const requestParams = this.formUser;
-
-      const res = await tableManagementService.updateTable(requestParams);
-
-      if (res.status === 200) {
-        this.isDone = true;
-        this.$emit('doneUpdate', this.isDone);
-      } else {
-        this.isDone = false;
-      }
-    },
-
-    async getTableById() {
-      const res = await tableManagementService.getTableById(this.tableId);
+    async getDetailTable() {
+      const res = await tableManagementService.getTableById(this.tableId, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
 
       if (res.success) {
-        // const user = res.data;
+        const data = res.data;
+        this.formTable = {
+          numberOfSeats: data.tableId,
+          qrCode: data.qrCode,
+          status: toNumber(data.status),
+        };
+        this.statusSelected = toNumber(data.status);
+      }
+    },
+
+    async addTable(requestParams) {
+      const res = await tableManagementService.addTable(requestParams, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
+
+      if (res.status === 200) {
+        this.$emit('complete');
+      } else {
+        this.isDone = false;
+      }
+    },
+
+    async updateTable(requestParams) {
+      const res = await tableManagementService.updateTable(requestParams, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
+
+      if (res.status === 200) {
+        this.$emit('complete');
+      } else {
+        this.isDone = false;
       }
     },
 
     handleSave() {
-      if (this.modalTitle) {
-        this.updateTable();
+      const requestParams = {
+        numberOfSeats: this.formTable.numberOfSeats,
+        qrCode: {
+          qrcodeLink: this.formTable.qrCode.qrcodeLink,
+        },
+        status: this.statusSelected,
+      };
+
+      if (this.modalTitle === 'update') {
+        this.updateTable(requestParams);
       } else {
-        this.addTable();
+        this.addTable(requestParams);
       }
       this.handleHideModal();
     },

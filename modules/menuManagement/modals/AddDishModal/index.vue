@@ -11,65 +11,30 @@
   >
     <div class="info-dish">
       <div class="info-dish__avatar" @click="chooseAvatar()">
-        <ImageOrDefault
-          class="info-dish__img"
-          :src="avatar || formDish.dishImage"
-          alt="avatar"
-        />
+        <ImageOrDefault class="info-dish__img" :src="avatar || formDish.dishImage" alt="avatar" />
         <div class="info-dish__add">+</div>
       </div>
-      <input
-        ref="avatarRef"
-        style="display: none"
-        type="file"
-        accept="image/*"
-        @change="handleAddAvatar($event)"
-      />
+      <input ref="avatarRef" style="display: none" type="file" accept="image/*" @change="handleAddAvatar($event)" />
       <div class="info-dish__detail">
         <div class="info-dish__item">
           <label for="name">Tên món ăn:</label>
-          <input
-            id="name"
-            v-model="formDish.dishesName"
-            type="text"
-            placeholder="Nhập tên món ăn"
-          />
+          <input id="name" v-model="formDish.dishesName" type="text" placeholder="Nhập tên món ăn" />
         </div>
         <div class="info-dish__item">
           <label for="username">Mô tả:</label>
-          <input
-            id="username"
-            v-model="formDish.description"
-            type="text"
-            placeholder="Nhập mô tả"
-          />
+          <input id="username" v-model="formDish.description" type="text" placeholder="Nhập mô tả" />
         </div>
         <div class="info-dish__item">
           <label for="salePrice">Giá bán:</label>
-          <input
-            id="salePrice"
-            v-model.number="formDish.salePrice"
-            type="number"
-            placeholder="Nhập giá mua"
-          />
+          <input id="salePrice" v-model.number="formDish.salePrice" type="number" placeholder="Nhập giá mua" />
         </div>
         <div class="info-dish__item">
           <label for="costPrice">Giá mua:</label>
-          <input
-            id="costPrice"
-            v-model.number="formDish.costPrice"
-            type="number"
-            placeholder="Nhập giá bán"
-          />
+          <input id="costPrice" v-model.number="formDish.costPrice" type="number" placeholder="Nhập giá bán" />
         </div>
         <div class="info-dish__item">
           <label for="discount">Giảm giá:</label>
-          <input
-            id="discount"
-            v-model.number="formDish.discount"
-            type="number"
-            placeholder="Nhập phần trăm giảm"
-          />
+          <input id="discount" v-model.number="formDish.discount" type="number" placeholder="Nhập phần trăm giảm" />
         </div>
         <div class="info-dish__item">
           <label for="category">Phân loại:</label>
@@ -86,7 +51,7 @@
         <div class="info-dish__item">
           <label for="status">Trạng thái:</label>
           <div class="d-flex" style="width: 100%">
-            <div v-for="(status) in statusType" :key="status.id">
+            <div v-for="status in statusType" :key="status.id">
               <CustomCheckbox
                 v-model="statusSelected"
                 class="mr-2"
@@ -118,6 +83,13 @@ import ImageOrDefault from '@/components/common/ImageOrDefault/index.vue';
 import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import { menuManagementService } from '@/services';
 import MultiSelect from 'vue-multiselect';
+import { size } from 'lodash';
+
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
 export default {
   name: 'AddUserModal',
 
@@ -131,7 +103,7 @@ export default {
     dishesId: {
       type: Number,
       default: 0,
-    }
+    },
   },
 
   data() {
@@ -152,7 +124,7 @@ export default {
       statusSelected: '',
       statusType: [
         { id: 1, name: 'Còn hàng' },
-        { id: 2, name: 'Hết hàng' }
+        { id: 2, name: 'Hết hàng' },
       ],
       listCategory: [],
       selectedCategory: {},
@@ -201,7 +173,11 @@ export default {
     },
 
     async getListCategory() {
-      const res = await menuManagementService.getListCategory();
+      const res = await menuManagementService.getListCategory({
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
 
       if (res.status === 200) {
         this.listCategory = res.data;
@@ -214,7 +190,11 @@ export default {
       this.formDish.dishImage = '';
       const requestParams = this.formDish;
 
-      const res = await menuManagementService.addDish(requestParams);
+      const res = await menuManagementService.addDish(requestParams, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
 
       if (res.status === 200) {
         this.isDone = true;
@@ -231,7 +211,11 @@ export default {
 
       const requestParams = this.formDish;
 
-      const res = await menuManagementService.updateDish(requestParams);
+      const res = await menuManagementService.updateDish(requestParams, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
 
       if (res.status === 200) {
         this.isDone = true;
@@ -242,7 +226,11 @@ export default {
     },
 
     async getDishById() {
-      const res = await menuManagementService.getDishById(this.dishesId);
+      const res = await menuManagementService.getDishById(this.dishesId, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
 
       if (res.success) {
         const dish = res.data;
@@ -254,6 +242,10 @@ export default {
     },
 
     handleSave() {
+      if (!this.validator()) {
+        return;
+      }
+
       if (this.modalTitle) {
         this.updateDish();
       } else {
@@ -261,9 +253,54 @@ export default {
       }
       this.handleHideModal();
     },
+
+    validator() {
+      if (!this.formDish.dishesName) {
+        Vue.$toast.error('Vui lòng nhập tên Món ăn');
+        return false;
+      }
+
+      if (!this.formDish.description) {
+        Vue.$toast.error('Vui lòng mô tả món ăn');
+        return false;
+      }
+
+      if (!this.formDish.dishesName) {
+        Vue.$toast.error('Vui lòng nhập giá mua');
+        return false;
+      }
+
+      if (!this.formDish.salePrice) {
+        Vue.$toast.error('Vui lòng nhập giá bán');
+        return false;
+      }
+
+      if (!this.formDish.costPrice) {
+        Vue.$toast.error('Vui lòng nhập giá bán');
+        return false;
+      }
+
+      if (this.formDish.salePrice < this.formDish.costPrice) {
+        Vue.$toast.error('Giá bán phải lớn hơn giá mua');
+        return false;
+      }
+
+      if (!size(this.selectedCategory)) {
+        Vue.$toast.error('Vui lòng phân loại sản phẩm');
+        return false;
+      }
+
+      if (!this.statusSelected) {
+        Vue.$toast.error('Vui lòng chọn trạng thái');
+        return false;
+      }
+
+      return true;
+    },
   },
 };
 </script>
 
 <style lang="scss" src="./styles.scss" scoped></style>
-// <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+//
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

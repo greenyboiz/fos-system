@@ -2,7 +2,12 @@
   <div class="dinner">
     <ul class="choice">
       <template v-for="item in listTable">
-        <button :key="item.tableId" class="choice__btn" :class="checkStatus(item.status)" @click="onSelectTable(item.tableId)">
+        <button
+          :key="item.tableId"
+          class="choice__btn"
+          :class="checkStatus(item.status)"
+          @click="onSelectTable(item.tableId)"
+        >
           A{{ item.tableId }}
 
           <!-- <div class="choice__status">
@@ -35,7 +40,7 @@ export default {
       const res = await tableManagementService.getListTable({
         headers: {
           Authorization: this.$auth.$storage._state['_token.local'],
-        }
+        },
       });
 
       // console.log(res);
@@ -52,9 +57,7 @@ export default {
       }
     },
 
-    onSelectTable(tableId) {
-
-    }
+    onSelectTable(tableId) {},
   },
 };
 </script>

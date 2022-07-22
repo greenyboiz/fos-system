@@ -131,9 +131,15 @@ export default {
 
     async getOrderList() {
       this.isLoading = true;
-      const res = await orderService.getOrderList().finally(() => {
-        this.isLoading = false;
-      });
+      const res = await orderService
+        .getOrderList({
+          headers: {
+            Authorization: this.$auth.$storage._state['_token.local'],
+          },
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
 
       if (res.success) {
         this.listOrder = res.data;
@@ -147,7 +153,11 @@ export default {
         confirmText: 'Xóa',
 
         confirmed: async () => {
-          const res = await orderService.deleteOrder(id);
+          const res = await orderService.deleteOrder(id, {
+            headers: {
+              Authorization: this.$auth.$storage._state['_token.local'],
+            },
+          });
 
           if (res) {
             this.getOrderList();

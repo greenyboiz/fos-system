@@ -1,38 +1,38 @@
 import axios from 'axios';
 
 class OrderService {
-  async getOrderList() {
-    const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/orders');
+  async getOrderList(header) {
+    const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/orders', header);
 
     return res.data;
   }
 
-  async postOrder(params) {
-    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/orders', params);
+  async postOrder(params, header) {
+    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/orders', params, header);
 
     return res.data;
   }
 
-  async getOrderItem(orderItemId) {
-    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/orderItem/order/${orderItemId}`);
+  async getOrderItem(orderItemId, header) {
+    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/orderItem/order/${orderItemId}`, header);
 
     return res.data;
   }
 
-  async postOrderItem(params) {
-    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/orderItem', params);
+  async postOrderItem(params, header) {
+    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/orderItem', params, header);
 
     return res;
   }
 
-  async getTotalPayment(orderId) {
-    const res =  await axios.get(`https://project-for-fos-mld.herokuapp.com/api/payment/${orderId}`);
+  async getTotalPayment(orderId, header) {
+    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/payment/${orderId}`, header);
 
     return res;
   }
 
-  async deleteOrder(orderId) {
-    const res =  await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/orders/delete/${orderId}`);
+  async deleteOrder(orderId, header) {
+    const res = await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/orders/delete/${orderId}`, header);
 
     return res;
   }

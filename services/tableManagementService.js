@@ -1,38 +1,38 @@
 import axios from 'axios';
 
 class TableManagementService {
-  async getListTable(params) {
-    const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/tables', params);
+  async getListTable(params, header) {
+    const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/tables', params, header);
 
     return res;
   }
 
-  async addTable(params) {
-    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/tables/add', params);
+  async addTable(params, header) {
+    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/tables/add', params, header);
 
     return res;
   }
 
-  async updateTable(params) {
-    const res = await axios.put('https://project-for-fos-mld.herokuapp.com/api/tables/update', params);
+  async updateTable(params, header) {
+    const res = await axios.put('https://project-for-fos-mld.herokuapp.com/api/tables/update', params, header);
 
     return res;
   }
 
-  async deleteTable(tableId) {
-    const res = await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/tables/delete/${tableId}`);
+  async deleteTable(tableId, header) {
+    const res = await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/tables/delete/${tableId}`, header);
 
     return res;
   }
 
-  async getTableById(tableId) {
-    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/tables/${tableId}`);
+  async getTableById(tableId, header) {
+    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/tables/${tableId}`, header);
 
     return res.data;
   }
 
-  async getQrCode() {
-    const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/qrcode');
+  async getQrCode(header) {
+    const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/qrcode', header);
 
     return res.data;
   }

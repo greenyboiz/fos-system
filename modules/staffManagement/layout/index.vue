@@ -1,106 +1,97 @@
 <template>
-  <div class="staffManagement">
+  <div class="menuManagement">
+    <!-- Top -->
     <div class="headline">
-      <div class="headline__left">
+      <div class="headline__top">
         <div class="headline__title">Quản lý nhân viên</div>
-        <div class="headline__count">{{ totalStaff }} nhân viên</div>
-      </div>
-      <div class="headline__right">
-        <div class="searchArea">
-          <div class="searchBox d-flex align-items-center">
-            <img
-              class="searchBox__icon"
-              src="~/assets/icons/search_gray_icon.png"
-            />
-            <input
-              v-model="searchText"
-              class="searchBox__input"
-              placeholder="Tìm kiếm thông tin nhân viên"
-            />
-            <div
-              v-if="searchText"
-              class="cursor-pointer"
-              @click="removeKeyword()"
-            >
-              <img
-                class="searchBox__remove"
-                src="~/assets/icons/remove_search.svg"
-              />
+
+        <div class="headline__right">
+          <button class="btn__add" @click="handleShowAddUserModal()">Thêm người dùng</button>
+
+          <div class="searchArea">
+            <div class="searchBox d-flex align-items-center">
+              <img class="searchBox__icon" src="~/assets/icons/search_gray_icon.png" />
+              <input v-model="searchText" class="searchBox__input" placeholder="Tìm kiếm thông tin người dùng" />
+              <div v-if="searchText" class="cursor-pointer" @click="removeKeyword()">
+                <img class="searchBox__remove" src="~/assets/icons/remove_search.svg" />
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="headline__bottom">
+        <span>Danh sách nhân viên</span> -
+        <span class="headline__count">{{ totalStaff }} nhân viên</span>
+      </div>
     </div>
-    <div class="staffManagement__list">
-      <div class="staffManagement__list--title">Danh sách nhân viên</div>
-      <div class="staffManagement__list--table">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Họ và tên</th>
-              <th scope="col">Tên tài khoản</th>
-              <th scope="col">Mật khẩu</th>
-              <th scope="col">Giới tính</th>
-              <th scope="col">SĐT</th>
-              <th scope="col">Email</th>
-              <th scope="col">Role</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in listStaffSearch" :key="item.id" class="tw-cursor-pointer">
-              <th scope="row">{{ item.userId }}</th>
-              <td>{{ item.fullName }}</td>
-              <td>{{ item.userName }}</td>
-              <td>{{ item.password }}</td>
-              <td>{{ item.gender }}</td>
-              <td>{{ item.contact }}</td>
-              <td>{{ item.email }}</td>
-              <td>{{ item.role.roleName }}</td>
-              <td class="align-items-center">
-                <div class="btn-group align-top">
-                  <button
-                    class="btn btn-sm btn-outline-secondary badge"
-                    type="button"
-                    data-toggle="modal"
-                    data-target="#myModal"
-                    @click="editClick(item)"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    class="btn btn-sm btn-outline-secondary badge"
-                    type="button"
-                    @click="remove(item.userId)"
-                  >
-                    Delete
-                  </button>
+
+    <!-- Content -->
+
+    <div class="main">
+      <div class="table">
+        <table class="table__wrapper">
+          <div class="table__head">
+            <div class="table__col">ID</div>
+            <div class="table__col">Họ và tên</div>
+            <div class="table__col">Tên tài khoản</div>
+            <div class="table__col">Mật khẩu</div>
+            <div class="table__col">Giới tính</div>
+            <div class="table__col">SĐT</div>
+            <div class="table__col">Email</div>
+            <div class="table__col">Role</div>
+            <div class="table__col">Action</div>
+          </div>
+
+          <tbody class="table__bot">
+            <template v-if="isLoading">
+              <div class="loading">
+                <Loading />
+              </div>
+            </template>
+
+            <template v-else>
+              <div v-for="item in listStaffSearch" :key="'a' + item.id" class="table__body">
+                <div class="table__row">{{ item.userId }}</div>
+                <div class="table__row">{{ item.fullName }}</div>
+                <div class="table__row">{{ item.userName }}</div>
+                <div class="table__row">
+                  <span>{{ item.password }}</span>
                 </div>
-              </td>
-            </tr>
+                <div class="table__row">{{ item.gender }}</div>
+                <div class="table__row">{{ item.contact }}</div>
+                <div class="table__row">
+                  <span>{{ item.email }}</span>
+                </div>
+                <div class="table__row">{{ item.role.roleName }}</div>
+
+                <div class="table__row align-items-center">
+                  <div class="btn-group align-top">
+                    <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(item)">
+                      Edit
+                    </button>
+                    <button class="btn__delete" @click="remove(item.userId)">
+                      <img src="@/assets/icons/delete.png" alt="" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </template>
           </tbody>
         </table>
       </div>
+
+      <!-- Paging -->
+      <div class="pagination">
+        <section class="pagination__wrap">
+          <div class="pagination__list">
+            <button class="pagination__button active">1</button>
+            <button class="pagination__button">2</button>
+          </div>
+        </section>
+      </div>
     </div>
-    <nav aria-label="...">
-      <ul class="pagination">
-        <li class="page-item disabled">
-          <span class="page-link">Previous</span>
-        </li>
-        <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-        <li class="page-item">
-          <span class="page-link">2</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">Next</a>
-        </li>
-      </ul>
-    </nav>
-    <div class="add-button">
-      <button class="btn btn-success" @click="handleShowAddUserModal()">Thêm người dùng</button>
-    </div>
+
     <AddUserModal ref="addUserModalRef" :userId="userId" @doneAdd="onAdded" @doneUpdate="onUpdated" />
   </div>
 </template>
@@ -108,16 +99,20 @@
 <script>
 import { staffManagementService } from '@/services';
 import AddUserModal from '../modals/AddUserModal/index.vue';
+import Loading from '@/components/common/Loading/index.vue';
 // import { mapState, mapMutations } from 'vue'
+
 export default {
   name: 'StaffManagement',
 
   components: {
-    AddUserModal
+    AddUserModal,
+    Loading,
   },
 
   data() {
     return {
+      isLoading: false,
       searchText: '',
       listStaff: [],
       userId: null,
@@ -135,19 +130,22 @@ export default {
   },
 
   computed: {
-    listStaffSearch(){
-      if(this.searchText){
-      return this.listStaff.filter((item) => {
-        return this.searchText.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v));
-      });
-      }else{
+    listStaffSearch() {
+      if (this.searchText) {
+        return this.listStaff.filter((item) => {
+          return this.searchText
+            .toLowerCase()
+            .split(' ')
+            .every((v) => item.name.toLowerCase().includes(v));
+        });
+      } else {
         return this.listStaff;
       }
     },
 
     totalStaff() {
       return this.listStaff.length;
-    }
+    },
   },
 
   mounted() {
@@ -185,11 +183,16 @@ export default {
     },
 
     async getListUser() {
-      const res = await staffManagementService.getListUser({
-        headers: {
-          Authorization: this.$auth.$storage._state['_token.local'],
-        }
-      });
+      this.isLoading = true;
+      const res = await staffManagementService
+        .getListUser({
+          headers: {
+            Authorization: this.$auth.$storage._state['_token.local'],
+          },
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
 
       this.listStaff = res.data;
     },
@@ -212,9 +215,9 @@ export default {
           if (res.status === 200) {
             this.getListUser();
           }
-        }
+        },
       });
-    }
+    },
   },
 };
 </script>

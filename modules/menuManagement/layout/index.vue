@@ -1,108 +1,93 @@
 <template>
   <div class="menuManagement">
+    <!-- Top -->
     <div class="headline">
-      <div class="headline__left">
+      <div class="headline__top">
         <div class="headline__title">Quản lý thực đơn</div>
-        <div class="headline__count">{{ totalDish }} món ăn</div>
-      </div>
-      <div class="headline__right">
-        <div class="searchArea">
-          <div class="searchBox d-flex align-items-center">
-            <img
-              class="searchBox__icon"
-              src="~/assets/icons/search_gray_icon.png"
-            />
-            <input
-              v-model="searchText"
-              class="searchBox__input"
-              placeholder="Tìm kiếm thông tin món ăn"
-            />
-            <div
-              v-if="searchText"
-              class="cursor-pointer"
-              @click="removeKeyword()"
-            >
-              <img
-                class="searchBox__remove"
-                src="~/assets/icons/remove_search.svg"
-              />
+
+        <div class="headline__right">
+          <button class="btn__add" @click="handleShowAddDishesModal()">Thêm món ăn</button>
+
+          <div class="searchArea">
+            <div class="searchBox d-flex align-items-center">
+              <img class="searchBox__icon" src="~/assets/icons/search_gray_icon.png" />
+              <input v-model="searchText" class="searchBox__input" placeholder="Tìm kiếm thông tin món ăn" />
+              <div v-if="searchText" class="cursor-pointer" @click="removeKeyword()">
+                <img class="searchBox__remove" src="~/assets/icons/remove_search.svg" />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="menuManagement__list">
-      <div class="menuManagement__list--title">Danh sách thực đơn</div>
-      <div class="menuManagement__list--table">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Tên món ăn</th>
-              <th scope="col">Mô tả</th>
-              <th scope="col">Giảm giá (%)</th>
-              <th scope="col">Giá mua (đ)</th>
-              <th scope="col">Giá bán (đ)</th>
-              <th scope="col">Trạng thái</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in listDishSearch" :key="item.id" class="tw-cursor-pointer">
-              <th scope="row">{{ item.dishesId }}</th>
-              <td>{{ item.dishesName }}</td>
-              <td>{{ item.description }}</td>
-              <td>{{ item.discount }}</td>
-              <td>{{ item.costPrice }}</td>
-              <td>{{ item.salePrice }}</td>
-              <td>{{ item.status === 1 ? 'Còn hàng' : 'Hết hàng' }}</td>
-              <td class="align-items-center">
-                <div class="btn-group align-top">
-                  <button
-                    class="btn btn-sm btn-outline-secondary badge"
-                    type="button"
-                    data-toggle="modal"
-                    data-target="#myModal"
-                    @click="editClick(item)"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    class="btn btn-sm btn-outline-secondary badge"
-                    type="button"
-                    @click="remove(item.dishesId)"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+
+      <div class="headline__bottom">
+        <span>Danh sách thực đơn</span> -
+        <span class="headline__count">{{ totalDish }} món ăn</span>
       </div>
     </div>
-    <nav aria-label="...">
-      <ul class="pagination">
-        <li class="page-item disabled">
-          <span class="page-link">Previous</span>
-        </li>
-        <li class="page-item active" aria-current="page">
-          <a class="page-link" href="#">1</a>
-        </li>
-        <li class="page-item">
-          <span class="page-link">2</span>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">Next</a>
-        </li>
-      </ul>
-    </nav>
-    <div class="add-button">
-      <button class="btn btn-success" @click="handleShowAddDishesModal()">
-        Thêm món ăn
-      </button>
+
+    <!-- Content -->
+
+    <div class="main">
+      <div class="table">
+        <div class="table__wrapper">
+          <div class="table__head">
+            <div class="tableCol">STT</div>
+            <div class="tableCol">Tên món ăn</div>
+            <div class="tableCol">Mô tả</div>
+            <div class="tableCol">Giảm giá (%)</div>
+            <div class="tableCol">Giá mua (đ)</div>
+            <div class="tableCol">Giá bán (đ)</div>
+            <div class="tableCol">Trạng thái</div>
+            <div class="tableCol">Action</div>
+          </div>
+
+          <div class="table__bot">
+            <template v-if="isLoading">
+              <div class="loading">
+                <Loading />
+              </div>
+            </template>
+
+            <template v-else>
+              <div v-for="item in listDishSearch" :key="item.id" class="table__body">
+                <div class="tableRow">{{ item.dishesId }}</div>
+                <div class="tableRow">{{ item.dishesName }}</div>
+                <div class="tableRow">{{ item.description }}</div>
+                <div class="tableRow">{{ item.discount }}</div>
+                <div class="tableRow">{{ item.costPrice }}</div>
+                <div class="tableRow">{{ item.salePrice }}</div>
+                <div class="tableRow">
+                  <span v-if="item.status === 1" class="status had">Còn hàng</span>
+                  <span v-else class="status sold">Hết hàng</span>
+                </div>
+                <div class="tableRow align-items-center">
+                  <div class="btn-group align-top">
+                    <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(item)">
+                      Edit
+                    </button>
+                    <button class="btn__delete" @click="remove(item.dishesId)">
+                      <img src="@/assets/icons/delete.png" alt="" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paging -->
+      <div class="pagination">
+        <section class="pagination__wrap">
+          <div class="pagination__list">
+            <button class="pagination__button active">1</button>
+            <button class="pagination__button">2</button>
+          </div>
+        </section>
+      </div>
     </div>
+
     <AddDishModal ref="addDishModalRef" :dishesId="dishesId" @doneAdd="addedDish" @doneUpdate="updatedDish" />
   </div>
 </template>
@@ -110,11 +95,14 @@
 <script>
 import { menuManagementService } from '@/services';
 import AddDishModal from '../modals/AddDishModal/index.vue';
+import Loading from '@/components/common/Loading/index.vue';
+
 export default {
   name: 'MenuManagement',
 
   components: {
     AddDishModal,
+    Loading,
   },
 
   data() {
@@ -122,6 +110,7 @@ export default {
       searchText: '',
       listDishes: [],
       dishesId: null,
+      isLoading: false,
     };
   },
 
@@ -141,7 +130,7 @@ export default {
 
     totalDish() {
       return this.listDishes.length;
-    }
+    },
   },
 
   mounted() {
@@ -179,7 +168,17 @@ export default {
     },
 
     async getListDish() {
-      const res = await menuManagementService.getListDish();
+      this.isLoading = true;
+
+      const res = await menuManagementService
+        .getListDish({
+          headers: {
+            Authorization: this.$auth.$storage._state['_token.local'],
+          },
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
 
       this.listDishes = res.data;
     },
@@ -191,14 +190,18 @@ export default {
         confirmText: 'Xóa',
 
         confirmed: async () => {
-          const res = await menuManagementService.deleteDish(dishId);
+          const res = await menuManagementService.deleteDish(dishId, {
+            headers: {
+              Authorization: this.$auth.$storage._state['_token.local'],
+            },
+          });
 
           if (res.status === 200) {
             this.getListDish();
           }
-        }
+        },
       });
-    }
+    },
   },
 };
 </script>

@@ -70,7 +70,11 @@ export default {
     },
 
     async getListDish() {
-      const res = await employeeService.getDishes();
+      const res = await employeeService.getDishes({
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
       this.listDish = res;
 
       this.listTypeOrder = uniqBy(

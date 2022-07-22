@@ -36,7 +36,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import VueSlickCarousel from 'vue-slick-carousel';
-import { orderService } from '@/services';
+import { orderService, tableManagementService } from '@/services';
 import { isEmpty } from 'lodash';
 import SupportModal from '@/components/common/SupportModal/index.vue';
 export default {
@@ -59,6 +59,7 @@ export default {
           qrcodeId: 1,
         }
       },
+      listTable: [],
     };
   },
 

@@ -3,20 +3,28 @@
     <div class="headline">
       <div class="headline__left">
         <div class="headline__title">Quản lý bàn ăn</div>
-        <div class="headline__count">{{ totalTable }} bàn ăn</div>
+        <div class="headline__count">{{ size(listTable) }} bàn ăn</div>
       </div>
     </div>
+
     <div class="table-wrapper">
+      <!--  -->
       <div class="tableManagement__list">
-        <div class="tableManagement__list--title">Danh sách bàn ăn</div>
+        <div class="tableManagement__list--title">
+          <h3 class="title">Danh sách bàn ăn</h3>
+          <div class="add-button">
+            <button class="btn__add" @click="handleShowAddTablesModal()">Thêm bàn ăn</button>
+          </div>
+        </div>
+
         <div class="tableManagement__list--table">
           <table class="table table-bordered table-hover">
             <thead>
               <tr>
-                <th scope="col">ID</th>
+                <th scope="col">Bàn số</th>
                 <th scope="col">Số ghế</th>
                 <th scope="col">Trạng thái</th>
-                <th scope="col">Action</th>
+                <th scope="col">Thao tác</th>
               </tr>
             </thead>
             <tbody>
@@ -51,12 +59,9 @@
             </tbody>
           </table>
         </div>
-        <div class="add-button">
-          <button class="btn btn-success" @click="handleShowAddTablesModal()">
-            Thêm bàn ăn
-          </button>
-        </div>
       </div>
+
+      <!--  -->
       <div v-if="isOpenQRCode" class="tableManagement__qr">
         <div class="qr">
           <div class="qr__title title">Bàn số {{ selectedTable.id }}</div>
@@ -70,34 +75,37 @@
         </div>
 
         <div class="qr__img">
-          <QrCode class="qr__code" :size="400" :text="selectedTable.qr_url" />
+          <QrCode class="qr__code" :size="400" :text="selectedTable.qr_url"></QrCode>
         </div>
       </div>
     </div>
-    <AddTableModal ref="addTableModalRef" :tableId="tableId" />
+
+    <AddTableModal ref="addTableModalRef" :tableId="tableId" @complete="complete" />
   </div>
 </template>
 
 <script>
 import Loading from '@/components/common/Loading/index.vue';
+
 import { tableManagementService } from '@/services';
 import AddTableModal from '../modals/AddTableModal/index.vue';
-import { filter } from 'lodash';
+import { size, forEach } from 'lodash';
 import QrCode from 'vue-qrcode-component';
+
 export default {
   name: 'TableManagement',
 
   components: {
     AddTableModal,
+    Loading,
     QrCode,
-    Loading
   },
 
   data() {
     return {
       searchText: '',
       listTable: [],
-      tableId: '',
+      tableId: 0,
       qr_url: '',
       isOpenQRCode: false,
       selectedTable: {
@@ -105,14 +113,9 @@ export default {
         qr_image: '',
         qr_url: '',
         numberOfSeat: 0,
-      }
+      },
+      isLoading: false,
     };
-  },
-
-  computed: {
-    totalTable() {
-      return this.listTable.length;
-    },
   },
 
   watch: {
@@ -121,7 +124,7 @@ export default {
         this.isOpenQRCode = true;
       },
       deep: true,
-    }
+    },
   },
 
   mounted() {
@@ -129,8 +132,11 @@ export default {
   },
 
   methods: {
-    editClick(val) {
-      // this.$refs.addTableModalRef.show('update');
+    size,
+    editClick(id) {
+      this.tableId = id;
+      this.isOpenQRCode = false;
+      this.$refs.addTableModalRef.show('update');
     },
 
     remove(val) {
@@ -149,16 +155,17 @@ export default {
       this.isOpenQRCode = !this.isOpenQRCode;
     },
 
-    handleSave() {
-
-    },
-
     async getListTable() {
-      const res = await tableManagementService.getListTable({
-        headers: {
-          Authorization: this.$auth.$storage._state['_token.local'],
-        }
-      });
+      this.isLoading = true;
+      const res = await tableManagementService
+        .getListTable({
+          headers: {
+            Authorization: this.$auth.$storage._state['_token.local'],
+          },
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
 
       this.listTable = res.data;
     },
@@ -170,14 +177,22 @@ export default {
         confirmText: 'Xóa',
 
         confirmed: async () => {
-          const res = await tableManagementService.deleteTable(dishId);
+          const res = await tableManagementService.deleteTable(dishId, {
+            headers: {
+              Authorization: this.$auth.$storage._state['_token.local'],
+            },
+          });
 
           if (res.status === 200) {
             this.getListTable();
           }
-        }
+        },
       });
-    }
+    },
+
+    complete() {
+      this.getListTable();
+    },
   },
 };
 </script>

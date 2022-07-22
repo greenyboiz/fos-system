@@ -130,7 +130,7 @@ export default {
         this.getListDishes();
       },
       deep: true,
-    }
+    },
   },
 
   mounted() {
@@ -139,7 +139,11 @@ export default {
 
   methods: {
     async getListDishes() {
-      const res = await orderService.getOrderItem(this.spOrderId);
+      const res = await orderService.getOrderItem(this.spOrderId, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
 
       console.log(res);
       if (res.success) {

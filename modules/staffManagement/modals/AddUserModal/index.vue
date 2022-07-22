@@ -11,56 +11,26 @@
   >
     <div class="info-staff">
       <div class="info-staff__avatar" @click="chooseAvatar()">
-        <ImageOrDefault
-          class="info-staff__img"
-          :src="avatar || formUser.avatar"
-          alt="avatar"
-        />
+        <ImageOrDefault class="info-staff__img" :src="avatar" alt="avatar" />
         <div class="info-staff__add">+</div>
       </div>
-      <input
-        ref="avatarRef"
-        style="display: none"
-        type="file"
-        accept="image/*"
-        @change="handleAddAvatar($event)"
-      />
+      <input ref="avatarRef" style="display: none" type="file" accept="image/*" @change="handleAddAvatar" />
       <div class="info-staff__detail">
         <div class="info-staff__item">
           <label for="name">Họ và Tên:</label>
-          <input
-            id="name"
-            v-model="formUser.fullName"
-            type="text"
-            placeholder="Nhập tên người dùng"
-          />
+          <input id="name" v-model="formUser.fullName" type="text" placeholder="Nhập tên người dùng" />
         </div>
         <div class="info-staff__item">
           <label for="username">Tên tài khoản:</label>
-          <input
-            id="username"
-            v-model="formUser.userName"
-            type="text"
-            placeholder="Nhập tên tài khoản"
-          />
+          <input id="username" v-model="formUser.userName" type="text" placeholder="Nhập tên tài khoản" />
         </div>
         <div class="info-staff__item">
           <label for="phone">SĐT:</label>
-          <input
-            id="phone"
-            v-model="formUser.contact"
-            type="text"
-            placeholder="Nhập SĐT"
-          />
+          <input id="phone" v-model="formUser.contact" type="text" placeholder="Nhập SĐT" />
         </div>
         <div class="info-staff__item">
           <label for="email">Email:</label>
-          <input
-            id="email"
-            v-model="formUser.email"
-            type="text"
-            placeholder="Nhập email"
-          />
+          <input id="email" v-model="formUser.email" type="text" placeholder="Nhập email" />
         </div>
         <div class="info-staff__item">
           <label for="pass">Mật khẩu:</label>
@@ -70,16 +40,12 @@
             :type="showPassword ? 'text' : 'password'"
             placeholder="Nhập mật khẩu"
           />
-          <img
-            src="~/assets/icons/eye.png"
-            alt=""
-            @click="handleShowPassword()"
-          />
+          <img src="~/assets/icons/eye.png" alt="" @click="handleShowPassword()" />
         </div>
         <div class="info-staff__item">
           <label for="gender">Giới tính:</label>
           <div class="d-flex" style="width: 100%">
-            <div v-for="(gender) in genderType" :key="gender.id">
+            <div v-for="gender in genderType" :key="gender.id">
               <CustomCheckbox
                 v-model="genderSelected"
                 class="mr-2"
@@ -98,7 +64,7 @@
         <div class="info-staff__item">
           <label for="role">Role:</label>
           <div class="d-flex" style="width: 100%">
-            <div v-for="(role) in roleType" :key="role.roleId">
+            <div v-for="role in roleType" :key="role.roleId">
               <CustomCheckbox
                 v-model="roleSelected"
                 class="mr-2"
@@ -117,7 +83,7 @@
         <div class="info-staff__item">
           <label for="status">Trạng thái:</label>
           <div class="d-flex" style="width: 100%">
-            <div v-for="(status) in statusType" :key="status.id">
+            <div v-for="status in statusType" :key="status.id">
               <CustomCheckbox
                 v-model="statusSelected"
                 class="mr-2"
@@ -149,6 +115,12 @@
 import ImageOrDefault from '@/components/common/ImageOrDefault/index.vue';
 import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import { staffManagementService } from '@/services';
+
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
 export default {
   name: 'AddUserModal',
 
@@ -161,14 +133,13 @@ export default {
     userId: {
       type: Number,
       default: 0,
-    }
+    },
   },
 
   data() {
     return {
       formUser: {
         fullName: '',
-        profileImage: '',
         userName: '',
         password: '',
         contact: '',
@@ -182,10 +153,10 @@ export default {
       },
       modalTitle: '',
       showPassword: false,
-      avatar: '',
+      avatar: null,
       genderType: [
         { id: 1, name: 'nam' },
-        { id: 2, name: 'nu' }
+        { id: 2, name: 'nu' },
       ],
       genderSelected: '',
       roleSelected: '',
@@ -193,12 +164,12 @@ export default {
         { roleId: 1, roleName: 'ADMIN' },
         { roleId: 2, roleName: 'STAFF' },
         { roleId: 3, roleName: 'CHEF' },
-        { roleId: 4, roleName: 'CUSTOMER' }
+        { roleId: 4, roleName: 'CUSTOMER' },
       ],
       statusSelected: null,
       statusType: [
         { id: 0, name: 'Đang làm việc' },
-        { id: 1, name: 'Đã nghỉ' }
+        { id: 1, name: 'Đã nghỉ' },
       ],
       isLoading: false,
       isDone: false,
@@ -224,7 +195,7 @@ export default {
   watch: {
     userId() {
       this.getUserById();
-    }
+    },
   },
 
   methods: {
@@ -236,7 +207,6 @@ export default {
     handleHideModal() {
       this.formUser = {
         fullName: '',
-        profileImage: '',
         userName: '',
         password: '',
         contact: '',
@@ -254,6 +224,55 @@ export default {
       this.$refs.addUser.hide();
     },
 
+    validator() {
+      if (!this.formUser.fullName) {
+        Vue.$toast.error('Bạn chưa nhập Họ và tên');
+        return false;
+      }
+
+      if (!this.formUser.userName) {
+        this.$toast.error('Bạn chưa nhập Tên tài khoản');
+        return false;
+      }
+
+      if (!this.formUser.password) {
+        this.$toast.error('Bạn chưa nhập Mật khẩu');
+        return false;
+      }
+
+      if (!this.formUser.contact) {
+        this.$toast.error('Bạn chưa nhập Số điện thoại');
+        return false;
+      }
+
+      if (!this.formUser.contact.match(/(84|0[3|5|7|8|9])+([0-9]{8})\b/g)) {
+        this.$toast.error('Bạn chưa nhập đúng định dạng');
+        return false;
+      }
+
+      if (!this.formUser.email) {
+        this.$toast.error('Bạn chưa nhập Email');
+        return false;
+      }
+
+      if (!this.genderSelected) {
+        this.$toast.error('Bạn chưa chọn giới tính');
+        return false;
+      }
+
+      if (!this.roleSelected) {
+        this.$toast.error('Bạn chưa phân quyền tài khoản');
+        return false;
+      }
+
+      if (!this.statusSelected) {
+        this.$toast.error('Bạn chưa chọn trạng thái');
+        return false;
+      }
+
+      return true;
+    },
+
     chooseAvatar() {
       this.$refs.avatarRef.click();
     },
@@ -262,13 +281,14 @@ export default {
       // console.log(this.statusSelected);
     },
 
-    handleAddAvatar(e) {
-      const file = e.target.files;
+    handleAddAvatar() {
+      const file = this.$refs.avatarRef.files;
       if (!file.length) return;
 
-      this.formUser.avatar = file[0];
+      // this.avatar = file[0];
       this.avatar = URL.createObjectURL(file[0]);
-      e.target.value = '';
+      console.log(this.avatar);
+      // e.target.value = '';
     },
 
     handleShowPassword() {
@@ -281,8 +301,15 @@ export default {
       this.formUser.role.roleId = this.roleIdSelected;
       this.formUser.role.roleName = this.roleSelected;
       const requestParams = this.formUser;
+      const formData = new FormData();
+      formData.set('file', this.$refs.avatarRef.files[0]);
+      formData.set('users', requestParams);
 
-      const res = await staffManagementService.addUser(requestParams);
+      const res = await staffManagementService.addUser(formData, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
 
       if (res.status === 200) {
         this.isDone = true;
@@ -300,7 +327,17 @@ export default {
       this.formUser.userId = this.userId;
       const requestParams = this.formUser;
 
-      const res = await staffManagementService.updateUser(requestParams);
+      const res = await staffManagementService.updateUser(
+        {
+          file: null,
+          users: requestParams,
+        },
+        {
+          headers: {
+            Authorization: this.$auth.$storage._state['_token.local'],
+          },
+        }
+      );
 
       if (res.status === 200) {
         this.isDone = true;
@@ -311,7 +348,11 @@ export default {
     },
 
     async getUserById() {
-      const res = await staffManagementService.getUserById(this.userId);
+      const res = await staffManagementService.getUserById(this.userId, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
 
       if (res.success) {
         const user = res.data;
@@ -319,7 +360,7 @@ export default {
         this.formUser.userName = user.userName;
         this.formUser.password = user.password;
         this.formUser.contact = user.contact;
-        this.formUser.profileImage = user.profileImage;
+        this.avatar = user.profileImage;
         this.formUser.email = user.email;
         this.formUser.gender = user.gender;
         this.statusSelected = user.status;
@@ -329,12 +370,18 @@ export default {
     },
 
     handleSave() {
+      console.log(this.formUser);
+      if (!this.validator()) {
+        return;
+      }
+
       if (this.modalTitle) {
         this.updateUser();
       } else {
         this.addUser();
       }
-      this.handleHideModal();
+
+      // this.handleHideModal();
     },
   },
 };

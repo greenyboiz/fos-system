@@ -7,26 +7,26 @@ class StaffManagementService {
     return res.data;
   }
 
-  async addUser(params) {
-    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/users/add', params);
+  async addUser(params, header) {
+    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/users/add', params, header);
 
     return res;
   }
 
-  async updateUser(params) {
-    const res = await axios.put('https://project-for-fos-mld.herokuapp.com/api/users/update', params);
+  async updateUser(params, header) {
+    const res = await axios.put('https://project-for-fos-mld.herokuapp.com/api/users/update', params, header);
 
     return res;
   }
 
-  async deleteUser(userId) {
-    const res = await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/users/delete/${userId}`);
+  async deleteUser(userId, header) {
+    const res = await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/users/delete/${userId}`, header);
 
     return res;
   }
 
-  async getUserById(userId) {
-    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/users/${userId}`);
+  async getUserById(userId, header) {
+    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/users/${userId}`, header);
 
     return res.data;
   }
