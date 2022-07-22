@@ -11,10 +11,21 @@
   >
     <div class="info-staff">
       <div class="info-staff__avatar" @click="chooseAvatar()">
-        <ImageOrDefault class="info-staff__img" :src="avatar" alt="avatar" />
+        <ImageOrDefault
+          class="info-staff__img"
+          :src="avatar"
+          alt="avatar"
+        />
         <div class="info-staff__add">+</div>
       </div>
-      <input ref="avatarRef" style="display: none" type="file" accept="image/*" @change="handleAddAvatar" />
+      <input
+        id="avatarUser"
+        ref="avatarRef"
+        style="display: none"
+        type="file"
+        accept="image/*"
+        @change="handleAddAvatar($event)"
+      />
       <div class="info-staff__detail">
         <div class="info-staff__item">
           <label for="name">Họ và Tên:</label>
@@ -274,22 +285,32 @@ export default {
     },
 
     chooseAvatar() {
-      this.$refs.avatarRef.click();
+      window.cloudinary.createUploadWidget(
+        { cloud_name: 'dk7clbldt',
+          upload_preset: 'ml_default'
+        },
+        (error, result) => {
+          if (!error && result && result.event === 'success') {
+            console.log('Done uploading..: ', result.info);
+            this.avatar = result.info.url;
+          }
+        }
+      ).open();
     },
 
     handleSelectedStatus() {
       // console.log(this.statusSelected);
     },
 
-    handleAddAvatar() {
-      const file = this.$refs.avatarRef.files;
-      if (!file.length) return;
+    // handleAddAvatar(e) {
+    //   const file = this.$refs.avatarRef.files;
+    //   if (!file.length) return;
 
-      // this.avatar = file[0];
-      this.avatar = URL.createObjectURL(file[0]);
-      console.log(this.avatar);
-      // e.target.value = '';
-    },
+    //   this.avatar = URL.createObjectURL(file[0]);
+    //   // this.avatar = file[0];
+    //   // console.log(this.avatar);
+    //   // e.target.value = '';
+    // },
 
     handleShowPassword() {
       this.showPassword = !this.showPassword;

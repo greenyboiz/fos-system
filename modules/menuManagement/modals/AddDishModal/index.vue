@@ -156,17 +156,28 @@ export default {
     updateUsers() {},
 
     chooseAvatar() {
-      this.$refs.avatarRef.click();
+      // this.$refs.avatarRef.click();
+      window.cloudinary.createUploadWidget(
+        { cloud_name: 'dk7clbldt',
+          upload_preset: 'ml_default'
+        },
+        (error, result) => {
+          if (!error && result && result.event === 'success') {
+            console.log('Done uploading..: ', result.info);
+            this.avatar = result.info.url;
+          }
+        }
+      ).open();
     },
 
-    handleAddAvatar(e) {
-      const file = e.target.files;
-      if (!file.length) return;
+    // handleAddAvatar(e) {
+    //   const file = e.target.files;
+    //   if (!file.length) return;
 
-      this.formDish.dishImage = file[0];
-      this.avatar = URL.createObjectURL(file[0]);
-      e.target.value = '';
-    },
+    //   this.formDish.dishImage = file[0];
+    //   this.avatar = URL.createObjectURL(file[0]);
+    //   e.target.value = '';
+    // },
 
     handleSelectCat() {
       // console.log(this.selectedCategory);
@@ -187,7 +198,7 @@ export default {
     async addDish() {
       this.formDish.status = this.statusSelected;
       this.formDish.category = this.selectedCategory;
-      this.formDish.dishImage = '';
+      this.formDish.dishImage = this.avatar;
       const requestParams = this.formDish;
 
       const res = await menuManagementService.addDish(requestParams, {

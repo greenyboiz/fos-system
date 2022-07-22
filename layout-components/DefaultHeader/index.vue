@@ -45,6 +45,7 @@
           </li>
 
           <li
+            v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'"
             :class="{ 'nav-item-active': false }"
             class="nav-item menuItem"
             style="margin-left: 32px"
@@ -55,6 +56,7 @@
             </nuxt-link>
           </li>
           <li
+            v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'"
             :class="{ 'nav-item-active': false }"
             class="nav-item menuItem"
           >
@@ -64,6 +66,7 @@
             </nuxt-link>
           </li>
           <li
+            v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'"
             :class="{ 'nav-item-active': false }"
             class="nav-item menuItem"
           >
@@ -73,6 +76,7 @@
             </nuxt-link>
           </li>
           <li
+            v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'"
             :class="{ 'nav-item-active': false }"
             class="nav-item menuItem"
           >

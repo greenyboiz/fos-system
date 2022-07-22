@@ -29,6 +29,9 @@ export default {
       {
         src: 'https://unpkg.com/vue-multiselect@2.1.0',
       },
+      {
+        src: 'https://upload-widget.cloudinary.com/global/all.js',
+      }
     ],
   },
 

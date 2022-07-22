@@ -102,12 +102,20 @@ export default {
 
       if (res.success) {
         this.updateOrderId(res.data.orderId);
-        // this.$router.push({
-        //   name: 'specific_order',
-        //   params: {
-        //     orderId: res.data.orderId,
-        //   },
-        // });
+        this.getListTable();
+        // this.getOrder
+      }
+    },
+
+    async getListTable() {
+      const res = await tableManagementService.getListTable({
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        }
+      });
+
+      if (res) {
+        this.listTable = res.data;
       }
     },
 
