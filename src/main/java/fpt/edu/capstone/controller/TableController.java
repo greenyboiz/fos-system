@@ -36,7 +36,7 @@ public class TableController {
     private IOrdersService iOrdersService;
 
     @GetMapping("/tables")
-    private List<Tables> getAllTables(){
+    public List<Tables> getAllTables(){
         return iTablesService.getAllTables();
     }
 
@@ -56,21 +56,21 @@ public class TableController {
 
     }
 
-    @PreAuthorize("hasRole('ROLE_ADOMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/tables/add")
-    private ResponseEntity<?> saveTable(@RequestBody Tables table){
+    public ResponseEntity<?> saveTable(@RequestBody Tables table){
 
-//        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(table.getQrCode().getQRCodeLink());
-//        if(!checkQRCodeExist){
+        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(table.getQrCode().getQRCodeLink());
+        if(!checkQRCodeExist){
             iqrCodeService.addQRCode(table.getQrCode());
             iTablesService.addTable(table);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "successfull",true, iTablesService.addTable(table))
             );
-//        }
-//        return ResponseEntity.status(HttpStatus.OK).body(
-//                new ResponseObject("fail", "QRCode is exist",false, null)
-//        );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("fail", "QRCode is exist",false, null)
+        );
     }
 
 //    @PostMapping( value = "/tables", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -98,10 +98,11 @@ public class TableController {
 
 
     @PutMapping("/tables/update")
-    private Tables updateTable(@RequestBody Tables table){
+    public Tables updateTable(@RequestBody Tables table){
         return iTablesService.updateTable(table);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/tables/delete/{id}")
     public ResponseEntity<?> deleteTable(@PathVariable("id") Long id){
         boolean checkTableExist = iTablesService.checkTableExist(id);
