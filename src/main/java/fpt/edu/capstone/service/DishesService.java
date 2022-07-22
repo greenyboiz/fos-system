@@ -97,4 +97,13 @@ public class DishesService implements IDishesService {
             );
         }
     }
+
+    @Override
+    public boolean getDishesExist(String dishesName) {
+        Dishes dishes = dishesRepository.findDishesByDishesName(dishesName);
+        if (dishes != null){
+            return true;
+        }
+        return false;
+    }
 }

@@ -30,35 +30,44 @@ public class DishesController {
     }
 
 
-//    @PostMapping("/dishes/add")
-//    private Dishes saveDishes(@RequestBody Dishes dishes){
-//        return iDishesService.addDishes(dishes);
-//    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping( value = "/dishes/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<?> addDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
-        ObjectMapper objectMapper = new ObjectMapper();
-        Dishes dishes1 = new Dishes();
-        try {
-            dishes1 = objectMapper.readValue(dishes, Dishes.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        if(file.getSize() == 0){
-            iDishesService.addDishes(dishes1);
+    @PostMapping("/dishes/add")
+    public ResponseEntity<?> saveDishes(@RequestBody Dishes dishes){
+        boolean checkDishesExist = iDishesService.getDishesExist(dishes.getDishesName());
+        if(!checkDishesExist){
+            iDishesService.addDishes(dishes);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "file imange of dishes null",true, iDishesService.addDishes(dishes1))
-            );
-        }else {
-
-            Dishes dishes2 = iDishesService.uploadDishesImage(file,dishes1);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "successfull",true, dishes2)
+                    new ResponseObject("ok", "successfull",true, iDishesService.addDishes(dishes))
             );
         }
-
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "this dishes is exist",false, null)
+        );
     }
+
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PostMapping( value = "/dishes/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
+//    public ResponseEntity<?> addDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        Dishes dishes1 = new Dishes();
+//        try {
+//            dishes1 = objectMapper.readValue(dishes, Dishes.class);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//        if(file.getSize() == 0){
+//            iDishesService.addDishes(dishes1);
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "file imange of dishes null",true, iDishesService.addDishes(dishes1))
+//            );
+//        }else {
+//
+//            Dishes dishes2 = iDishesService.uploadDishesImage(file,dishes1);
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "successfull",true, dishes2)
+//            );
+//        }
+//
+//    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/dishes/update")
