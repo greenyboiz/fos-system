@@ -29,8 +29,7 @@ public class CategoryController {
     }
 
     @PostMapping("/category/add")
-    private ResponseEntity<?
-            > saveCategory(@RequestBody Category category){
+    public ResponseEntity<?> saveCategory(@RequestBody Category category){
         boolean checkCategoryExist = iCategoryService.checkCategoryExist(category.getCategoryName());
         if(!checkCategoryExist){
             iCategoryService.addCategory(category);
@@ -80,14 +79,22 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/category/update")
-    private Category updateCategory(@RequestBody Category category){
+    public Category updateCategory(@RequestBody Category category){
         return iCategoryService.updateCategory(category);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/category/delete/{id}")
-    public boolean deleteCategory(@PathVariable("id") Long id){
-        return iCategoryService.deleteCategory(id);
+    public ResponseEntity<?> deleteCategory(@PathVariable("id") Long id){
+        boolean deleteCategory = iCategoryService.deleteCategory(id);
+        if(deleteCategory){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Delete tableId = " + id + " successfull",true, deleteCategory)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "tableId = " + id + " not exist",false, null)
+        );
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
