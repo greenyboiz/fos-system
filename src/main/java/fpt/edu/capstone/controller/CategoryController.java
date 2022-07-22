@@ -23,7 +23,6 @@ public class CategoryController {
     @Autowired
     private ICategoryService iCategoryService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/category")
     public List<Category> getAlllCategories(){
         return iCategoryService.getAllCategory();
