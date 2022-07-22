@@ -94,9 +94,18 @@ public class OrdersService implements IOrdersService {
 
     @Override
     public Orders getOrderIdByQRCodeId(Long qrCodeId) {
-        Orders orderId = ordersRepository.findOrderIdByQRCodeId(qrCodeId);
-        if(orderId != null){
-            return orderId;
+        Orders orders = ordersRepository.findOrderIdByQRCodeId(qrCodeId);
+        if(orders != null){
+            return orders;
+        }
+        return null;
+    }
+
+    @Override
+    public Long getQRCodeIdByOrderId(Long orderId) {
+        Long qrCodeId = ordersRepository.findQRCodeIdByOrderId(orderId);
+        if(qrCodeId != null){
+            return qrCodeId;
         }
         return null;
     }

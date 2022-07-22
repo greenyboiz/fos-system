@@ -22,4 +22,6 @@ public interface ITablesService {
 //    Tables addTableAndQRcodeImage(MultipartFile file, Tables tables);
 
     Long getQRCodeIdByTableId(Long tableId);
+
+    Tables getTableByQRCodeId(Long qrCodeId);
 }

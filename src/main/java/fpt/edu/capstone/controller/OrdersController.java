@@ -5,6 +5,7 @@ import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.Tables;
 import fpt.edu.capstone.implementService.ICustomerService;
 import fpt.edu.capstone.implementService.IOrdersService;
+import fpt.edu.capstone.implementService.ITablesService;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,11 @@ public class OrdersController {
     @Autowired
     private ICustomerService iCustomerService;
 
+    @Autowired
+    private ITablesService iTablesService;
+
     @GetMapping("/orders")
-    private ResponseEntity<?> getAllOrders(){
+    public ResponseEntity<?> getAllOrders(){
         List<Orders> orders = iOrdersService.getAllOrders();
         if(orders != null){
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -40,13 +44,18 @@ public class OrdersController {
     }
 
     @PostMapping("/orders")
-    private ResponseEntity<?> saveOrders(@RequestBody Orders orders){
+    public ResponseEntity<?> saveOrders(@RequestBody Orders orders){
+
         boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
 //        boolean checkCustomerExistInOrder = iOrdersService.checkCustomerExistInOrder(orders);
         boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
         if (!checkOrderExist && !checkCustomerExist){
+//            Long qrCodeId = iOrdersService.getQRCodeIdByOrderId(orders.getOrderId());
+//            Tables tables = iTablesService.getTableByQRCodeId(qrCodeId);
+//            tables.setStatus("0");
             Customer customer = iCustomerService.addCustomer(orders.getCustomer());
             orders.setCustomer(customer);
+            iOrdersService.addOrder(orders);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "add order succsessfully",true, iOrdersService.addOrder(orders))
             );
@@ -59,7 +68,7 @@ public class OrdersController {
     }
 
     @PutMapping("/orders/update")
-    private Orders updateOrders(@RequestBody Orders orders){
+    public Orders updateOrders(@RequestBody Orders orders){
         return iOrdersService.updateOrder(orders);
     }
 

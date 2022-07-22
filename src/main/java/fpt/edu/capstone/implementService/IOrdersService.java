@@ -23,4 +23,6 @@ public interface IOrdersService {
     boolean checkCustomerExistInOrder(Orders orders);
 
     Orders getOrderIdByQRCodeId(Long qrCodeId);
+
+    Long getQRCodeIdByOrderId(Long orderId);
 }

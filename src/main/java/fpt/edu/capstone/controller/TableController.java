@@ -63,6 +63,7 @@ public class TableController {
         boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(table.getQrCode().getQRCodeLink());
         if(!checkQRCodeExist){
             iqrCodeService.addQRCode(table.getQrCode());
+            table.setStatus("1");
             iTablesService.addTable(table);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "successfull",true, iTablesService.addTable(table))

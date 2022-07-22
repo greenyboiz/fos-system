@@ -101,4 +101,13 @@ public class TableService implements ITablesService {
         }
         return null;
     }
+
+    @Override
+    public Tables getTableByQRCodeId(Long qrCodeId) {
+        Tables tables = tableRepository.findTableByQRCodeId(qrCodeId);
+        if(tables != null){
+            return tables;
+        }
+        return null;
+    }
 }
