@@ -23,13 +23,23 @@ public class QRCodeController {
     public IQRCodeService iqrCodeService;
 
     @GetMapping("/qrcode")
-    private List<QRCode> getAllQRCode(){
+    public List<QRCode> getAllQRCode(){
         return iqrCodeService.getAllQRCodes();
     }
 
     @PostMapping(value = "/qrcode/add")
-    private QRCode saveQRCode(@RequestBody QRCode qrCode){
-        return iqrCodeService.addQRCode(qrCode);
+    public ResponseEntity<?> saveQRCode(@RequestBody QRCode qrCode){
+        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(qrCode.getQRCodeLink());
+        if (!checkQRCodeExist){
+            iqrCodeService.addQRCode(qrCode);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successfull",true, iqrCodeService.addQRCode(qrCode))
+            );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("fail", "QRCode is exist",false, null)
+        );
+
     }
 
 //    @PostMapping( value = "/qrcode/upload", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })

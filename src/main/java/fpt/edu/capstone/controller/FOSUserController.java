@@ -39,8 +39,8 @@ public class FOSUserController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/users/add1")
-    private ResponseEntity<?> saveFOSUser(@RequestBody FOSUser fosUser){
+    @PostMapping("/users/add")
+    public ResponseEntity<?> saveFOSUser(@RequestBody FOSUser fosUser){
         boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
         if(!checkExistUser){
             FOSUser fosUserAdd = ifosUserService.addFOSUser(fosUser);
@@ -53,43 +53,43 @@ public class FOSUserController {
         );
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping( value = "/users/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<?> addFOSUser(@RequestParam("file") MultipartFile file, @RequestPart("users") String users){
-        ObjectMapper objectMapper = new ObjectMapper();
-        FOSUser fosUser = new FOSUser();
-        try {
-            fosUser = objectMapper.readValue(users, FOSUser.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
-        if(file.getSize() == 0){
-            if(!checkExistUser){
-                ifosUserService.addFOSUser(fosUser);
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "file image null",true, ifosUserService.addFOSUser(fosUser))
-                );
-            }
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                    new ResponseObject("fail", "Account exist",false, null)
-            );
-        }else {
-            if(!checkExistUser){
-                FOSUser fosUser1 = ifosUserService.addFOSUserImage(file,fosUser);
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "successfull",true, fosUser1)
-                );
-            }
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                    new ResponseObject("fail", "Account exist",false, null)
-            );
-        }
-    }
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PostMapping( value = "/users/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
+//    public ResponseEntity<?> addFOSUser(@RequestParam("file") MultipartFile file, @RequestPart("users") String users){
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        FOSUser fosUser = new FOSUser();
+//        try {
+//            fosUser = objectMapper.readValue(users, FOSUser.class);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//        boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
+//        if(file.getSize() == 0){
+//            if(!checkExistUser){
+//                ifosUserService.addFOSUser(fosUser);
+//                return ResponseEntity.status(HttpStatus.OK).body(
+//                        new ResponseObject("ok", "file image null",true, ifosUserService.addFOSUser(fosUser))
+//                );
+//            }
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+//                    new ResponseObject("fail", "Account exist",false, null)
+//            );
+//        }else {
+//            if(!checkExistUser){
+//                FOSUser fosUser1 = ifosUserService.addFOSUserImage(file,fosUser);
+//                return ResponseEntity.status(HttpStatus.OK).body(
+//                        new ResponseObject("ok", "successfull",true, fosUser1)
+//                );
+//            }
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+//                    new ResponseObject("fail", "Account exist",false, null)
+//            );
+//        }
+//    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/users/update")
-    private FOSUser updateFOSUser(@RequestBody FOSUser fosUser){
+    public FOSUser updateFOSUser(@RequestBody FOSUser fosUser){
         return ifosUserService.updateFOSUser(fosUser);
     }
 
@@ -101,7 +101,7 @@ public class FOSUserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users/{id}")
-    ResponseEntity<ResponseObject> findFOSUserById(@PathVariable Long id){
+    public ResponseEntity<ResponseObject> findFOSUserById(@PathVariable Long id){
         return ifosUserService.getFOSUserById(id);
     }
 }
