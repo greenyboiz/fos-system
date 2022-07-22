@@ -32,46 +32,46 @@ public class QRCodeController {
         return iqrCodeService.addQRCode(qrCode);
     }
 
-    @PostMapping( value = "/qrcode/upload", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    private QRCode uploadQRCode(@RequestParam("file")MultipartFile file, @RequestPart("qrcode") String qrcode){
-        ObjectMapper objectMapper = new ObjectMapper();
-        QRCode qrCode = new QRCode();
-        try {
-            qrCode = objectMapper.readValue(qrcode, QRCode.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return iqrCodeService.saveImageToDB(file,qrCode);
-    }
+//    @PostMapping( value = "/qrcode/upload", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
+//    private QRCode uploadQRCode(@RequestParam("file")MultipartFile file, @RequestPart("qrcode") String qrcode){
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        QRCode qrCode = new QRCode();
+//        try {
+//            qrCode = objectMapper.readValue(qrcode, QRCode.class);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return iqrCodeService.saveImageToDB(file,qrCode);
+//    }
 
-    @PostMapping( value = "/qrcode", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    private ResponseEntity<?> addQRCode(@RequestParam("file")MultipartFile file, @RequestPart("qrcode") String qrcode){
-        ObjectMapper objectMapper = new ObjectMapper();
-        QRCode qrCode = new QRCode();
-        try {
-            qrCode = objectMapper.readValue(qrcode, QRCode.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(qrCode.getQRCodeImage());
-        if(file.getSize() == 0){
-            iqrCodeService.addQRCode(qrCode);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "file imange is null",true, iqrCodeService.addQRCode(qrCode))
-            );
-        }else {
-            if (!checkQRCodeExist){
-                iqrCodeService.addQRCodeToDB(file,qrCode);
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "successfull",true, iqrCodeService.addQRCodeToDB(file,qrCode))
-                );
-            }else {
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("fail", "QRCode is exist",false, null)
-                );
-            }
-        }
-    }
+//    @PostMapping( value = "/qrcode", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
+//    private ResponseEntity<?> addQRCode(@RequestParam("file")MultipartFile file, @RequestPart("qrcode") String qrcode){
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        QRCode qrCode = new QRCode();
+//        try {
+//            qrCode = objectMapper.readValue(qrcode, QRCode.class);
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(qrCode.getQRCodeLink());
+//        if(file.getSize() == 0){
+//            iqrCodeService.addQRCode(qrCode);
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "file imange is null",true, iqrCodeService.addQRCode(qrCode))
+//            );
+//        }else {
+//            if (!checkQRCodeExist){
+//                iqrCodeService.addQRCodeToDB(file,qrCode);
+//                return ResponseEntity.status(HttpStatus.OK).body(
+//                        new ResponseObject("ok", "successfull",true, iqrCodeService.addQRCodeToDB(file,qrCode))
+//                );
+//            }else {
+//                return ResponseEntity.status(HttpStatus.OK).body(
+//                        new ResponseObject("fail", "QRCode is exist",false, null)
+//                );
+//            }
+//        }
+//    }
 
 
     @PutMapping("/qrcode/update")

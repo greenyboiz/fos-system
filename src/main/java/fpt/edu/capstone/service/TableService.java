@@ -81,17 +81,17 @@ public class TableService implements ITablesService {
         return false;
     }
 
-    @Override
-    public Tables addTableAndQRcodeImage(MultipartFile file, Tables tables) {
-        try {
-            Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
-            String img = (String) r.get("secure_url");
-            tables.getQrCode().setQRCodeImage(img);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return tableRepository.save(tables);
-    }
+//    @Override
+//    public Tables addTableAndQRcodeImage(MultipartFile file, Tables tables) {
+//        try {
+//            Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
+//            String img = (String) r.get("secure_url");
+//            tables.getQrCode().setQRCodeImage(img);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return tableRepository.save(tables);
+//    }
 
     @Override
     public Long getQRCodeIdByTableId(Long tableId) {

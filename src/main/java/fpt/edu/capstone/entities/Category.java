@@ -18,6 +18,6 @@ public class Category {
     @Column(name = "categoryName")
     private String categoryName;
 
-    @Column(name = "categoryImage")
-    private String categoryImage;
+//    @Column(name = "categoryImage")
+//    private String categoryImage;
 }

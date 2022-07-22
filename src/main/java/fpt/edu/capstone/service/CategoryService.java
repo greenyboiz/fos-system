@@ -30,37 +30,37 @@ public class CategoryService implements ICategoryService {
         return categoryRepository.save(category);
     }
 
-    @Override
-    public Category uploadImageCategory(MultipartFile file, Category category) {
-        try {
-            Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
-            String img = (String) r.get("secure_url");
-            category.setCategoryImage(img);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return categoryRepository.save(category);
-    }
+//    @Override
+//    public Category uploadImageCategory(MultipartFile file, Category category) {
+//        try {
+//            Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
+//            String img = (String) r.get("secure_url");
+//            category.setCategoryImage(img);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return categoryRepository.save(category);
+//    }
 
-    @Override
-    public Category uploadUpdateCategory(MultipartFile file, Category category) {
-        if(category != null){
-            Category category1 = categoryRepository.findByCategoryId(category.getCategoryId());
-            if(category1 != null){
-                try {
-                    Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
-                    String img = (String) r.get("secure_url");
-                    category1.setCategoryImage(img);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                category1.setCategoryName(category.getCategoryName());
-
-                return categoryRepository.save(category1);
-            }
-        }
-        return null;
-    }
+//    @Override
+//    public Category uploadUpdateCategory(MultipartFile file, Category category) {
+//        if(category != null){
+//            Category category1 = categoryRepository.findByCategoryId(category.getCategoryId());
+//            if(category1 != null){
+//                try {
+//                    Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
+//                    String img = (String) r.get("secure_url");
+//                    category1.setCategoryImage(img);
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//                category1.setCategoryName(category.getCategoryName());
+//
+//                return categoryRepository.save(category1);
+//            }
+//        }
+//        return null;
+//    }
 
     @Override
     public Category updateCategory(Category category) {
@@ -68,7 +68,7 @@ public class CategoryService implements ICategoryService {
             Category category1 = categoryRepository.findByCategoryId(category.getCategoryId());
             if(category1 != null){
                 category1.setCategoryName(category.getCategoryName());
-                category1.setCategoryImage(category.getCategoryImage());
+//                category1.setCategoryImage(category.getCategoryImage());
 
                 return categoryRepository.save(category1);
             }
@@ -103,5 +103,14 @@ public class CategoryService implements ICategoryService {
                     new ResponseObject("fail", "Can not find CategoryID: "+id,false,"null")
             );
         }
+    }
+
+    @Override
+    public boolean checkCategoryExist(String categoryName) {
+        Category category = categoryRepository.findByCategoryName(categoryName);
+        if(category != null){
+            return true;
+        }
+        return false;
     }
 }

@@ -18,8 +18,8 @@ public class QRCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long QRCodeId;
 
-    @Column(name = "QRCodeImage")
-    private String QRCodeImage;
+//    @Column(name = "QRCodeImage")
+//    private String QRCodeImage;
 
     @Column(name = "QRCodeLink")
     private String QRCodeLink;

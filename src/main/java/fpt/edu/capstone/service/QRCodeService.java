@@ -38,9 +38,9 @@ public class QRCodeService implements IQRCodeService {
         return qrCodeRepository.save(qrCode);
     }
 
-    @Override
-    public QRCode saveImageToDB(MultipartFile file, QRCode qrCode){
-//        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//    @Override
+//    public QRCode saveImageToDB(MultipartFile file, QRCode qrCode){
+////        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 //        if(fileName.contains("..")){
 //            System.out.println("not valid");
 //        }
@@ -51,29 +51,29 @@ public class QRCodeService implements IQRCodeService {
 //        }
 //        qrCode.setQRCodeImage(qrCode.getQRCodeImage());
 //        qrCode.setQRCodeLink(qrCode.getQRCodeLink());
-        return qrCodeRepository.save(qrCode);
-    }
+//        return qrCodeRepository.save(qrCode);
+//    }
 
-    @Override
-    public QRCode addQRCodeToDB(MultipartFile file, QRCode qrCode) {
-//        boolean checkQRCodeExist = qrCodeRepository.checkQRCodeExist(qrCode.getQRCodeImage());
-        try {
-            Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
-            String img = (String) r.get("secure_url");
-            qrCode.setQRCodeImage(img);
-            qrCode.setQRCodeLink("link"+ qrCode.getQRCodeId());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return qrCodeRepository.save(qrCode);
-    }
+//    @Override
+//    public QRCode addQRCodeToDB(MultipartFile file, QRCode qrCode) {
+////        boolean checkQRCodeExist = qrCodeRepository.checkQRCodeExist(qrCode.getQRCodeImage());
+//        try {
+//            Map r = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("resource_type","auto"));
+//            String img = (String) r.get("secure_url");
+//            qrCode.setQRCodeImage(img);
+//            qrCode.setQRCodeLink("link"+ qrCode.getQRCodeId());
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return qrCodeRepository.save(qrCode);
+//    }
 
     @Override
     public QRCode updateQRCode(QRCode qrCode) {
         if(qrCode != null){
             QRCode qrCodeUpdate = qrCodeRepository.getById(qrCode.getQRCodeId());
             if(qrCodeUpdate != null){
-                qrCodeUpdate.setQRCodeImage(qrCode.getQRCodeImage());
+//                qrCodeUpdate.setQRCodeImage(qrCode.getQRCodeImage());
                 qrCodeUpdate.setQRCodeLink(qrCode.getQRCodeLink());
 
                 return qrCodeRepository.save(qrCodeUpdate);
@@ -123,8 +123,8 @@ public class QRCodeService implements IQRCodeService {
     }
 
     @Override
-    public boolean checkQRCodeExist(String qrCodeImage) {
-        QRCode qrCode = qrCodeRepository.checkQRCodeExist(qrCodeImage);
+    public boolean checkQRCodeExist(String qrCodeLink) {
+        QRCode qrCode = qrCodeRepository.checkQRCodeExist(qrCodeLink);
         if(qrCode != null){
             return true;
         }

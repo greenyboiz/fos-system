@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,33 +55,46 @@ public class TableController {
 
 
     }
+
+    @PreAuthorize("hasRole('ROLE_ADOMIN')")
     @PostMapping("/tables/add")
-    private Tables saveTable(@RequestBody Tables table){
-        return iTablesService.addTable(table);
+    private ResponseEntity<?> saveTable(@RequestBody Tables table){
+
+//        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(table.getQrCode().getQRCodeLink());
+//        if(!checkQRCodeExist){
+            iqrCodeService.addQRCode(table.getQrCode());
+            iTablesService.addTable(table);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successfull",true, iTablesService.addTable(table))
+            );
+//        }
+//        return ResponseEntity.status(HttpStatus.OK).body(
+//                new ResponseObject("fail", "QRCode is exist",false, null)
+//        );
     }
 
-    @PostMapping( value = "/tables", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-    private ResponseEntity<?> addTable(@RequestParam("file") MultipartFile file, @RequestPart("table") String table){
-        if(file.getSize() == 0){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("fail", "file null",false, null)
-            );
-        }else {
-            ObjectMapper objectMapper = new ObjectMapper();
-            Tables tables = new Tables();
-            try {
-                tables = objectMapper.readValue(table, Tables.class);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-            iqrCodeService.addQRCode(tables.getQrCode());
-            Tables tables1 = iTablesService.addTableAndQRcodeImage(file,tables);
-
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "successfull",true, tables1)
-            );
-        }
-    }
+//    @PostMapping( value = "/tables", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
+//    private ResponseEntity<?> addTable(@RequestParam("file") MultipartFile file, @RequestPart("table") String table){
+//        if(file.getSize() == 0){
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("fail", "file null",false, null)
+//            );
+//        }else {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            Tables tables = new Tables();
+//            try {
+//                tables = objectMapper.readValue(table, Tables.class);
+//            } catch (JsonProcessingException e) {
+//                throw new RuntimeException(e);
+//            }
+//            iqrCodeService.addQRCode(tables.getQrCode());
+//            Tables tables1 = iTablesService.addTableAndQRcodeImage(file,tables);
+//
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "successfull",true, tables1)
+//            );
+//        }
+//    }
 
 
     @PutMapping("/tables/update")
