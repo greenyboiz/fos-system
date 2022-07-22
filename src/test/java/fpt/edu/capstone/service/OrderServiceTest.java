@@ -41,12 +41,12 @@ public class OrderServiceTest {
     public void getAllOrders(){
         List<Orders> expect = new ArrayList<>();
         Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
-        QRCode expectQRCode = new QRCode(1l,null,null);
+        QRCode expectQRCode = new QRCode(1l,null);
         expect.add(new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10));
 
         List<Orders> actual = new ArrayList<>();
         Customer actualCustomer = new Customer(null,null,"0964697689",null,null);
-        QRCode actualQRCode = new QRCode(1l,null,null);
+        QRCode actualQRCode = new QRCode(1l,null);
         actual.add(new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"tuyệt vời",10));
 
         Mockito.when(ordersRepository.findAll()).thenReturn(actual);
@@ -59,11 +59,11 @@ public class OrderServiceTest {
     @Test
     public void addOrder(){
         Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
-        QRCode expectQRCode = new QRCode(1l,null,null);
+        QRCode expectQRCode = new QRCode(1l,null);
         Orders expect = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
 
         Customer actualCustomer = new Customer(null,null,"0964697689",null,null);
-        QRCode actualQRCode = new QRCode(1l,null,null);
+        QRCode actualQRCode = new QRCode(1l,null);
         Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"tuyệt vời",10);
 
         Mockito.when(ordersRepository.save(actual)).thenReturn(expect);
@@ -75,11 +75,11 @@ public class OrderServiceTest {
     @Test
     public void updateOrder(){
         Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
-        QRCode expectQRCode = new QRCode(1l,null,null);
+        QRCode expectQRCode = new QRCode(1l,null);
         Orders expect = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
 
         Customer actualCustomer = new Customer(null,null,"0964697688",null,null);
-        QRCode actualQRCode = new QRCode(2l,null,null);
+        QRCode actualQRCode = new QRCode(2l,null);
         Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
 
         Mockito.when(ordersRepository.getById(actual.getOrderId())).thenReturn(expect);
@@ -92,11 +92,11 @@ public class OrderServiceTest {
     @Test
     public void deleteOrder(){
         Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
-        QRCode expectQRCode = new QRCode(1l,null,null);
+        QRCode expectQRCode = new QRCode(1l,null);
         Orders expect = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
 
         Customer actualCustomer = new Customer(null,null,"0964697688",null,null);
-        QRCode actualQRCode = new QRCode(2l,null,null);
+        QRCode actualQRCode = new QRCode(2l,null);
         Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
 
         Mockito.when(ordersRepository.getOrdersById(actual.getOrderId())).thenReturn(expect);
@@ -108,7 +108,7 @@ public class OrderServiceTest {
     @Test
     public void checkOrderExist(){
         Customer actualCustomer = new Customer(null,null,"0964697688",null,null);
-        QRCode actualQRCode = new QRCode(2l,null,null);
+        QRCode actualQRCode = new QRCode(2l,null);
         Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
 
         Mockito.when(ordersRepository.findByCustomerIdAndQrCodeAndOrderStatus(actual.getCustomer().getContact(),actual.getQrCode().getQRCodeId())).thenReturn(actual);

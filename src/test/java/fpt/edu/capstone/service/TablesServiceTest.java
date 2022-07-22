@@ -57,8 +57,8 @@ public class TablesServiceTest {
 
     @Test
     public void updateTableTest(){
-        QRCode qrCodeExpect = new QRCode(1l, "abc","link1");
-        QRCode qrCodeUpdate = new QRCode(2l, "abcd","link2");
+        QRCode qrCodeExpect = new QRCode(1l, "link1");
+        QRCode qrCodeUpdate = new QRCode(2l, "link2");
 
         Tables oldTable = new Tables(1l,"4","1",qrCodeExpect);
         Tables tableUpdate = new Tables(1l,"4","1",qrCodeUpdate);
@@ -74,8 +74,8 @@ public class TablesServiceTest {
 
     @Test
     public void deleteTableByIdTest(){
-        QRCode qrCodeExpect = new QRCode(1l, "abc","link1");
-        QRCode qrCodeUpdate = new QRCode(2l, "abcd","link2");
+        QRCode qrCodeExpect = new QRCode(1l, "link1");
+        QRCode qrCodeUpdate = new QRCode(2l, "link2");
         Tables table = new Tables(1l,"4","1",qrCodeExpect);
         Tables actual = new Tables(1l,"4","1",qrCodeUpdate);
         Mockito.when(tableRepository.getById(table.getTableId())).thenReturn(actual);

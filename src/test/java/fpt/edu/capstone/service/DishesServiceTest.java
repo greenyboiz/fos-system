@@ -47,8 +47,8 @@ public class DishesServiceTest {
 
     @Test
     public void addDishesTest(){
-        Category expectCategory = new Category(1l,"ga","img ga 1");
-        Category actualCategory = new Category(2l,"lon","img lon 1");
+        Category expectCategory = new Category(1l,"ga");
+        Category actualCategory = new Category(2l,"lon");
 
         Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, expectCategory);
         Dishes actual = new Dishes( "ga tan cao cap", "ngon ngon", "image1", null, null, 10l, 1, actualCategory);
@@ -61,8 +61,8 @@ public class DishesServiceTest {
 
     @Test
     public void updateDishesTest(){
-        Category expectCategory = new Category(1l,"ga","img ga 1");
-        Category actualCategory = new Category(2l,"lon","img lon 1");
+        Category expectCategory = new Category(1l,"ga");
+        Category actualCategory = new Category(2l,"lon");
 
         Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, expectCategory);
         Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, 1, actualCategory);
@@ -77,8 +77,8 @@ public class DishesServiceTest {
 
     @Test
     public void  deleteDishesByIdTest(){
-        Category expectCategory = new Category(1l,"ga","img ga 1");
-        Category actualCategory = new Category(2l,"lon","img lon 1");
+        Category expectCategory = new Category(1l,"ga");
+        Category actualCategory = new Category(2l,"lon");
 
         Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, expectCategory);
         Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, 1, actualCategory);
