@@ -29,10 +29,10 @@ public class CustomerServiceTest {
     @Test
     public void getAllCustomerTest(){
         List<Customer> expect = new ArrayList<>();
-        expect.add(new Customer(1l,"minh","nguyet","065623266","mn@gmail.com","Ha Noi"));
+        expect.add(new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi"));
 
         List<Customer> actual = new ArrayList<>();
-        actual.add(new Customer(1l,"minh","nguyet","065623266","mn@gmail.com","Ha Noi"));
+        actual.add(new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi"));
 
         Mockito.when(customerRepository.findAll()).thenReturn(actual);
         List<Customer> result = customerService.getAllCustomer();
@@ -41,8 +41,8 @@ public class CustomerServiceTest {
 
     @Test
     public void addCustomerTest(){
-        Customer expect = new Customer(1l,"minh","nguyet","065623266","mn@gmail.com","Ha Noi");
-        Customer actual = new Customer("tang","nguyet","065623266","mn@gmail.com","Ha Noi");
+        Customer expect = new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi");
+        Customer actual = new Customer("tang nguyet","065623266","mn@gmail.com","Ha Noi");
 
         Mockito.when(customerRepository.save(actual)).thenReturn(expect);
         Customer result = customerService.addCustomer(actual);
@@ -52,8 +52,8 @@ public class CustomerServiceTest {
 
     @Test
     public void updateCustomerTest(){
-        Customer expect = new Customer(1l,"minh","nguyet","065623266","mn@gmail.com","Ha Noi");
-        Customer actual = new Customer(1l,"tang","nguyet","065623266","mn@gmail.com","Ha Noi");
+        Customer expect = new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi");
+        Customer actual = new Customer(1l,"tang nguyet","065623266","mn@gmail.com","Ha Noi");
 
         Mockito.when(customerRepository.getById(actual.getCustomerId())).thenReturn(expect);
         Mockito.when(customerRepository.save(actual)).thenReturn(expect);
@@ -65,8 +65,8 @@ public class CustomerServiceTest {
     @Test
     public void  deleteCustomerByIdTest(){
 
-        Customer expect = new Customer(1l,"minh","nguyet","065623266","mn@gmail.com","Ha Noi");
-        Customer actual = new Customer(1l,"tang","nguyet","065623266","mn@gmail.com","Ha Noi");
+        Customer expect = new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi");
+        Customer actual = new Customer(1l,"tang nguyet","065623266","mn@gmail.com","Ha Noi");
 
         Mockito.when(customerRepository.getById(expect.getCustomerId())).thenReturn(actual);
 //        Mockito.when(dishesRepository.delete(actual);)

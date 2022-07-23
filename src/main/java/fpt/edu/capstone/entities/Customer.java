@@ -17,11 +17,9 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
-    @Column(name = "firstName")
-    private String firstName;
+    @Column(name = "fullName")
+    private String fullName;
 
-    @Column(name = "lastName")
-    private String lastName;
 
 //    @Column(name = "contact",unique = true, nullable = false)
     @Column(name = "contact")
@@ -33,9 +31,8 @@ public class Customer {
     @Column(name = "address")
     private String address;
 
-    public Customer(String firstName, String lastName, String contact, String email, String address) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Customer(String fullName, String contact, String email, String address) {
+        this.fullName = fullName;
         this.contact = contact;
         this.email = email;
         this.address = address;

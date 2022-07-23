@@ -27,8 +27,7 @@ public class CustomerService implements ICustomerService {
         if(customer != null){
             Customer customer1 = customerRepository.findByCustomerId(customer.getCustomerId());
             if(customer1 != null){
-                customer1.setFirstName(customer.getFirstName());
-                customer1.setLastName(customer.getLastName());
+                customer1.setFullName(customer.getFullName());
                 customer1.setContact(customer.getContact());
                 customer1.setEmail(customer.getEmail());
                 customer1.setAddress(customer.getAddress());

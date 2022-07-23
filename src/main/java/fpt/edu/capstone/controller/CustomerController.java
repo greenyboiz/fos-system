@@ -18,12 +18,20 @@ public class CustomerController {
     private ICustomerService iCustomerService;
 
     @GetMapping("/customers")
-    private List<Customer> getAllCustomer(){
-        return iCustomerService.getAllCustomer();
+    public ResponseEntity<?> getAllCustomer(){
+        List<Customer> customers = iCustomerService.getAllCustomer();
+        if(customers !=null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, customers)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "can not find any customer",false,"null")
+        );
     }
 
     @PostMapping("/customers/add")
-    private ResponseEntity<?> saveCustomer(@RequestBody Customer customer){
+    public ResponseEntity<?> saveCustomer(@RequestBody Customer customer){
         boolean checkCustomerExist = iCustomerService.checkCustomerExist(customer);
 
         if(!checkCustomerExist){
@@ -39,7 +47,7 @@ public class CustomerController {
     }
 
     @PutMapping("/customers/update")
-    private Customer updateFOSUser(@RequestBody Customer customer){
+    public Customer updateFOSUser(@RequestBody Customer customer){
         return iCustomerService.updateCustomer(customer);
     }
 
@@ -49,7 +57,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/{id}")
-    ResponseEntity<ResponseObject> findCustomerById(@PathVariable Long id){
+    public ResponseEntity<ResponseObject> findCustomerById(@PathVariable Long id){
         return iCustomerService.getCustomerById(id);
     }
 
