@@ -54,17 +54,8 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> getCustomerById(Long id) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if(customer.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, customer)
-            );
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", "Can not find customerId: "+id,false,"null")
-            );
-        }
+    public Customer getCustomerById(Long id) {
+        return customerRepository.findByCustomerId(id);
     }
 
     @Override

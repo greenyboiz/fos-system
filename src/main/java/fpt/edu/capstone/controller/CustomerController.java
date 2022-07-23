@@ -5,6 +5,7 @@ import fpt.edu.capstone.implementService.ICustomerService;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class CustomerController {
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("fail", "can not find any customer",false,"null")
+                new ResponseObject("fail", "Can not find any customer",false,"null")
         );
     }
 
@@ -52,13 +53,29 @@ public class CustomerController {
     }
 
     @DeleteMapping("/customers/delete/{id}")
-    public boolean deletecustomers(@PathVariable("id") Long id){
-        return iCustomerService.deleteCustomer(id);
+    public ResponseEntity<?> deletecustomers(@PathVariable("id") Long id){
+        boolean deleteCustomer = iCustomerService.deleteCustomer(id);
+        if(deleteCustomer){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, deleteCustomer)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Customer is not exist ",false,"null")
+        );
     }
 
     @GetMapping("/customers/{id}")
     public ResponseEntity<ResponseObject> findCustomerById(@PathVariable Long id){
-        return iCustomerService.getCustomerById(id);
+        Customer customer = iCustomerService.getCustomerById(id);
+        if(customer != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, customer)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Customer is not exist ",false,"null")
+        );
     }
 
 
