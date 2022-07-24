@@ -2,11 +2,14 @@ package fpt.edu.capstone.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fpt.edu.capstone.dto.PagingRequest;
 import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.implementService.IDishesService;
 import fpt.edu.capstone.response.ResponseObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +23,24 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class DishesController {
     @Autowired
     public IDishesService iDishesService;
 
+//    @GetMapping("/dishes")
+//    public List<Dishes> getAllDishes(){
+//        return iDishesService.getAllDishes();
+//    }
+
     @GetMapping("/dishes")
-    public List<Dishes> getAllDishes(){
-        return iDishesService.getAllDishes();
+    public Page<Dishes> listAll(
+//            PagingRequest pagingRequest
+            @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "20") int pageSize
+    ){
+        log.info("(listAll)pageNum: {}, pageSize: {}", pageNum, pageSize);
+        return iDishesService.listDishes(pageNum, pageSize);
     }
 
 

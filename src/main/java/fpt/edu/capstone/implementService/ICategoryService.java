@@ -8,18 +8,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ICategoryService {
-    public Category addCategory(Category category);
 
-//    public Category uploadImageCategory(MultipartFile file, Category category);
-//
-//    public Category uploadUpdateCategory(MultipartFile file,Category category);
-    public Category updateCategory(Category category);
+    List<Category> getAllCategory();
+    Category addCategory(Category category);
 
-    public boolean deleteCategory(Long id);
+    Category updateCategory(Category category);
 
-    public List<Category> getAllCategory();
+    boolean deleteCategory(Long id);
 
-    public ResponseEntity<ResponseObject> getCategoryById(Long id);
+    ResponseEntity<ResponseObject> getCategoryById(Long id);
 
     boolean checkCategoryExist(String categoryName);
 }

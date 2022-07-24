@@ -8,6 +8,7 @@ import fpt.edu.capstone.response.JwtResponse;
 import fpt.edu.capstone.response.ResponseObject;
 import fpt.edu.capstone.sercurity.JwtTokenUtil;
 import fpt.edu.capstone.service.JwtUserDetailsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class AuthenticationController {
 
     @Autowired
@@ -63,11 +65,11 @@ public class AuthenticationController {
                     .body(ResponseObject.builder().status("401").message("sign in request: username or pasword wrong!")
                             .success(false).build());
         }
-//        if (!user.isActive()) {
-//            logger.error("Account inactive!");
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseObject.builder().code("401")
-//                    .message("Authenticate request: account lock!").messageCode("INACTIVE_ACCOUNT").build());
-//        }
+        if (!user.isActive()) {
+            log.error("Account inactive!");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseObject.builder().status("401")
+                    .message("Authenticate request: account lock!").success(false).build());
+        }
         final FOSUserPrincipal userPrincipal = (FOSUserPrincipal) jwtUserDetailsService
                 .loadUserByUsername(user.getUserName());
         JwtResponse jwtResponse = new JwtResponse(jwtTokenUtil.generateToken(userPrincipal),user.getRole().getRoleName());

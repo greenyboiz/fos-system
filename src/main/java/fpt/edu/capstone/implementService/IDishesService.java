@@ -2,6 +2,7 @@ package fpt.edu.capstone.implementService;
 
 import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.response.ResponseObject;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,4 +22,13 @@ public interface IDishesService {
     public ResponseEntity<ResponseObject> getDishesById(Long id);
 
     boolean getDishesExist(String dishesName);
+
+    /**
+     * Function list dishes with pagination: pageNum, pageSize
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    Page<Dishes> listDishes(int pageNum, int pageSize);
 }

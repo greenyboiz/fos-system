@@ -10,6 +10,9 @@ import fpt.edu.capstone.repo.DishesRepository;
 import fpt.edu.capstone.response.ResponseObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -51,9 +54,14 @@ public class DishesService implements IDishesService {
     @Override
     public Dishes updateDishes(Dishes dishes) {
         Category category = categoryRepository.findByCategoryId(dishes.getCategory().getCategoryId());
-        if(dishes != null){
+//        Category category =
+//                categoryRepository.findById(dishes.getCategory().getCategoryId())
+//                        .orElseThrow(() -> {
+//                            throw new RuntimeException("(updateDishes)category not found");
+//                        });
+        if(dishes != null) {
             Dishes dishes1 = dishesRepository.findDishesById(dishes.getDishesId());
-            if(dishes1 != null){
+            if(dishes1 != null) {
                 dishes1.setDishesName(dishes.getDishesName());
                 dishes1.setDescription(dishes.getDescription());
                 dishes1.setDishImage(dishes.getDishImage());
@@ -105,5 +113,12 @@ public class DishesService implements IDishesService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Page<Dishes> listDishes(int pageNum, int pageSize) {
+        log.info("(listDishes)pageNum: {}, pageSize: {}", pageNum, pageSize);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        return dishesRepository.findAll(pageable);
     }
 }

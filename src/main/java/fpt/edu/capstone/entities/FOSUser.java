@@ -61,4 +61,11 @@ public class FOSUser {
         this.profileImage = profileImage;
         this.role = role;
     }
+
+    public boolean isActive(){
+        if(this.status == 1){
+            return true;
+        }
+        return false;
+    }
 }

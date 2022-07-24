@@ -58,7 +58,7 @@ public class CustomerServiceTest {
         Mockito.when(customerRepository.getById(actual.getCustomerId())).thenReturn(expect);
         Mockito.when(customerRepository.save(actual)).thenReturn(expect);
 
-        Customer result = customerService.updateCustomer(actual);
+        Customer result = customerService.updateCustomer(expect);
         Assert.assertEquals(result,expect);
     }
 
