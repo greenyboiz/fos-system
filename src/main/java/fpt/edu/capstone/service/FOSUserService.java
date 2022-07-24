@@ -11,6 +11,7 @@ import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,9 +28,13 @@ public class FOSUserService implements IFOSUserService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private PasswordEncoder bcryptEncoder;
+
+    @Autowired
     private Cloudinary cloudinary;
     @Override
     public FOSUser addFOSUser(FOSUser fosUser) {
+        fosUser.setPassword(bcryptEncoder.encode(fosUser.getPassword()));
         return fosUserRepository.save(fosUser);
     }
 
