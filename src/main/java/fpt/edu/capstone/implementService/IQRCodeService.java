@@ -19,7 +19,7 @@ public interface IQRCodeService {
     public boolean deleteQRCode(Long id);
 
     public List<QRCode> getAllQRCodes();
-    public ResponseEntity<ResponseObject> getQRCodeById(Long id);
+    public QRCode getQRCodeById(Long id);
 
     boolean checkQRCodeExist(String qrCodeLink);
 }

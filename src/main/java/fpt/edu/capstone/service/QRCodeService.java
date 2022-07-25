@@ -98,8 +98,8 @@ public class QRCodeService implements IQRCodeService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> getQRCodeById(Long id) {
-        Optional<QRCode> qrCode = qrCodeRepository.findById(id);
+    public QRCode getQRCodeById(Long id) {
+        QRCode qrCode = qrCodeRepository.findByQRCodeId(id);
 //        byte[] byteData = qrCode.get().getQRCodeImage2().getBytes();
 //        Blob blob = null;
 //        InputStream in = null;
@@ -111,15 +111,10 @@ public class QRCodeService implements IQRCodeService {
 //        } catch (SQLException | IOException e) {
 //            throw new RuntimeException(e);
 //        }
-        if(qrCode.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, qrCode)
-            );
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", "Can not find QRCodeID: "+id,false,"null")
-            );
+        if(qrCode != null){
+            return qrCode;
         }
+        return null;
     }
 
     @Override

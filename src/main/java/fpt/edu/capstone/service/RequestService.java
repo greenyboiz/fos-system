@@ -24,7 +24,7 @@ public class RequestService implements IRequestService {
             Request request1 = requestRepository.getById(request.getRequestId());
             if(request1 != null){
                 request1.setRequestDetail(request.getRequestDetail());
-                request1.setRequestType(request.getRequestType());
+//                request1.setRequestType(request.getRequestType());
 
                 return requestRepository.save(request1);
             }

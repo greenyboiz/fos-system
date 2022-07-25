@@ -16,8 +16,9 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long requestId;
 
-    @Column(name = "requestType")
-    private String requestType;
+    @ManyToOne
+    @JoinColumn(name = "requestTypeId", nullable = true)
+    private Request request;
 
     @Column(name = "requestDetail")
     private String requestDetail;

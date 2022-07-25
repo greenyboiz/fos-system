@@ -96,6 +96,14 @@ public class QRCodeController {
 
     @GetMapping("/qrcode/{id}")
     ResponseEntity<ResponseObject> findQRCodeById(@PathVariable Long id){
-        return iqrCodeService.getQRCodeById(id);
+        QRCode qrCode = iqrCodeService.getQRCodeById(id);
+        if(qrCode != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successfull",true, qrCode)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("fail", "QRCode is not exist",false, qrCode)
+        );
     }
 }

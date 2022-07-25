@@ -56,6 +56,29 @@ public class TableController {
 
     }
 
+//    @PutMapping("/changeTable/{tableIdOld}/{tableIdNew}")
+//    public ResponseEntity<?> changeTableByOrderId(
+//            @PathVariable("tableIdOld") Long tableIdOld,
+//            @PathVariable("tableIdNew") Long tableIdNew){
+//        Long qrCodeIdOld = iTablesService.getQRCodeIdByTableId(tableIdOld);
+//        Orders orderOld = iOrdersService.getOrderIdByQRCodeId(qrCodeIdOld);
+//
+//        Long qrCodeIdNew = iTablesService.getQRCodeIdByTableId(tableIdNew);
+//        Orders orderNew = iOrdersService.getOrderIdByQRCodeId(qrCodeIdNew);
+//
+//
+//        if(order != null){
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "change table successful",true, order)
+//            );
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+//                new ResponseObject("fail", "Order not exist",false, null)
+//        );
+//
+//
+//    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/tables/add")
     public ResponseEntity<?> saveTable(@RequestBody Tables table){

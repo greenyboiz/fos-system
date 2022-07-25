@@ -53,6 +53,7 @@ public class OrdersController {
             tables.setStatus("0");
             Customer customer = iCustomerService.addCustomer(orders.getCustomer());
             orders.setCustomer(customer);
+            // check qrCode đã có người ngồi và chưa thanh toán
             iOrdersService.addOrder(orders);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "add order succsessfully",true, iOrdersService.addOrder(orders))

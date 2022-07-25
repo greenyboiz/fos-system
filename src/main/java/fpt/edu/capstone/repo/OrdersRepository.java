@@ -11,7 +11,7 @@ public interface OrdersRepository extends JpaRepository<Orders,Long> {
     @Query("select c from Orders c where c.customer.contact = ?1 and c.qrCode.QRCodeId = ?2 and c.status = 0")
     Orders findByCustomerIdAndQrCodeAndOrderStatus(String contact, Long qrCodeId);
 
-    @Query("select c from Orders c where c.orderId = ?1")
+    @Query("select c from Orders c where c.orderId = ?1 and c.status = 0")
     Orders getOrdersById(Long id);
 
     @Query("select c from Orders c where c.customer.contact = ?1")
