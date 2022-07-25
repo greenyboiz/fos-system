@@ -2,9 +2,11 @@ package fpt.edu.capstone.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.entities.Tables;
 import fpt.edu.capstone.implementService.ITablesService;
+import fpt.edu.capstone.repo.OrdersRepository;
 import fpt.edu.capstone.repo.QRCodeRepository;
 import fpt.edu.capstone.repo.TableRepository;
 import fpt.edu.capstone.response.ResponseObject;
@@ -28,7 +30,7 @@ public class TableService implements ITablesService {
     private QRCodeRepository qrCodeRepository;
 
     @Autowired
-    private Cloudinary cloudinary;
+    private OrdersRepository ordersRepository;
 
     @Override
     public Tables addTable(Tables table) {
@@ -109,5 +111,11 @@ public class TableService implements ITablesService {
             return tables;
         }
         return null;
+    }
+
+    @Override
+    public boolean checkTableIsEmpty(Long qrCodeIdNew) {
+
+        return tableRepository.checkTableIsEmpty(qrCodeIdNew);
     }
 }

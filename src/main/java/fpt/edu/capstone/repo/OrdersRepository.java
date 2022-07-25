@@ -22,4 +22,6 @@ public interface OrdersRepository extends JpaRepository<Orders,Long> {
 
     @Query("select c.qrCode.QRCodeId from Orders c where c.orderId = ?1")
     Long findQRCodeIdByOrderId(Long orderId);
+
+
 }

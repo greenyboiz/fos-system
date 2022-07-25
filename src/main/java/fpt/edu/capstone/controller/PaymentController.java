@@ -1,8 +1,10 @@
 package fpt.edu.capstone.controller;
 
 import fpt.edu.capstone.dto.PaymentDTO;
+import fpt.edu.capstone.entities.OrderItem;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.Tables;
+import fpt.edu.capstone.implementService.IOrderItemService;
 import fpt.edu.capstone.implementService.IOrdersService;
 import fpt.edu.capstone.implementService.IQRCodeService;
 import fpt.edu.capstone.implementService.ITablesService;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -32,6 +35,9 @@ public class PaymentController {
     @Autowired
     private ITablesService iTablesService;
 
+    @Autowired
+    private IOrderItemService iOrderItemService;
+
     @GetMapping("/payment/{orderId}")
     public BigDecimal getTotal(@PathVariable(name = "orderId") Long orderId){
         return paymentService.getTotalAmountByOrder(orderId);
@@ -43,9 +49,11 @@ public class PaymentController {
         if(orders != null){
             Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
             BigDecimal payment = paymentService.getTotalAmountByOrder(orderId);
+            List<OrderItem> itemList = iOrderItemService.getOrderItemByOrderId(orderId);
             PaymentDTO paymentDTO = new PaymentDTO();
             paymentDTO.setPayment(payment);
             paymentDTO.setTableId(tables.getTableId());
+            paymentDTO.setOrderItemList(itemList);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "successfull",true, paymentDTO)
             );

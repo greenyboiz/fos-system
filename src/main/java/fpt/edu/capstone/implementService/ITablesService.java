@@ -24,4 +24,6 @@ public interface ITablesService {
     Long getQRCodeIdByTableId(Long tableId);
 
     Tables getTableByQRCodeId(Long qrCodeId);
+
+    boolean checkTableIsEmpty(Long qrCodeIdNew);
 }

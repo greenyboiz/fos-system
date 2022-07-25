@@ -56,28 +56,43 @@ public class TableController {
 
     }
 
-//    @PutMapping("/changeTable/{tableIdOld}/{tableIdNew}")
-//    public ResponseEntity<?> changeTableByOrderId(
-//            @PathVariable("tableIdOld") Long tableIdOld,
-//            @PathVariable("tableIdNew") Long tableIdNew){
-//        Long qrCodeIdOld = iTablesService.getQRCodeIdByTableId(tableIdOld);
-//        Orders orderOld = iOrdersService.getOrderIdByQRCodeId(qrCodeIdOld);
-//
-//        Long qrCodeIdNew = iTablesService.getQRCodeIdByTableId(tableIdNew);
-//        Orders orderNew = iOrdersService.getOrderIdByQRCodeId(qrCodeIdNew);
-//
-//
-//        if(order != null){
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "change table successful",true, order)
-//            );
-//        }
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//                new ResponseObject("fail", "Order not exist",false, null)
-//        );
-//
-//
-//    }
+    @PutMapping("/changeTable/{tableIdOld}/{tableIdNew}")
+    public ResponseEntity<?> changeTableByOrderId(
+            @PathVariable("tableIdOld") Long tableIdOld,
+            @PathVariable("tableIdNew") Long tableIdNew){
+        try {
+            Long qrCodeIdOld = iTablesService.getQRCodeIdByTableId(tableIdOld);
+            Orders order = iOrdersService.getOrderIdByQRCodeId(qrCodeIdOld);
+            if(order == null){
+                throw new Exception();
+            }
+            Long qrCodeIdNew = iTablesService.getQRCodeIdByTableId(tableIdNew);
+            QRCode qrCode = iqrCodeService.getQRCodeById(qrCodeIdNew);
+            boolean checkTableIsEmpty = iTablesService.checkTableIsEmpty(qrCodeIdNew);
+            if(checkTableIsEmpty){
+                order.setQrCode(qrCode);
+                iOrdersService.addOrder(order);
+                // chuyển bàn cũ sang mới và update status table
+                Tables tablesOld = iTablesService.getTableByQRCodeId(qrCodeIdOld);
+                tablesOld.setStatus("1");
+                iTablesService.addTable(tablesOld);
+
+                Tables tablesNew = iTablesService.getTableByQRCodeId(qrCodeIdNew);
+                tablesNew.setStatus("0");
+                iTablesService.addTable(tablesNew);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("ok", "change table successful",true, order)
+                );
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "Table not empty",false, null)
+            );
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", e.getMessage(),false, null)
+            );
+        }
+    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/tables/add")

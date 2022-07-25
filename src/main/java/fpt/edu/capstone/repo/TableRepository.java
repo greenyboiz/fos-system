@@ -15,4 +15,7 @@ public interface TableRepository extends JpaRepository<Tables, Long> {
 
     @Query("select c from  Tables c where c.qrCode.QRCodeId = ?1")
     Tables findTableByQRCodeId(Long qrCodeId);
+
+    @Query("select new java.lang.Boolean(count(t) > 0) from Tables t where t.qrCode.QRCodeId = ?1 and t.status = 1")
+    boolean checkTableIsEmpty(Long qrCodeIdNew);
 }
