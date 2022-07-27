@@ -4,6 +4,7 @@ import fpt.edu.capstone.entities.Customer;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.Tables;
 import fpt.edu.capstone.implementService.ICustomerService;
+import fpt.edu.capstone.implementService.IOrderItemService;
 import fpt.edu.capstone.implementService.IOrdersService;
 import fpt.edu.capstone.implementService.ITablesService;
 import fpt.edu.capstone.response.ResponseObject;
@@ -22,6 +23,9 @@ public class OrdersController {
 
     @Autowired
     private IOrdersService iOrdersService;
+
+    @Autowired
+    private IOrderItemService iOrderItemService;
 
     @Autowired
     private ICustomerService iCustomerService;
@@ -82,6 +86,7 @@ public class OrdersController {
             Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
             tables.setStatus("1");
             iTablesService.addTable(tables);
+            iOrderItemService.deleteOrderItemByOrderId(orders);
             boolean orderDelete = iOrdersService.deleteOrder(id);
             if(orderDelete){
                 return ResponseEntity.status(HttpStatus.OK).body(
@@ -93,7 +98,7 @@ public class OrdersController {
             );
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", "Can not find OrderID: "+id,false,"null")
+                    new ResponseObject("fail", e.getMessage(),false,"null")
             );
         }
 

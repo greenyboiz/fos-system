@@ -41,7 +41,7 @@ public class FOSUser {
     private String email;
 
     @Column(name = "status")
-    private Integer status;
+    private Integer status = 1;
 
     @Column(name = "profileImage")
     private String profileImage;

@@ -6,6 +6,7 @@ import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.implementService.IOrdersService;
 import fpt.edu.capstone.repo.CustomerRepository;
+import fpt.edu.capstone.repo.OrderItemRepository;
 import fpt.edu.capstone.repo.OrdersRepository;
 import fpt.edu.capstone.repo.QRCodeRepository;
 import fpt.edu.capstone.response.ResponseObject;
@@ -22,6 +23,8 @@ public class OrdersService implements IOrdersService {
     @Autowired
     private OrdersRepository ordersRepository;
 
+    @Autowired
+    private OrderItemRepository orderItemRepository;
     @Autowired
     private QRCodeRepository qrCodeRepository;
 
@@ -60,6 +63,7 @@ public class OrdersService implements IOrdersService {
     public boolean deleteOrder(Long id) {
         Orders orders = ordersRepository.findOrdersById(id);
         if(orders != null){
+//            orderItemRepository.deleteOrderItemByOrderId(id);
             ordersRepository.delete(orders);
             return true;
         }

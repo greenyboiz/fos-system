@@ -2,6 +2,7 @@ package fpt.edu.capstone.service;
 
 import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.entities.OrderItem;
+import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.implementService.IOrderItemService;
 import fpt.edu.capstone.repo.DishesRepository;
 import fpt.edu.capstone.repo.OrderItemRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -77,6 +79,11 @@ public class OrderItemService implements IOrderItemService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void deleteOrderItemByOrderId(Orders orders) {
+        orderItemRepository.deleteOrderItemByOrderId(orders.getOrderId());
     }
 
 }

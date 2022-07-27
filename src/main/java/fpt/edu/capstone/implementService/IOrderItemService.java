@@ -1,6 +1,7 @@
 package fpt.edu.capstone.implementService;
 
 import fpt.edu.capstone.entities.OrderItem;
+import fpt.edu.capstone.entities.Orders;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface IOrderItemService {
     List<OrderItem> getOrderItemByOrderId(Long id);
 
     boolean deleteDishesInOrederItem(Long orderItemId);
+
+    void deleteOrderItemByOrderId(Orders orders);
 }
