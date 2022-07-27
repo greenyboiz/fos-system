@@ -76,6 +76,30 @@ public class OrdersController {
         return iOrdersService.updateOrder(orders);
     }
 
+    @PutMapping("/orders/confirm/{orderId}")
+    public ResponseEntity<?> confirmOrders(@PathVariable("orderId") Long orderId){
+        try {
+            Orders orders = iOrdersService.getOrderById(orderId);
+            if (orders == null){
+                throw new Exception();
+            }
+            //set order bill paid
+            orders.setStatus(1);
+            iOrdersService.addOrder(orders);
+            //set table is Empty
+            Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
+            tables.setStatus("1");
+            iTablesService.addTable(tables);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Order " + orderId + " bill paid",true, orders)
+            );
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", e.getMessage(),false, null)
+            );
+        }
+    }
+
     @DeleteMapping("/orders/delete/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable("id") Long id){
         try {
