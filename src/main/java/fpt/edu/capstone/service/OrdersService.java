@@ -58,7 +58,7 @@ public class OrdersService implements IOrdersService {
 
     @Override
     public boolean deleteOrder(Long id) {
-        Orders orders = ordersRepository.getOrdersById(id);
+        Orders orders = ordersRepository.findOrdersById(id);
         if(orders != null){
             ordersRepository.delete(orders);
             return true;
@@ -73,7 +73,7 @@ public class OrdersService implements IOrdersService {
 
     @Override
     public Orders getOrderById(Long id) {
-       Orders orders = ordersRepository.getOrdersById(id);
+       Orders orders = ordersRepository.findOrdersById(id);
        if (orders != null){
            return orders;
        }

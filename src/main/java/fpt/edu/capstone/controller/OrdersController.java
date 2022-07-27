@@ -73,8 +73,30 @@ public class OrdersController {
     }
 
     @DeleteMapping("/orders/delete/{id}")
-    public boolean deleteOrder(@PathVariable("id") Long id){
-        return iOrdersService.deleteOrder(id);
+    public ResponseEntity<?> deleteOrder(@PathVariable("id") Long id){
+        try {
+            Orders orders = iOrdersService.getOrderById(id);
+            if(orders==null){
+                throw new Exception();
+            }
+            Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
+            tables.setStatus("1");
+            iTablesService.addTable(tables);
+            boolean orderDelete = iOrdersService.deleteOrder(id);
+            if(orderDelete){
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("ok", "Delete Order succsessfully",true, orderDelete)
+                );
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "Delete Order : "+ id + " fail",false,"null")
+            );
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "Can not find OrderID: "+id,false,"null")
+            );
+        }
+
     }
 
     @GetMapping("/orders/{id}")
