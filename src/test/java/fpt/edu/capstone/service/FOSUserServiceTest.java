@@ -70,8 +70,8 @@ public class FOSUserServiceTest {
         Role roleExpect = new Role(1l,"ADMIN");
         Role roleUpdate = new Role(2l,"STAFF");
 
-        FOSUser oldUser = new FOSUser(20l, "hoang tien dat111111","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",roleExpect);
-        FOSUser fosUserForUpdate = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",roleUpdate);
+        FOSUser oldUser = new FOSUser(1l, "hoang tien dat111111","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",roleExpect);
+        FOSUser fosUserForUpdate = new FOSUser(1l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",roleUpdate);
 
         Mockito.when(roleRepository.findByRoleId(fosUserForUpdate.getRole().getRoleId())).thenReturn(roleUpdate);
         Mockito.when(fosUserRepository.getById(fosUserForUpdate.getUserId())).thenReturn(oldUser);

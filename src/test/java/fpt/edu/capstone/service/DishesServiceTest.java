@@ -71,6 +71,7 @@ public class DishesServiceTest {
 
         Mockito.when(categoryRepository.findByCategoryId(actual.getCategory().getCategoryId())).thenReturn(actualCategory);
         Mockito.when(dishesRepository.getById(actual.getDishesId())).thenReturn(expect);
+//        actual.set
         Mockito.when(dishesRepository.save(actual)).thenReturn(expect);
 
         Dishes result = dishesService.updateDishes(actual);

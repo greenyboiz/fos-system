@@ -55,10 +55,10 @@ public class CustomerServiceTest {
         Customer expect = new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi");
         Customer actual = new Customer(1l,"tang nguyet","065623266","mn@gmail.com","Ha Noi");
 
-        Mockito.when(customerRepository.getById(actual.getCustomerId())).thenReturn(expect);
-        Mockito.when(customerRepository.save(actual)).thenReturn(expect);
+        Mockito.when(customerRepository.getById(expect.getCustomerId())).thenReturn(actual);
+        Mockito.when(customerRepository.save(actual)).thenReturn(actual);
 
-        Customer result = customerService.updateCustomer(expect);
+        Customer result = customerService.updateCustomer(actual);
         Assert.assertEquals(result,expect);
     }
 

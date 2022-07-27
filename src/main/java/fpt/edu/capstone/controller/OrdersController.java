@@ -46,6 +46,7 @@ public class OrdersController {
     @PostMapping("/orders")
     public ResponseEntity<?> saveOrders(@RequestBody Orders orders){
         boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
+
 //        boolean checkCustomerExistInOrder = iOrdersService.checkCustomerExistInOrder(orders);
 //        boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
         if (!checkOrderExist){

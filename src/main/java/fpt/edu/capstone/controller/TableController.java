@@ -112,28 +112,7 @@ public class TableController {
         );
     }
 
-//    @PostMapping( value = "/tables", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-//    private ResponseEntity<?> addTable(@RequestParam("file") MultipartFile file, @RequestPart("table") String table){
-//        if(file.getSize() == 0){
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("fail", "file null",false, null)
-//            );
-//        }else {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            Tables tables = new Tables();
-//            try {
-//                tables = objectMapper.readValue(table, Tables.class);
-//            } catch (JsonProcessingException e) {
-//                throw new RuntimeException(e);
-//            }
-//            iqrCodeService.addQRCode(tables.getQrCode());
-//            Tables tables1 = iTablesService.addTableAndQRcodeImage(file,tables);
-//
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "successfull",true, tables1)
-//            );
-//        }
-//    }
+
 
 
     @PutMapping("/tables/update")
@@ -170,5 +149,28 @@ public class TableController {
             );
         }
     }
+
+    //    @PostMapping( value = "/tables", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
+//    private ResponseEntity<?> addTable(@RequestParam("file") MultipartFile file, @RequestPart("table") String table){
+//        if(file.getSize() == 0){
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("fail", "file null",false, null)
+//            );
+//        }else {
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            Tables tables = new Tables();
+//            try {
+//                tables = objectMapper.readValue(table, Tables.class);
+//            } catch (JsonProcessingException e) {
+//                throw new RuntimeException(e);
+//            }
+//            iqrCodeService.addQRCode(tables.getQrCode());
+//            Tables tables1 = iTablesService.addTableAndQRcodeImage(file,tables);
+//
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "successfull",true, tables1)
+//            );
+//        }
+//    }
 
 }
