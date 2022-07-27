@@ -1,6 +1,7 @@
 package fpt.edu.capstone.controller;
 
 import fpt.edu.capstone.entities.Customer;
+import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.Tables;
 import fpt.edu.capstone.implementService.ICustomerService;
@@ -8,7 +9,9 @@ import fpt.edu.capstone.implementService.IOrderItemService;
 import fpt.edu.capstone.implementService.IOrdersService;
 import fpt.edu.capstone.implementService.ITablesService;
 import fpt.edu.capstone.response.ResponseObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +22,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class OrdersController {
 
     @Autowired
@@ -33,18 +37,28 @@ public class OrdersController {
     @Autowired
     private ITablesService iTablesService;
 
+//    @GetMapping("/orders")
+//    public ResponseEntity<?> getAllOrders(){
+//        List<Orders> orders = iOrdersService.getAllOrders();
+//        if(orders != null){
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "succsessfully",true, orders)
+//            );
+//        }else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+//                    new ResponseObject("fail", "List order is empty ",false,"null")
+//            );
+//        }
+//    }
+
     @GetMapping("/orders")
-    public ResponseEntity<?> getAllOrders(){
-        List<Orders> orders = iOrdersService.getAllOrders();
-        if(orders != null){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, orders)
-            );
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", "List order is empty ",false,"null")
-            );
-        }
+    public Page<Orders> listAllOrders(
+//            PagingRequest pagingRequest
+            @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
+            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
+    ){
+        log.info("(listAll)pageNum: {}, pageSize: {}", pageNum, pageSize);
+        return iOrdersService.listOrders(pageNum, pageSize);
     }
 
     @PostMapping("/orders")

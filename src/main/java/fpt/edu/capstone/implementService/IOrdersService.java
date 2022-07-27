@@ -4,6 +4,7 @@ import fpt.edu.capstone.dto.OrderDTO;
 import fpt.edu.capstone.entities.Customer;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.response.ResponseObject;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface IOrdersService {
     Orders getOrderIdByQRCodeId(Long qrCodeId);
 
     Long getQRCodeIdByOrderId(Long orderId);
+
+    Page<Orders> listOrders(int pageNum, int pageSize);
 }

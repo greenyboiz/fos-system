@@ -10,7 +10,11 @@ import fpt.edu.capstone.repo.OrderItemRepository;
 import fpt.edu.capstone.repo.OrdersRepository;
 import fpt.edu.capstone.repo.QRCodeRepository;
 import fpt.edu.capstone.response.ResponseObject;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class OrdersService implements IOrdersService {
     @Autowired
     private OrdersRepository ordersRepository;
@@ -112,5 +117,12 @@ public class OrdersService implements IOrdersService {
             return qrCodeId;
         }
         return null;
+    }
+
+    @Override
+    public Page<Orders> listOrders(int pageNum, int pageSize) {
+        log.info("(listOrders)pageNum: {}, pageSize: {}", pageNum, pageSize);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        return ordersRepository.findAll(pageable);
     }
 }
