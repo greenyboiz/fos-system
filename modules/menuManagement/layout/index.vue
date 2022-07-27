@@ -180,7 +180,7 @@ export default {
           this.isLoading = false;
         });
 
-      this.listDishes = res.data;
+      this.listDishes = res.data.content;
     },
 
     deleteDish(dishId) {

@@ -25,8 +25,8 @@ class MenuManagementService {
     return res;
   }
 
-  async getDishById(dishId, header) {
-    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/dishes/${dishId}`, header);
+  async getDishById(dishId) {
+    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/dishes/${dishId}`);
 
     return res.data;
   }

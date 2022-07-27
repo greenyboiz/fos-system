@@ -70,12 +70,14 @@
           </div>
 
           <div class="add-button">
-            <button class="btn__add" @click="handleSave()">Lưu mã QR</button>
+            <button class="btn__add" @click="handleSave()">
+              <a href=""></a>
+            </button>
           </div>
         </div>
 
         <div class="qr__img">
-          <QrCode class="qr__code" :size="400" :text="selectedTable.qr_url"></QrCode>
+          <QrCode id="specificQrCode" class="qr__code" :size="400" :text="selectedTable.qr_url"></QrCode>
         </div>
       </div>
     </div>
@@ -125,6 +127,10 @@ export default {
       },
       deep: true,
     },
+  },
+
+  beforeMount() {
+    const qrImg = document.getElementById('specificQrCode');
   },
 
   mounted() {

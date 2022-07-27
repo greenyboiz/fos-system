@@ -14,5 +14,7 @@ export default {
   components: { DetailDish },
 
   layout: 'default-no-header',
+
+  auth: false,
 };
 </script>

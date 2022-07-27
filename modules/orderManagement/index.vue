@@ -36,7 +36,7 @@
             <template v-else>
               <div v-for="item in listOrder" :key="item.id" class="table__body">
                 <div class="table__row">{{ item.orderId }}</div>
-                <div class="table__row">{{ item.customer.firstName }} {{ item.customer.lastName }}</div>
+                <div class="table__row">{{ item.customer.fullName }}</div>
                 <div class="table__row">{{ item.customer.contact }}</div>
                 <div class="table__row">{{ item.customer.address }}</div>
                 <div class="table__row">{{ item.description }}</div>

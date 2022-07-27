@@ -79,20 +79,33 @@
   }
   &__detail {
     width: calc(100% - 86px);
+
     input {
+      height: 36px;
       width: 100%;
-      outline: none;
-      border: 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      margin-right: 10px;
+      border: 1px solid #d6d6d6;
+      border-radius: 4px;
+      padding-left: 10px;
+
       &::placeholder {
         color: #7a7a7a;
       }
     }
+
     label {
       width: 150px;
       margin: 0;
     }
   }
+
+  &__hide {
+    position: absolute;
+    width: 16px;
+    height: 10px;
+    right: 20px;
+  }
+
   &__item {
     position: relative;
     display: flex;

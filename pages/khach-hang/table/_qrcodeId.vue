@@ -2,6 +2,12 @@
   <Home />
 </template>
 
+<router>
+  {
+    name: 'specific_table'
+  }
+</router>
+
 <script>
 import Home from '@/modules/clientView/Home/index.vue';
 export default {

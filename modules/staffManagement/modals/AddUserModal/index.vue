@@ -11,11 +11,7 @@
   >
     <div class="info-staff">
       <div class="info-staff__avatar" @click="chooseAvatar()">
-        <ImageOrDefault
-          class="info-staff__img"
-          :src="avatar"
-          alt="avatar"
-        />
+        <ImageOrDefault class="info-staff__img" :src="avatar" alt="avatar" />
         <div class="info-staff__add">+</div>
       </div>
       <input
@@ -51,7 +47,7 @@
             :type="showPassword ? 'text' : 'password'"
             placeholder="Nhập mật khẩu"
           />
-          <img src="~/assets/icons/eye.png" alt="" @click="handleShowPassword()" />
+          <img class="info-staff__hide" src="~/assets/icons/eye.png" alt="" @click="handleShowPassword()" />
         </div>
         <div class="info-staff__item">
           <label for="gender">Giới tính:</label>
@@ -64,7 +60,7 @@
                 type="radio"
                 styleCheck="dot"
                 :keyValue="gender.id"
-                :inputValue="gender.name"
+                :inputValue="gender.id"
                 :customLabel="true"
               >
                 <template slot="custom-label"> {{ gender.name }} </template>
@@ -73,7 +69,7 @@
           </div>
         </div>
         <div class="info-staff__item">
-          <label for="role">Role:</label>
+          <label for="role">Role: </label>
           <div class="d-flex" style="width: 100%">
             <div v-for="role in roleType" :key="role.roleId">
               <CustomCheckbox
@@ -83,7 +79,7 @@
                 type="radio"
                 styleCheck="dot"
                 :keyValue="`${role.roleId}r`"
-                :inputValue="role.roleName"
+                :inputValue="`ROLE_${role.roleName}`"
                 :customLabel="true"
               >
                 <template slot="custom-label"> {{ role.roleName }} </template>
@@ -150,6 +146,7 @@ export default {
   data() {
     return {
       formUser: {
+        profileImage: '',
         fullName: '',
         userName: '',
         password: '',
@@ -166,18 +163,18 @@ export default {
       showPassword: false,
       avatar: null,
       genderType: [
-        { id: 1, name: 'nam' },
-        { id: 2, name: 'nu' },
+        { id: 1, name: 'Nam' },
+        { id: 2, name: 'Nữ' },
       ],
-      genderSelected: '',
-      roleSelected: '',
+      genderSelected: 1,
+      roleSelected: 'ROLE_ADMIN',
       roleType: [
         { roleId: 1, roleName: 'ADMIN' },
         { roleId: 2, roleName: 'STAFF' },
         { roleId: 3, roleName: 'CHEF' },
         { roleId: 4, roleName: 'CUSTOMER' },
       ],
-      statusSelected: null,
+      statusSelected: 0,
       statusType: [
         { id: 0, name: 'Đang làm việc' },
         { id: 1, name: 'Đã nghỉ' },
@@ -189,13 +186,13 @@ export default {
 
   computed: {
     roleIdSelected() {
-      if (this.roleSelected === 'ADMIN') {
+      if (this.roleSelected === 'ROLE_ADMIN') {
         return 1;
-      } else if (this.roleSelected === 'STAFF') {
+      } else if (this.roleSelected === 'ROLE_STAFF') {
         return 2;
-      } else if (this.roleSelected === 'CHEF') {
+      } else if (this.roleSelected === 'ROLE_CHEF') {
         return 3;
-      } else if (this.roleSelected === 'CUSTOMER') {
+      } else if (this.roleSelected === 'ROLE_CUSTOMER') {
         return 4;
       } else {
         return 0;
@@ -217,6 +214,7 @@ export default {
 
     handleHideModal() {
       this.formUser = {
+        profileImage: '',
         fullName: '',
         userName: '',
         password: '',
@@ -231,7 +229,7 @@ export default {
       };
       this.roleSelected = '';
       this.genderSelected = '';
-      this.statusSelected = '';
+      this.statusSelected = null;
       this.$refs.addUser.hide();
     },
 
@@ -242,42 +240,42 @@ export default {
       }
 
       if (!this.formUser.userName) {
-        this.$toast.error('Bạn chưa nhập Tên tài khoản');
+        Vue.$toast.error('Bạn chưa nhập Tên tài khoản');
         return false;
       }
 
       if (!this.formUser.password) {
-        this.$toast.error('Bạn chưa nhập Mật khẩu');
+        Vue.$toast.error('Bạn chưa nhập Mật khẩu');
         return false;
       }
 
       if (!this.formUser.contact) {
-        this.$toast.error('Bạn chưa nhập Số điện thoại');
+        Vue.$toast.error('Bạn chưa nhập Số điện thoại');
         return false;
       }
 
       if (!this.formUser.contact.match(/(84|0[3|5|7|8|9])+([0-9]{8})\b/g)) {
-        this.$toast.error('Bạn chưa nhập đúng định dạng');
+        Vue.$toast.error('Bạn chưa nhập đúng định dạng');
         return false;
       }
 
       if (!this.formUser.email) {
-        this.$toast.error('Bạn chưa nhập Email');
+        Vue.$toast.error('Bạn chưa nhập Email');
         return false;
       }
 
       if (!this.genderSelected) {
-        this.$toast.error('Bạn chưa chọn giới tính');
+        Vue.$toast.error('Bạn chưa chọn giới tính');
         return false;
       }
 
       if (!this.roleSelected) {
-        this.$toast.error('Bạn chưa phân quyền tài khoản');
+        Vue.$toast.error('Bạn chưa phân quyền tài khoản');
         return false;
       }
 
-      if (!this.statusSelected) {
-        this.$toast.error('Bạn chưa chọn trạng thái');
+      if (this.statusSelected === '') {
+        Vue.$toast.error('Bạn chưa chọn trạng thái');
         return false;
       }
 
@@ -285,21 +283,18 @@ export default {
     },
 
     chooseAvatar() {
-      window.cloudinary.createUploadWidget(
-        { cloud_name: 'dk7clbldt',
-          upload_preset: 'ml_default'
-        },
-        (error, result) => {
+      window.cloudinary
+        .createUploadWidget({ cloud_name: 'dk7clbldt', upload_preset: 'ml_default' }, (error, result) => {
           if (!error && result && result.event === 'success') {
             console.log('Done uploading..: ', result.info);
             this.avatar = result.info.url;
           }
-        }
-      ).open();
+        })
+        .open();
     },
 
     handleSelectedStatus() {
-      // console.log(this.statusSelected);
+      console.log(this.statusSelected);
     },
 
     // handleAddAvatar(e) {
@@ -316,17 +311,8 @@ export default {
       this.showPassword = !this.showPassword;
     },
 
-    async addUser() {
-      this.formUser.gender = this.genderSelected;
-      this.formUser.status = this.statusSelected;
-      this.formUser.role.roleId = this.roleIdSelected;
-      this.formUser.role.roleName = this.roleSelected;
-      const requestParams = this.formUser;
-      const formData = new FormData();
-      formData.set('file', this.$refs.avatarRef.files[0]);
-      formData.set('users', requestParams);
-
-      const res = await staffManagementService.addUser(formData, {
+    async addUser(requestParams) {
+      const res = await staffManagementService.addUser(requestParams, {
         headers: {
           Authorization: this.$auth.$storage._state['_token.local'],
         },
@@ -340,25 +326,12 @@ export default {
       }
     },
 
-    async updateUser() {
-      this.formUser.gender = this.genderSelected;
-      this.formUser.status = this.statusSelected;
-      this.formUser.role.roleId = this.roleIdSelected;
-      this.formUser.role.roleName = this.roleSelected;
-      this.formUser.userId = this.userId;
-      const requestParams = this.formUser;
-
-      const res = await staffManagementService.updateUser(
-        {
-          file: null,
-          users: requestParams,
+    async updateUser(requestParams) {
+      const res = await staffManagementService.updateUser(requestParams, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
         },
-        {
-          headers: {
-            Authorization: this.$auth.$storage._state['_token.local'],
-          },
-        }
-      );
+      });
 
       if (res.status === 200) {
         this.isDone = true;
@@ -386,23 +359,40 @@ export default {
         this.formUser.gender = user.gender;
         this.statusSelected = user.status;
         this.roleSelected = user.role.roleName;
-        this.genderSelected = user.gender;
+        this.genderSelected = parseInt(user.gender);
       }
     },
 
     handleSave() {
-      console.log(this.formUser);
       if (!this.validator()) {
         return;
       }
 
+      const requestParams = {
+        profileImage: this.avatar,
+        fullName: this.formUser.fullName,
+        userName: this.formUser.userName,
+        password: this.formUser.password,
+        contact: this.formUser.contact,
+        email: this.formUser.email,
+        gender: this.genderSelected.toString(),
+        role: {
+          roleId: this.roleIdSelected,
+          roleName: this.roleSelected,
+        },
+        status: this.statusSelected,
+      };
+
+      console.log(requestParams);
+
       if (this.modalTitle) {
-        this.updateUser();
+        requestParams.id = this.userId;
+        this.updateUser(requestParams);
       } else {
-        this.addUser();
+        this.addUser(requestParams);
       }
 
-      // this.handleHideModal();
+      this.handleHideModal();
     },
   },
 };

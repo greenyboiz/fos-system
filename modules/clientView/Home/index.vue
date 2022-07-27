@@ -17,7 +17,7 @@
     <div class="customer">
       <div class="customer__item">
         <label for="username">Họ và tên:</label>
-        <input id="username" type="text" placeholder="Nhập họ và tên" />
+        <input id="username" v-model="formData.customer.fullName" type="text" placeholder="Nhập họ và tên" />
       </div>
       <div class="customer__item">
         <label for="phone">SĐT:</label>
@@ -25,9 +25,8 @@
       </div>
     </div>
     <div class="getDish" @click="handleGetOrder()">
-      <nuxt-link to="/khach-hang/order">
-        <button>Gọi món</button>
-      </nuxt-link>
+      <nuxt-link :to="`/khach-hang/order/${orderId}`"></nuxt-link>
+      <button>Gọi món</button>
     </div>
     <SupportModal ref="supportModalRef" />
   </div>
@@ -54,9 +53,10 @@ export default {
       formData: {
         customer: {
           contact: '',
+          fullName: '',
         },
         qrCode: {
-          qrcodeId: 1,
+          qrcodeId: null,
         }
       },
       listTable: [],
@@ -75,10 +75,17 @@ export default {
     }),
   },
 
-  created() {
+  // created() {
+
+  // },
+
+  mounted() {
+    const path = window.location.toString();
+    this.formData.qrCode.qrcodeId = parseInt(path.substr(path.length - 1));
     this.$router.push({
+      name: 'specific_table',
       params: {
-        qrcodeId: this.formData.qrCode.qrcodeId
+        qrcodeId: this.formData.qrCode.qrcodeId,
       }
     });
   },
@@ -88,13 +95,19 @@ export default {
       updateOrderId: 'updateOrderId'
     }),
 
+    getQrCodeId() {
+      const path = window.location.toString();
+      return parseInt(path.substr(path.length - 1));
+    },
+
     async postOrder() {
       const requestParam = {
         customer: {
-            contact: this.formData.customer.contact
+          contact: this.formData.customer.contact,
+          fullName: this.formData.customer.fullName,
         },
         qrCode: {
-            qrcodeId: this.formData.qrCode.qrcodeId
+          qrcodeId: this.formData.qrCode.qrcodeId,
         },
       };
 
@@ -103,6 +116,11 @@ export default {
       if (res.success) {
         this.updateOrderId(res.data.orderId);
         this.getListTable();
+        this.$router.push({
+          params: {
+            orderId: this.orderId,
+          }
+        });
         // this.getOrder
       }
     },

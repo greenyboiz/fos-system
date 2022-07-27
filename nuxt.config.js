@@ -61,6 +61,7 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     '@nuxt/postcss8',
+    '@nuxtjs/router-extras'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

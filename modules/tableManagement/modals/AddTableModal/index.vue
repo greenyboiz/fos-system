@@ -93,20 +93,26 @@ export default {
       isDone: false,
       statusSelected: null,
       statusType: [
-        { id: 0, name: 'Còn trống' },
-        { id: 1, name: 'Đã đầy' },
+        { id: 0, name: 'Đã đầy' },
+        { id: 1, name: 'Còn trống' },
       ],
     };
+  },
+
+  watch: {
+    tableId() {
+      this.getDetailTable();
+    }
   },
 
   methods: {
     show(title) {
       this.modalTitle = title;
-      this.$refs.addTable.show();
 
       if (this.modalTitle === 'update') {
         this.getDetailTable();
       }
+      this.$refs.addTable.show();
     },
 
     handleHideModal() {
@@ -130,7 +136,7 @@ export default {
       if (res.success) {
         const data = res.data;
         this.formTable = {
-          numberOfSeats: data.tableId,
+          numberOfSeats: data.numberOfSeats,
           qrCode: data.qrCode,
           status: toNumber(data.status),
         };

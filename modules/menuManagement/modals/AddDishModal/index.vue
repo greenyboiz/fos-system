@@ -191,7 +191,7 @@ export default {
       });
 
       if (res.status === 200) {
-        this.listCategory = res.data;
+        this.listCategory = res.data.data;
       }
     },
 

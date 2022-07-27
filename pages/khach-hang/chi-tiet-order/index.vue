@@ -14,5 +14,7 @@ export default {
   components: { DetailOrder },
 
   layout: 'default-no-header',
+
+  auth: false,
 };
 </script>

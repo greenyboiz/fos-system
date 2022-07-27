@@ -14,7 +14,7 @@ export default {
 
   head() {
     return {
-      title: 'Chef',
+      title: 'Đầu bếp',
     };
   },
 };

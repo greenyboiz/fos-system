@@ -55,6 +55,7 @@ export default {
       currentIndex: 1,
       listDish: [],
       listFood: [],
+      tableId: null,
     };
   },
 
@@ -75,10 +76,11 @@ export default {
           Authorization: this.$auth.$storage._state['_token.local'],
         },
       });
-      this.listDish = res;
+      console.log(res);
+      this.listDish = res.data.content;
 
       this.listTypeOrder = uniqBy(
-        res.map((x) => x.category),
+        res.data.content.map((x) => x.category),
         'categoryId'
       );
 

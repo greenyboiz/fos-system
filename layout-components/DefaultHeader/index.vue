@@ -32,9 +32,14 @@
                     <span class="icon mr-2"><manage-account-icon :width="21" :height="21" /></span> Quản lý tài khoản
                   </nuxt-link>
                 </div>
-                <div class="dropdown-menu__item">
-                  <nuxt-link class="w-100 h-100 d-flex align-items-center text-nowrap" to="/thong-tin-tai-khoan">
-                    <span class="icon mr-2"><manage-account-icon :width="21" :height="21" /></span> Thông tin tài khoản
+                <div v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'" class="dropdown-menu__item">
+                  <nuxt-link class="w-100 h-100 d-flex align-items-center text-nowrap" to="/employee">
+                    <span class="icon mr-2"><manage-account-icon :width="21" :height="21" /></span> Nhân viên
+                  </nuxt-link>
+                </div>
+                <div v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'" class="dropdown-menu__item">
+                  <nuxt-link class="w-100 h-100 d-flex align-items-center text-nowrap" to="/chef">
+                    <span class="icon mr-2"><manage-account-icon :width="21" :height="21" /></span> Đầu bếp
                   </nuxt-link>
                 </div>
                 <div class="dropdown-menu__item" @click="logoutUser()">
@@ -61,7 +66,7 @@
             class="nav-item menuItem"
           >
             <nuxt-link class="nav-link" to="/thuc-don">
-              <MenuDashboardIcon />
+              <MenuMenu />
               <span class="is-hide menuItem__title">Menu</span>
             </nuxt-link>
           </li>
@@ -71,7 +76,7 @@
             class="nav-item menuItem"
           >
             <nuxt-link class="nav-link" to="/ban-an">
-              <MenuDashboardIcon />
+              <MenuTable />
               <span class="is-hide menuItem__title">Bàn ăn</span>
             </nuxt-link>
           </li>
@@ -95,7 +100,7 @@
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import vClickOutside from 'v-click-outside';
-import { ArrowDown, ManageAccountIcon, MenuDashboardIcon, MenuOrder } from '@/components/CustomIcon';
+import { ArrowDown, ManageAccountIcon, MenuDashboardIcon, MenuOrder, MenuTable, MenuMenu } from '@/components/CustomIcon';
 Vue.use(vClickOutside);
 export default {
   name: 'DefaultHeader',
@@ -105,6 +110,8 @@ export default {
     ManageAccountIcon,
     MenuDashboardIcon,
     MenuOrder,
+    MenuTable,
+    MenuMenu
   },
 
   data() {

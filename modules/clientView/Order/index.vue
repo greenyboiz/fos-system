@@ -163,6 +163,7 @@ export default {
   mounted() {
     this.getListCategory();
     this.getListDish();
+    console.log(this.orderId);
   },
 
   methods: {
@@ -203,7 +204,7 @@ export default {
     async getListDish() {
       const res = await menuManagementService.getListDish();
 
-      const dishesList = res.data;
+      const dishesList = res.data.content;
 
       map(dishesList, (item) => {
         item.numberOfDish = 0;
@@ -218,7 +219,7 @@ export default {
       const res = await menuManagementService.getListCategory();
 
       if (res.status === 200) {
-        this.listCategory = res.data;
+        this.listCategory = res.data.data;
       }
     },
 

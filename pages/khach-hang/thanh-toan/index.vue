@@ -14,5 +14,7 @@ export default {
   components: { Payment },
 
   layout: 'default-no-header',
+
+  auth: false,
 };
 </script>

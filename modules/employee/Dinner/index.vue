@@ -33,6 +33,9 @@ export default {
 
   mounted() {
     this.getListTable();
+    setInterval(() => {
+      this.getListTable();
+    }, 60000);
   },
 
   methods: {
@@ -57,7 +60,9 @@ export default {
       }
     },
 
-    onSelectTable(tableId) {},
+    onSelectTable(tableId) {
+      this.$root.$emit('tableId', tableId);
+    },
   },
 };
 </script>
