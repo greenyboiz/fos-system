@@ -27,7 +27,7 @@
         </div>
       </div>
     </div>
-    <div class="totalPrice">
+    <!-- <div class="totalPrice">
       <div class="info-item">
         <div class="info-item_title">Giá:</div>
         <div class="info-item_number">2.500.000 VNĐ</div>
@@ -40,7 +40,7 @@
         <div class="info-item_title">Tổng cộng:</div>
         <div class="info-item_number">2.750.000 VNĐ</div>
       </div>
-    </div>
+    </div> -->
     <div class="payment__info">
       <div v-if="selectedMethod === 'banking_method'" class="banking-info">
         <div>Ngân hàng: ViB</div>

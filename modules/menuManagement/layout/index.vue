@@ -55,8 +55,8 @@
                 <div class="tableRow">{{ item.dishesName }}</div>
                 <div class="tableRow">{{ item.description }}</div>
                 <div class="tableRow">{{ item.discount }}</div>
-                <div class="tableRow">{{ item.costPrice }}</div>
-                <div class="tableRow">{{ item.salePrice }}</div>
+                <div class="tableRow">{{ currencyFormatter(item.costPrice) }}</div>
+                <div class="tableRow">{{ currencyFormatter(item.salePrice) }}</div>
                 <div class="tableRow">
                   <span v-if="item.status === 1" class="status had">Còn hàng</span>
                   <span v-else class="status sold">Hết hàng</span>
@@ -96,6 +96,7 @@
 import { menuManagementService } from '@/services';
 import AddDishModal from '../modals/AddDishModal/index.vue';
 import Loading from '@/components/common/Loading/index.vue';
+import commonMixin from '@/plugins/commonMixin';
 
 export default {
   name: 'MenuManagement',
@@ -104,6 +105,8 @@ export default {
     AddDishModal,
     Loading,
   },
+
+  mixins: [commonMixin],
 
   data() {
     return {

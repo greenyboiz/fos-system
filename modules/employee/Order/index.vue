@@ -28,7 +28,7 @@
             <p class="order__name">{{ item.dishesName || '' }}</p>
 
             <div class="order__detail">
-              <div class="order__price">{{ item.costPrice }}</div>
+              <div class="order__price">{{ currencyFormatter(item.salePrice) }}</div>
               <div class="order__add">
                 <img src="@/assets/images/plus.png" />
               </div>
@@ -44,9 +44,12 @@
 import { uniqBy, filter } from 'lodash';
 
 import { employeeService } from '@/services';
+import commonMixin from '@/plugins/commonMixin';
 
 export default {
   name: 'Order',
+
+  mixins: [commonMixin],
 
   data() {
     return {

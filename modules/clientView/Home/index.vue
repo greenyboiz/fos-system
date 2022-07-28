@@ -25,8 +25,9 @@
       </div>
     </div>
     <div class="getDish" @click="handleGetOrder()">
-      <nuxt-link :to="`/khach-hang/order/${orderId}`"></nuxt-link>
-      <button>Gọi món</button>
+      <nuxt-link to="/khach-hang/order/:orderId?">
+        <button>Gọi món</button>
+      </nuxt-link>
     </div>
     <SupportModal ref="supportModalRef" />
   </div>
@@ -115,6 +116,9 @@ export default {
 
       if (res.success) {
         this.updateOrderId(res.data.orderId);
+        localStorage.setItem('orderId', res.data.orderId);
+        localStorage.setItem('createAt', res.data.submitTime);
+        localStorage.setItem('customerName', res.data.customer.fullName);
         this.getListTable();
         this.$router.push({
           params: {

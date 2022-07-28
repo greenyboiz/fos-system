@@ -24,37 +24,44 @@
       </div>
     </div>
     <div class="special">
-      <div class="special__list">
-        <div v-for="spec in orderItemList" :key="spec.id" class="special-item">
-          <div class="spec-image">
-            <img :src="spec.dishes.dishImage" alt="" width="96px">
-          </div>
-          <div class="spec-info">
-            <div class="spec-name">{{ spec.dishes.dishesName }}</div>
-            <div class="spec-price">
-              <div class="spec-cost">{{ spec.dishes.salePrice }} VNĐ</div>
-              <div class="spec-remove" @click="handleRemoveOrderItem()">
-                <Trash />
-              </div>
+      <template v-if="isLoading">
+        <div class="loading">
+          <Loading />
+        </div>
+      </template>
+      <template v-else>
+        <div class="special__list">
+          <div v-for="spec in orderList" :key="spec.id" class="special-item">
+            <div class="spec-image">
+              <img :src="spec.dishes.dishImage" alt="" width="96px">
             </div>
-            <div class="spec-qua">
-              <div class="spec-quantity">
-                <div class="changeNum">
-                  <span class="downNumber" @click="decreaseDish(spec)"><i class="bi bi-dash-circle"></i></span>
-                  <span>{{ spec.quantity }}</span>
-                  <span class="upNumber" @click="increaseDish(spec)"><i class="bi bi-plus-circle"></i></span>
+            <div class="spec-info">
+              <div class="spec-name">{{ spec.dishes.dishesName }}</div>
+              <div class="spec-price">
+                <div class="spec-cost">{{ currencyFormatter(spec.dishes.salePrice) }} VNĐ</div>
+                <div class="spec-remove" @click="handleRemoveOrderItem(spec.orderItemId)">
+                  <Trash />
+                </div>
+              </div>
+              <div class="spec-qua">
+                <div class="spec-quantity">
+                  <div class="changeNum">
+                    <span class="downNumber" @click="decreaseDish(spec)"><i class="bi bi-dash-circle"></i></span>
+                    <span>{{ spec.quantity }}</span>
+                    <span class="upNumber" @click="increaseDish(spec)"><i class="bi bi-plus-circle"></i></span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </template>
     </div>
     <div class="totalOrder">
       <div class="payment-info">
         <div class="info-item">
           <div class="info-item_title">Giá:</div>
-          <div class="info-item_number">{{ totalPriceOrder || 0 }} VNĐ</div>
+          <div class="info-item_number">{{ currencyFormatter(totalPriceOrder || 0) }} VNĐ</div>
         </div>
         <div class="info-item">
           <div class="info-item_title">VAT:</div>
@@ -62,32 +69,48 @@
         </div>
         <div class="info-total">
           <div class="info-item_title">Tổng cộng:</div>
-          <div class="info-item_number">{{ (totalPriceOrder + (totalPriceOrder * 10) / 100) || 0 }} VNĐ</div>
+          <div class="info-item_number">{{ currencyFormatter((totalPriceOrder + (totalPriceOrder * 10) / 100) || 0) }} VNĐ</div>
         </div>
       </div>
       <div class="action-btn">
-        <div class="btn-order" @click="handleDoneOrder()">
+        <div v-if="!isOrder" class="btn-order" @click="handleDoneOrder()">
           <button>ORDER</button>
         </div>
+        <div v-else class="btn-order" @click="handleOrderMore()">
+          <nuxt-link to="/khach-hang/order/:orderId?">
+            <button>Gọi thêm</button>
+          </nuxt-link>
+        </div>
         <div class="btn-payment">
-          <nuxt-link to="/khach-hang/thanh-toan">
+          <nuxt-link to="/khach-hang/hoa-don/:orderId?">
             <button>Thanh toán</button>
           </nuxt-link>
         </div>
       </div>
     </div>
+    <SupportModal ref="supportModalRef" />
   </div>
 </template>
 
 <script>
 import Trash from '@/components/CustomIcon/trash.vue';
-import { mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
+import SupportModal from '@/components/common/SupportModal/index.vue';
+import Loading from '@/components/common/Loading/index.vue';
+import commonMixin from '@/plugins/commonMixin';
+import { orderService } from '@/services';
+import { map } from 'lodash';
+
 export default {
   name: 'Page',
 
   components: {
     Trash,
+    SupportModal,
+    Loading,
   },
+
+  mixins: [commonMixin],
 
   layout: 'default-no-header',
 
@@ -96,6 +119,9 @@ export default {
       searchText: '',
       numberOfDishes: 0,
       orderList: [],
+      totalPrice: 0,
+      isOrder: false,
+      isLoading: false,
     };
   },
 
@@ -108,20 +134,26 @@ export default {
   computed: {
     ...mapState('clientView', {
       orderId: (state) => state.orderId,
-      totalPriceOrder: (state) => state.totalPriceOrder,
       orderItemList: (state) => state.orderItemList,
     }),
+
+    totalPriceOrder() {
+      let total = 0;
+      map(this.orderList, (item) => {
+        total += item.quantity * item.price;
+      });
+      return total;
+    }
   },
 
   mounted() {
-    console.log(this.orderItemList);
+    this.getOrderItemList();
   },
 
   methods: {
-    ...mapMutations('clientView', {
-      updateTotalPriceOrder: 'updateTotalPriceOrder',
-      updateOrderItemList: 'updateOrderItemList',
-    }),
+    handleShowSupportModal() {
+      this.$refs.supportModalRef.show();
+    },
 
     removeKeyword() {
       this.searchText = '';
@@ -138,12 +170,46 @@ export default {
       val.quantity++;
     },
 
-    handleRemoveOrderItem() {
+    async getOrderItemList() {
+      this.isLoading = true;
+      const orderIdTmp = localStorage.getItem('orderId');
+      const res = await orderService.getOrderItem(orderIdTmp).finally(() => {
+        this.isLoading = false;
+      });
 
+      if (res.success) {
+        this.orderList = res.data;
+      }
+    },
+
+    async handleRemoveOrderItem(id) {
+      const res = await orderService.deleteOrderItem(id, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
+
+      if (res) {
+        this.getOrderItemList();
+      }
     },
 
     handleDoneOrder() {
-      // this.$root.$emit('orderId', this.orderId);
+      this.isOrder = true;
+      setTimeout(() => {
+        // this.isLoading = false;
+        this.isLoading = true;
+      }, 1000);
+      this.isLoading = false;
+    },
+
+    handleOrderMore() {
+      const orderIdTmp = localStorage.getItem('orderId');
+      this.$router.push({
+        params: {
+          orderId: orderIdTmp,
+        }
+      });
     }
 
   },

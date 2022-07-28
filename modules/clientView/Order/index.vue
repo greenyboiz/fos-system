@@ -50,7 +50,7 @@
               {{ val.dishesName }}
             </div>
             <div class="dishes-price">
-              {{ val.salePrice }} VNĐ
+              {{ currencyFormatter(val.salePrice) }} VNĐ
             </div>
           </nuxt-link>
             <div class="dishes-orderNum">
@@ -81,7 +81,7 @@
           </div>
           <div class="spec-info">
             <div class="spec-name">{{ spec.name }}</div>
-            <div class="spec-price">{{ spec.salePrice }} VNĐ</div>
+            <div class="spec-price">{{ currencyFormatter(spec.salePrice) }} VNĐ</div>
             <div class="spec-qua">
               <div class="spec-quality">
                 <StarFill :currentColor="'#EEC800'" />
@@ -100,10 +100,11 @@
       </div>
     </div>
     <div class="totalOrder" @click="handleOpenOrderList()">
-      <nuxt-link to="/khach-hang/chi-tiet-order">
+      <nuxt-link to="/khach-hang/chi-tiet-order/:orderId?">
         <button>Bạn đã order ({{ totalOrder }})</button>
       </nuxt-link>
     </div>
+    <SupportModal ref="supportModalRef" />
   </div>
 </template>
 
@@ -113,13 +114,18 @@ import VueSlickCarousel from 'vue-slick-carousel';
 import { menuManagementService, orderService } from '@/services';
 import StarFill from '@/components/CustomIcon/star-fill.vue';
 import { map, filter, reduce } from 'lodash';
+import SupportModal from '@/components/common/SupportModal/index.vue';
+import commonMixin from '@/plugins/commonMixin';
 export default {
   name: 'Page',
 
   components: {
     VueSlickCarousel,
-    StarFill
+    StarFill,
+    SupportModal
   },
+
+  mixins: [commonMixin],
 
   layout: 'default-no-header',
 
@@ -178,6 +184,10 @@ export default {
       this.searchText = '';
     },
 
+    handleShowSupportModal() {
+      this.$refs.supportModalRef.show();
+    },
+
     decreaseDish(val) {
       if (val.numberOfDish === 0) {
         return;
@@ -225,11 +235,12 @@ export default {
 
     async postOrderItem() {
       const test = [];
+      const orderIdTmp = localStorage.getItem('orderId');
       filter(this.totalDishes, (item) => {
         if (item.numberOfDish > 0) {
           test.push({
             'orders': {
-                'orderId': this.orderId
+                'orderId': orderIdTmp
             },
             'dishes': {
                 'dishesId': item.dishesId
@@ -238,7 +249,6 @@ export default {
           });
         }
       });
-      console.log(test);
       const requestParam = {
         'list': test
       };
@@ -246,10 +256,15 @@ export default {
       const res = await orderService.postOrderItem(requestParam);
 
       if (res.status === 200) {
-        this.updateOrderId(this.orderId);
-        console.log(this.orderId);
-        this.getOrderItemList(this.orderId);
-        this.getTotalPayment(this.orderId);
+        this.updateOrderId(orderIdTmp);
+        console.log(orderIdTmp);
+        this.getOrderItemList(orderIdTmp);
+        this.getTotalPayment(orderIdTmp);
+        this.$router.push({
+          params: {
+            orderId: orderIdTmp,
+          }
+        });
       }
     },
 

@@ -33,7 +33,7 @@
       <div class="dish-review">
         <StarFill /> 5
       </div>
-      <div class="dish-price">{{ dishDetail.salePrice }}</div>
+      <div class="dish-price">{{ currencyFormatter(dishDetail.salePrice) }}</div>
       <div class="dish-desc">{{ dishDetail.description }}</div>
     </div>
     <div class="totalOrder">
@@ -46,12 +46,15 @@
 import { mapState } from 'vuex';
 import { menuManagementService } from '@/services';
 import StarFill from '@/components/CustomIcon/star-fill.vue';
+import commonMixin from '@/plugins/commonMixin';
 export default {
   name: 'Page',
 
   components: {
     StarFill,
   },
+
+  mixins: [commonMixin],
 
   layout: 'default-no-header',
 

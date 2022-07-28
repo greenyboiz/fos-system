@@ -26,7 +26,7 @@
             <div class="table__col">Thao tác</div>
           </div>
 
-          <tbody class="table__bot">
+          <div class="table__bot">
             <template v-if="isLoading">
               <div class="loading">
                 <Loading />
@@ -58,7 +58,7 @@
                 </div>
               </div>
             </template>
-          </tbody>
+          </div>
         </table>
       </div>
 
@@ -141,9 +141,7 @@ export default {
           this.isLoading = false;
         });
 
-      if (res.success) {
-        this.listOrder = res.data;
-      }
+      this.listOrder = res.content;
     },
 
     removeOrder(id) {

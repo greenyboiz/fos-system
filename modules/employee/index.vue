@@ -94,6 +94,12 @@ import Order from '../../modules/employee/Order/index.vue';
 import Dinner from '../../modules/employee/Dinner/index.vue';
 import SwapTableModal from './modals/SwapTableModal/index.vue';
 
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
+
 export default {
   name: 'Page',
 
@@ -110,6 +116,7 @@ export default {
       spOrderId: null,
       totalPriceOrder: 0,
       tableId: 1,
+      orderId: null,
     };
   },
 
@@ -146,6 +153,7 @@ export default {
       if (res && res.success) {
         this.getOrderItemList(res.data.orderId);
         this.getTotalPayment(res.data.orderId);
+        this.orderId = res.data.orderId;
       } else {
         console.log('as');
       }
@@ -171,20 +179,24 @@ export default {
       }
     },
 
-    async getPaymentByOrderId(orderId) {
-      const res = await employeeService.getPaymentByOrderId(orderId, {
+    async confirmPayment() {
+      if (!this.orderId) {
+        return;
+      }
+
+      const res = await employeeService.confirmPayment(this.orderId, {}, {
         headers: {
           Authorization: this.$auth.$storage._state['_token.local'],
         },
       });
 
       if (res.success) {
-        console.log(res);
+        Vue.$toast.success('Đơn hàng đã thanh toán thành công');
       }
     },
 
     handleConfirmTransaction() {
-      this.getPaymentByOrderId(1);
+      this.confirmPayment();
     },
 
     handleGetChoice(bol) {
