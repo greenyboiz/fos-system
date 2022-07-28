@@ -76,17 +76,12 @@ public class FOSUserService implements IFOSUserService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> getFOSUserById(Long id) {
-        Optional<FOSUser> FOSUser = fosUserRepository.findById(id);
-        if(FOSUser.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, FOSUser)
-            );
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", "Can not find FOSUserID: "+id,false,"null")
-            );
+    public FOSUser getFOSUserById(Long id) {
+        FOSUser fosUser = fosUserRepository.findFOSUserById(id);
+        if(fosUser != null){
+            return fosUser;
         }
+        return null;
     }
 
     @Override

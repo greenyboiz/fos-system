@@ -70,8 +70,7 @@ public class DishesServiceTest {
         Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, 1, actualCategory);
 
         Mockito.when(categoryRepository.findByCategoryId(actual.getCategory().getCategoryId())).thenReturn(actualCategory);
-        Mockito.when(dishesRepository.getById(actual.getDishesId())).thenReturn(expect);
-//        actual.set
+        Mockito.when(dishesRepository.findDishesById(actual.getDishesId())).thenReturn(expect);
         Mockito.when(dishesRepository.save(actual)).thenReturn(expect);
 
         Dishes result = dishesService.updateDishes(actual);
@@ -86,7 +85,7 @@ public class DishesServiceTest {
         Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, expectCategory);
         Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, 1, actualCategory);
 
-        Mockito.when(dishesRepository.getById(expect.getDishesId())).thenReturn(actual);
+        Mockito.when(dishesRepository.findDishesById(expect.getDishesId())).thenReturn(actual);
 //        Mockito.when(dishesRepository.delete(actual);)
         boolean result = dishesService.deleteDishes(actual.getDishesId());
         Assert.assertEquals(result,true);

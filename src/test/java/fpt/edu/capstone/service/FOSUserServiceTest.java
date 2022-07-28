@@ -14,6 +14,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,9 @@ public class FOSUserServiceTest {
 
     @InjectMocks
     private FOSUserService fosUserService;
+
+    @Mock
+    private PasswordEncoder bcryptEncoder;
 
     @Mock
     private FOSUserRepository fosUserRepository;
@@ -59,6 +64,7 @@ public class FOSUserServiceTest {
     public void addFOSUserTest(){
         FOSUser newUser = new FOSUser("hoang tien dat111111","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
         FOSUser expectUser = new FOSUser(1L,"hoang tien dat111111","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
+        newUser.setPassword(bcryptEncoder.encode(newUser.getPassword()));
         Mockito.when(fosUserRepository.save(newUser)).thenReturn(expectUser);
         FOSUser result = fosUserService.addFOSUser(newUser);
 //        Assert.assertEquals(result.getUserId(),new Long(1));
@@ -74,7 +80,7 @@ public class FOSUserServiceTest {
         FOSUser fosUserForUpdate = new FOSUser(1l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",roleUpdate);
 
         Mockito.when(roleRepository.findByRoleId(fosUserForUpdate.getRole().getRoleId())).thenReturn(roleUpdate);
-        Mockito.when(fosUserRepository.getById(fosUserForUpdate.getUserId())).thenReturn(oldUser);
+        Mockito.when(fosUserRepository.findFOSUserById(fosUserForUpdate.getUserId())).thenReturn(oldUser);
         Mockito.when(fosUserRepository.save(oldUser)).thenReturn(fosUserForUpdate);
 
         FOSUser result = fosUserService.updateFOSUser(fosUserForUpdate);
@@ -88,20 +94,18 @@ public class FOSUserServiceTest {
         FOSUser expect = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
         FOSUser actual = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
 
-        Mockito.when(fosUserRepository.getById(actual.getUserId())).thenReturn(actual);
-//        ResponseEntity<ResponseObject> result = fosUserService.getFOSUserById(expect.getUserId());
-        Assert.assertEquals(expect,actual);
+        Mockito.when(fosUserRepository.findFOSUserById(actual.getUserId())).thenReturn(expect);
+        FOSUser result = fosUserService.getFOSUserById(expect.getUserId());
+        Assert.assertEquals(result,expect);
     }
 
     @Test
     public void deleteFOSUserByIdTest(){
         FOSUser fosUser = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
         FOSUser actual = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
-        Mockito.when(fosUserRepository.getById(fosUser.getUserId())).thenReturn(actual);
-
+        Mockito.when(fosUserRepository.findFOSUserById(fosUser.getUserId())).thenReturn(actual);
         fosUserRepository.delete(fosUser);
 //        Mockito.when(fosUserRepository.delete(fosUser)).thenReturn(actual);
-
         Boolean result = fosUserService.deleteFOSUser(actual.getUserId());
 
         Assert.assertEquals(result,true);

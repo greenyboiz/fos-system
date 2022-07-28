@@ -55,8 +55,8 @@ public class CustomerServiceTest {
         Customer expect = new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi");
         Customer actual = new Customer(1l,"tang nguyet","065623266","mn@gmail.com","Ha Noi");
 
-        Mockito.when(customerRepository.getById(expect.getCustomerId())).thenReturn(actual);
-        Mockito.when(customerRepository.save(actual)).thenReturn(actual);
+        Mockito.when(customerRepository.findByCustomerId(actual.getCustomerId())).thenReturn(expect);
+        Mockito.when(customerRepository.save(actual)).thenReturn(expect);
 
         Customer result = customerService.updateCustomer(actual);
         Assert.assertEquals(result,expect);
@@ -68,7 +68,7 @@ public class CustomerServiceTest {
         Customer expect = new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi");
         Customer actual = new Customer(1l,"tang nguyet","065623266","mn@gmail.com","Ha Noi");
 
-        Mockito.when(customerRepository.getById(expect.getCustomerId())).thenReturn(actual);
+        Mockito.when(customerRepository.findByCustomerId(expect.getCustomerId())).thenReturn(actual);
 //        Mockito.when(dishesRepository.delete(actual);)
         boolean result = customerService.deleteCustomer(actual.getCustomerId());
         Assert.assertEquals(result,true);

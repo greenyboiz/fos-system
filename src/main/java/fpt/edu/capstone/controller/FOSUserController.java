@@ -101,7 +101,15 @@ public class FOSUserController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users/{id}")
-    public ResponseEntity<ResponseObject> findFOSUserById(@PathVariable Long id){
-        return ifosUserService.getFOSUserById(id);
+    public ResponseEntity<?> findFOSUserById(@PathVariable Long id){
+        FOSUser fosUser = ifosUserService.getFOSUserById(id);
+        if(fosUser!=null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, fosUser)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Can not find FOSUserID: "+id,false,"null")
+        );
     }
 }

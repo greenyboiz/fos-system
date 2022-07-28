@@ -99,7 +99,7 @@ public class OrderServiceTest {
         QRCode actualQRCode = new QRCode(2l,null);
         Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
 
-        Mockito.when(ordersRepository.getOrdersById(actual.getOrderId())).thenReturn(expect);
+        Mockito.when(ordersRepository.findOrdersById(actual.getOrderId())).thenReturn(expect);
 //        Mockito.when(ordersRepository.delete(actual);)
         boolean result = ordersService.deleteOrder(actual.getOrderId());
         Assert.assertEquals(result,true);

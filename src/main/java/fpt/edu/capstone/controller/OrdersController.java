@@ -85,6 +85,42 @@ public class OrdersController {
         }
     }
 
+//    @PostMapping("/orders")
+//    public ResponseEntity<?> saveOrders(@RequestBody Orders orders){
+//        try {
+//            boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
+//
+////            boolean checkCustomerExistInOrder = iOrdersService.checkCustomerExistInOrder(orders);
+//            boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
+//            if (!checkOrderExist){
+//                Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
+//                tables.setStatus("0");
+//                if(!checkCustomerExist){
+//                    Customer customer = iCustomerService.addCustomer(orders.getCustomer());
+//                    orders.setCustomer(customer);
+//                    // check qrCode đã có người ngồi và chưa thanh toán
+//                    iOrdersService.addOrder(orders);
+//                    return ResponseEntity.status(HttpStatus.OK).body(
+//                            new ResponseObject("ok", "add order succsessfully",true, iOrdersService.addOrder(orders))
+//                    );
+//                }
+//                iOrdersService.addOrder(orders);
+//                return ResponseEntity.status(HttpStatus.OK).body(
+//                        new ResponseObject("ok", "add order succsessfully",true, iOrdersService.addOrder(orders))
+//                );
+//            }
+//            else {
+//                return ResponseEntity.status(HttpStatus.CONFLICT).body(
+//                        new ResponseObject("fail", "Order is exist",false,"null")
+//                );
+//            }
+//        }catch (Exception e){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+//                    new ResponseObject("fail", e.getMessage(),false, null)
+//            );
+//        }
+//    }
+
     @PutMapping("/orders/update")
     public Orders updateOrders(@RequestBody Orders orders){
         return iOrdersService.updateOrder(orders);
