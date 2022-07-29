@@ -26,9 +26,11 @@ public class Payment {
     @JoinColumn(name = "userId", nullable = true)
     private FOSUser fosUser;
 
-    @Column(name = "paymentType")
-    private String paymentType;
+    @ManyToOne
+    @JoinColumn(name = "paymentTypeId", nullable = true)
+    private PaymentType paymentType;
 
-    @Transient
-    private BigDecimal totalAmount;
+    @Column(name = "totalMoney")
+    private BigDecimal totalMoney;
+
 }

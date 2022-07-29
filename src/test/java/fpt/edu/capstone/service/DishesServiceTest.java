@@ -15,6 +15,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,10 +39,10 @@ public class DishesServiceTest {
     @Test
     public void getAllDishesTest(){
         List<Dishes> expect = new ArrayList<>();
-        expect.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, null));
+        expect.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(50000), null, 10l, 1, null));
 
         List<Dishes> actual = new ArrayList<>();
-        actual.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, 1, null));
+        actual.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(60000), null, 10l, 1, null));
 
         Mockito.when(dishesRepository.findAll()).thenReturn(actual);
         List<Dishes> results = dishesService.getAllDishes();
@@ -89,6 +92,50 @@ public class DishesServiceTest {
 //        Mockito.when(dishesRepository.delete(actual);)
         boolean result = dishesService.deleteDishes(actual.getDishesId());
         Assert.assertEquals(result,true);
+    }
+
+    @Test
+    public void getDishesByIdTest(){
+        Category expectCategory = new Category(1l,"ga");
+        Category actualCategory = new Category(2l,"lon");
+
+        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(80000), BigDecimal.valueOf(50000), 10l, 1, expectCategory);
+        Dishes actual = new Dishes( "ga tan cao cap", "ngon ngon", "image1", BigDecimal.valueOf(70000), BigDecimal.valueOf(50000), 10l, 1, actualCategory);
+
+        Mockito.when(dishesRepository.findDishesById(actual.getDishesId())).thenReturn(expect);
+        Dishes result = dishesService.getDishesById(actual.getDishesId());
+        Assert.assertEquals(result,expect);
+    }
+
+    @Test
+    public void getDishesExistTest(){
+        Category expectCategory = new Category(1l,"ga");
+        Category actualCategory = new Category(2l,"lon");
+
+        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(80000), BigDecimal.valueOf(50000), 10l, 1, expectCategory);
+        Dishes actual = new Dishes( "ga tan cao cap", "ngon ngon", "image1", BigDecimal.valueOf(70000), BigDecimal.valueOf(50000), 10l, 1, actualCategory);
+
+        Mockito.when(dishesRepository.findDishesByDishesName(actual.getDishesName())).thenReturn(expect);
+        boolean result = dishesService.getDishesExist(actual.getDishesName());
+        Assert.assertEquals(result,true);
+    }
+
+    @Test
+    public void listDishesTest(){
+        List<Dishes> expect = new ArrayList<>();
+        expect.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(50000), null, 10l, 1, null));
+
+        List<Dishes> actual = new ArrayList<>();
+        actual.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(60000), null, 10l, 1, null));
+
+        int pageNum = 1;
+        int pageSize = 1;
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+        Mockito.when(dishesRepository.findAll(pageable)).thenReturn((Page<Dishes>) expect);
+
+        Page<Dishes> result = dishesService.listDishes(pageNum,pageSize);
+
+        Assert.assertEquals(result,(Page<Dishes>) expect);
     }
 
 //    @Test

@@ -96,8 +96,16 @@ public class DishesController {
     }
 
     @GetMapping("/dishes/{id}")
-    ResponseEntity<ResponseObject> findDishesById(@PathVariable Long id){
-        return iDishesService.getDishesById(id);
+    public ResponseEntity<?> findDishesById(@PathVariable Long id){
+        Dishes dishes = iDishesService.getDishesById(id);
+        if(dishes != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, dishes)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Can not find dishesId: "+id,false,"null")
+        );
     }
 
 }

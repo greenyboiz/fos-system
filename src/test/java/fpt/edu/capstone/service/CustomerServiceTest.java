@@ -73,4 +73,26 @@ public class CustomerServiceTest {
         boolean result = customerService.deleteCustomer(actual.getCustomerId());
         Assert.assertEquals(result,true);
     }
+
+    @Test
+    public void getCustomerByIdTest(){
+        Customer expect = new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi");
+        Customer actual = new Customer(1l,"tang nguyet","065623266","mn@gmail.com","Ha Noi");
+
+        Mockito.when(customerRepository.findByCustomerId(actual.getCustomerId())).thenReturn(expect);
+        Customer result = customerService.getCustomerById(actual.getCustomerId());
+
+        Assert.assertEquals(result,expect);
+    }
+    @Test
+    public void checkCustomerExistTest(){
+        Customer expect = new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi");
+        Customer actual = new Customer(1l,"tang nguyet","065623266","mn@gmail.com","Ha Noi");
+
+        Mockito.when(customerRepository.checkContactExist(actual.getContact())).thenReturn(expect);
+        boolean result = customerService.checkCustomerExist(actual);
+
+        Assert.assertEquals(true,result);
+    }
+
 }

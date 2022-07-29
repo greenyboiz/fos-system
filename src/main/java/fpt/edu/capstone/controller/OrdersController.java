@@ -1,13 +1,8 @@
 package fpt.edu.capstone.controller;
 
-import fpt.edu.capstone.entities.Customer;
-import fpt.edu.capstone.entities.Dishes;
-import fpt.edu.capstone.entities.Orders;
-import fpt.edu.capstone.entities.Tables;
-import fpt.edu.capstone.implementService.ICustomerService;
-import fpt.edu.capstone.implementService.IOrderItemService;
-import fpt.edu.capstone.implementService.IOrdersService;
-import fpt.edu.capstone.implementService.ITablesService;
+import fpt.edu.capstone.dto.PaymentUserDTO;
+import fpt.edu.capstone.entities.*;
+import fpt.edu.capstone.implementService.*;
 import fpt.edu.capstone.response.ResponseObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -35,7 +31,15 @@ public class OrdersController {
     private ICustomerService iCustomerService;
 
     @Autowired
+    private IPaymentService iPaymentService;
+
+    @Autowired
+    private IPaymentTypeService iPaymentTypeService;
+    @Autowired
     private ITablesService iTablesService;
+
+    @Autowired
+    private IFOSUserService ifosUserService;
 
 //    @GetMapping("/orders")
 //    public ResponseEntity<?> getAllOrders(){
@@ -126,8 +130,32 @@ public class OrdersController {
         return iOrdersService.updateOrder(orders);
     }
 
+//    @PutMapping("/orders/confirm/{orderId}")
+//    public ResponseEntity<?> confirmOrders(@PathVariable("orderId") Long orderId){
+//        try {
+//            Orders orders = iOrdersService.getOrderById(orderId);
+//            if (orders == null){
+//                throw new Exception();
+//            }
+//            //set order bill paid
+//            orders.setStatus(1);
+//            iOrdersService.addOrder(orders);
+//            //set table is Empty
+//            Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
+//            tables.setStatus("1");
+//            iTablesService.addTable(tables);
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "Order " + orderId + " bill paid",true, orders)
+//            );
+//        }catch (Exception e){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+//                    new ResponseObject("fail", e.getMessage(),false, null)
+//            );
+//        }
+//    }
+
     @PutMapping("/orders/confirm/{orderId}")
-    public ResponseEntity<?> confirmOrders(@PathVariable("orderId") Long orderId){
+    public ResponseEntity<?> confirmOrders(@PathVariable("orderId") Long orderId, @RequestBody PaymentUserDTO paymentUserDTO){
         try {
             Orders orders = iOrdersService.getOrderById(orderId);
             if (orders == null){
@@ -140,6 +168,20 @@ public class OrdersController {
             Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
             tables.setStatus("1");
             iTablesService.addTable(tables);
+            ///------------
+            BigDecimal totalMoney = iPaymentService.getTotalAmountByOrder(orderId);
+            Long paymentTypeId = iPaymentTypeService.getPaymentTypeNameByPaymentTypeId(paymentUserDTO.getPaymentType());
+            FOSUser fosUser = ifosUserService.getFOSUserById(paymentUserDTO.getFosUserId());
+            Orders orders1 = iOrdersService.getOrderById(orderId);
+            PaymentType paymentType = iPaymentTypeService.getPaymentTypeByPaymentTypeId(paymentTypeId);
+            Payment payment = new Payment();
+            payment.setFosUser(fosUser);
+            payment.setOrders(orders1);
+            payment.setPaymentType(paymentType);
+            payment.setTotalMoney(totalMoney);
+            iPaymentService.savePayment(payment);
+
+            //--------------------
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "Order " + orderId + " bill paid",true, orders)
             );

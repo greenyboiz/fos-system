@@ -93,17 +93,12 @@ public class DishesService implements IDishesService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> getDishesById(Long id) {
-        Optional<Dishes> dishes = dishesRepository.findById(id);
-        if(dishes.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, dishes)
-            );
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", "Can not find dishesId: "+id,false,"null")
-            );
+    public Dishes getDishesById(Long id) {
+        Dishes dishes = dishesRepository.findDishesById(id);
+        if(dishes != null){
+            return dishes;
         }
+        return null;
     }
 
     @Override

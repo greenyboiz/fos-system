@@ -38,7 +38,7 @@ public class OrderServiceTest {
     private CustomerRepository customerRepository;
 
     @Test
-    public void getAllOrders(){
+    public void getAllOrdersTest(){
         List<Orders> expect = new ArrayList<>();
         Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
         QRCode expectQRCode = new QRCode(1l,null);
@@ -57,7 +57,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void addOrder(){
+    public void addOrderTest(){
         Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
         QRCode expectQRCode = new QRCode(1l,null);
         Orders expect = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
@@ -73,7 +73,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void updateOrder(){
+    public void updateOrderTest(){
         Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
         QRCode expectQRCode = new QRCode(1l,null);
         Orders expect = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
@@ -90,7 +90,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void deleteOrder(){
+    public void deleteOrderTest(){
         Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
         QRCode expectQRCode = new QRCode(1l,null);
         Orders expect = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
@@ -106,7 +106,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void checkOrderExist(){
+    public void checkOrderExistTest(){
         Customer actualCustomer = new Customer(null,null,"0964697688",null,null);
         QRCode actualQRCode = new QRCode(2l,null);
         Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
@@ -115,5 +115,36 @@ public class OrderServiceTest {
         boolean result = ordersService.checkOrderExist(actual);
 
         Assert.assertEquals(result,true);
+    }
+
+    @Test
+    public void checkCustomerExistInOrderTest(){
+        Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
+        QRCode expectQRCode = new QRCode(1l,null);
+        Orders expect = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
+
+        Customer actualCustomer = new Customer(null,null,"0964697688",null,null);
+        QRCode actualQRCode = new QRCode(2l,null);
+        Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
+
+        Mockito.when(ordersRepository.findCustomerByContactInOrder(actual.getCustomer().getContact())).thenReturn(expect);
+
+        boolean result = ordersService.checkCustomerExistInOrder(actual);
+        Assert.assertEquals(result,true);
+    }
+
+    @Test
+    public void getOrderIdByQRCodeIdTest(){
+        Customer expectCustomer = new Customer(null,null,"0964697689",null,null);
+        QRCode expectQRCode = new QRCode(1l,null);
+        Orders expect = new Orders(1l,expectCustomer,expectQRCode,null,null,null,0,"tuyệt vời",10);
+
+        Customer actualCustomer = new Customer(null,null,"0964697688",null,null);
+        QRCode actualQRCode = new QRCode(2l,null);
+        Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
+
+        Mockito.when(ordersRepository.findQRCodeIdByOrderId(actual.getOrderId())).thenReturn(expect.getOrderId());
+        Long result = ordersService.getQRCodeIdByOrderId(actual.getOrderId());
+        Assert.assertEquals(result,expect.getOrderId());
     }
 }

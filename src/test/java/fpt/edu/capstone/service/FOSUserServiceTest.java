@@ -24,12 +24,6 @@ import java.util.List;
 @MockitoSettings(strictness = Strictness.LENIENT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FOSUserServiceTest {
-
-//    @Autowired
-//    private WebApplicationContext webApplicationContext;
-//
-//    private MockMvc mockMvc;
-
     @InjectMocks
     private FOSUserService fosUserService;
 
@@ -41,11 +35,6 @@ public class FOSUserServiceTest {
 
     @Mock
     private RoleRepository roleRepository;
-
-//    @Before
-//    public void setUp(){
-//        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-//    }
 
     @Test
     public void getAllFOSUserTest(){
@@ -110,5 +99,15 @@ public class FOSUserServiceTest {
 
         Assert.assertEquals(result,true);
 
+    }
+
+    @Test
+    public void checkExistUserByUserNameAndContactAndEmailTest(){
+        FOSUser expect = new FOSUser(1l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
+        FOSUser actual = new FOSUser(1l, "hoang tien anh","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
+
+        Mockito.when(fosUserRepository.checkExistUserByUserNameAndContactAndEmail(actual.getUserName(),actual.getContact(),actual.getEmail())).thenReturn(expect);
+        boolean result = fosUserService.checkExistUserByUserNameAndContactAndEmail(actual);
+        Assert.assertEquals(result,true);
     }
 }

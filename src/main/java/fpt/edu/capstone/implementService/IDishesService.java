@@ -19,7 +19,7 @@ public interface IDishesService {
 
     public List<Dishes> getAllDishes();
 
-    public ResponseEntity<ResponseObject> getDishesById(Long id);
+    public Dishes getDishesById(Long id);
 
     boolean getDishesExist(String dishesName);
 
