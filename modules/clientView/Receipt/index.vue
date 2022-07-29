@@ -41,14 +41,17 @@
       <div class="STK">STK: 010595284</div>
       <div class="bank">ViB</div>
       <div class="bank-owner">Chủ TK: Nguyễn Đức Mạnh</div>
+      <div class="text-center mb-2">
+        <img src="~/assets/images/qr_pay.png" width="100px" height="100px" alt="">
+      </div>
     </div>
     <div class="receipt__footer">
       <div class="thanks-label">Cảm ơn Quý khách và hẹn gặp lại!</div>
-      <img src="~/assets/images/barcode.png" width="210px" height="48px" alt="">
+      <!-- <img src="~/assets/images/barcode.png" width="210px" height="48px" alt=""> -->
       <div class="other__payment" style="text-align: left; margin-top: 0.5rem">
-        <nuxt-link to="/khach-hang/thanh-toan">
-          <span>Phương thức thanh toán khác</span>
-        </nuxt-link>
+        <span style="font-size: 14px">
+          Note: Quý khách vui lòng giữ lại hóa đơn sau khi thanh toán để mang ra quầy kiểm tra
+        </span>
       </div>
     </div>
   </div>

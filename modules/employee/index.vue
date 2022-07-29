@@ -22,6 +22,24 @@
 
         <!--  -->
         <div class="test__footer">
+          <div class="payment__select">
+            <div>
+              <div v-for="type in payment" :key="type.id">
+                <CustomCheckbox
+                  v-model="selectedPayment"
+                  class="mr-2"
+                  shape="circle"
+                  type="radio"
+                  styleCheck="dot"
+                  :keyValue="`${type.id}s`"
+                  :inputValue="type.type"
+                  :customLabel="true"
+                >
+                  <template slot="custom-label"> {{ type.name }} </template>
+                </CustomCheckbox>
+            </div>
+            </div>
+          </div>
           <div class="intoMoney">
             Tổng:
             <span> {{ currencyFormatter(totalPriceOrder) }} đ </span>
@@ -93,6 +111,8 @@ import { size, isNumber } from 'lodash';
 import Order from '../../modules/employee/Order/index.vue';
 import Dinner from '../../modules/employee/Dinner/index.vue';
 import SwapTableModal from './modals/SwapTableModal/index.vue';
+import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
+
 
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
@@ -106,7 +126,8 @@ export default {
   components: {
     Order,
     Dinner,
-    SwapTableModal
+    SwapTableModal,
+    CustomCheckbox,
   },
 
   data() {
@@ -117,6 +138,11 @@ export default {
       totalPriceOrder: 0,
       tableId: 1,
       orderId: null,
+      payment: [
+        { id: 1, name: 'Thanh toán online', type: 'banking' },
+        { id: 2, name: 'Thanh toán bằng tiền mặt', type: 'cash' },
+      ],
+      selectedPayment: '',
     };
   },
 
@@ -184,7 +210,17 @@ export default {
         return;
       }
 
-      const res = await employeeService.confirmPayment(this.orderId, {}, {
+      if (!this.selectedPayment) {
+        Vue.$toast.error('Vui lòng chọn 1 phương thức thanh toán');
+        return;
+      }
+
+      const reqParams = {
+        'fosUserId': this.$auth.$state.user.user.id,
+        'paymentType': this.selectedPayment
+      };
+
+      const res = await employeeService.confirmPayment(this.orderId, reqParams, {
         headers: {
           Authorization: this.$auth.$storage._state['_token.local'],
         },
@@ -192,6 +228,7 @@ export default {
 
       if (res.success) {
         Vue.$toast.success('Đơn hàng đã thanh toán thành công');
+        location.reload();
       }
     },
 

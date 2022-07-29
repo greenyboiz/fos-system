@@ -270,11 +270,11 @@
 
   &__content {
     overflow: auto;
-    height: calc(100% - 120px);
+    height: calc(100% - 170px);
   }
 
   &__footer {
-    height: 120px;
+    height: 170px;
     background: #fff;
     display: flex;
     flex-direction: column;
@@ -312,6 +312,15 @@
     align-items: center;
     justify-content: space-around;
   }
+}
+
+.payment__select {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 12px;
+  padding-bottom: 8px;
+  height: 50px;
 }
 
 ::-webkit-scrollbar {

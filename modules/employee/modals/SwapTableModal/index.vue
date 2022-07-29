@@ -80,6 +80,7 @@ export default {
       this.moveFrom = '';
       this.moveTo = '';
       this.$refs.swapTable.hide();
+      location.reload();
     },
 
     async getListTable() {

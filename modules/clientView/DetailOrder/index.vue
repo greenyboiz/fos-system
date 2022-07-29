@@ -33,7 +33,7 @@
         <div class="special__list">
           <div v-for="spec in orderList" :key="spec.id" class="special-item">
             <div class="spec-image">
-              <img :src="spec.dishes.dishImage" alt="" width="96px">
+              <img :src="spec.dishes.dishImage" style="border-radius: 8px" alt="" width="96px" height="96px">
             </div>
             <div class="spec-info">
               <div class="spec-name">{{ spec.dishes.dishesName }}</div>
@@ -77,11 +77,11 @@
           <button>ORDER</button>
         </div>
         <div v-else class="btn-order" @click="handleOrderMore()">
-          <nuxt-link to="/khach-hang/order/:orderId?">
+          <nuxt-link to="/khach-hang/order">
             <button>Gọi thêm</button>
           </nuxt-link>
         </div>
-        <div class="btn-payment">
+        <div class="btn-payment" @click="handleGetReceipt()">
           <nuxt-link to="/khach-hang/hoa-don/:orderId?">
             <button>Thanh toán</button>
           </nuxt-link>
@@ -183,10 +183,13 @@ export default {
     },
 
     async handleRemoveOrderItem(id) {
+      this.isLoading = true;
       const res = await orderService.deleteOrderItem(id, {
         headers: {
           Authorization: this.$auth.$storage._state['_token.local'],
         },
+      }).finally(() => {
+        this.isLoading = false;
       });
 
       if (res) {
@@ -204,6 +207,15 @@ export default {
     },
 
     handleOrderMore() {
+      const orderIdTmp = localStorage.getItem('orderId');
+      this.$router.push({
+        params: {
+          orderId: orderIdTmp,
+        }
+      });
+    },
+
+    handleGetReceipt() {
       const orderIdTmp = localStorage.getItem('orderId');
       this.$router.push({
         params: {

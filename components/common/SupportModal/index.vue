@@ -33,7 +33,7 @@ export default {
       listSupport: [
         { id: 1, name: 'Hỗ trợ đổi bàn', key: 'change_table' },
         { id: 2, name: 'Mang đồ ăn về', key: 'take_away' },
-        { id: 3, name: 'Gọi thêm món', key: 'order_more' },
+        // { id: 3, name: 'Gọi thêm món', key: 'order_more' },
         { id: 4, name: 'Yêu cầu khác', key: 'call_out' }
       ]
     };
