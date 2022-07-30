@@ -36,13 +36,13 @@ public class Dishes {
     private Long discount;
 
     @Column(name = "status")
-    private Integer status;
+    private Boolean status;
 
     @ManyToOne
     @JoinColumn(name = "categoryId", nullable = true)
     private Category category;
 
-    public Dishes(String dishesName, String description, String dishImage, BigDecimal salePrice, BigDecimal costPrice, Long discount, Integer status, Category category) {
+    public Dishes(String dishesName, String description, String dishImage, BigDecimal salePrice, BigDecimal costPrice, Long discount, boolean status, Category category) {
         this.dishesName = dishesName;
         this.description = description;
         this.dishImage = dishImage;

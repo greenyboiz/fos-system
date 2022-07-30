@@ -39,9 +39,9 @@ public class FOSUserServiceTest {
     @Test
     public void getAllFOSUserTest(){
         List<FOSUser> expect = new ArrayList<>();
-        expect.add(new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null));
+        expect.add(new FOSUser(20l, "hoang tien dat","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null));
         List<FOSUser> actual = new ArrayList<>();
-        actual.add(new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null));
+        actual.add(new FOSUser(20l, "hoang tien dat","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null));
 
         Mockito.when(fosUserRepository.findAll()).thenReturn(actual);
 
@@ -51,8 +51,8 @@ public class FOSUserServiceTest {
 
     @Test
     public void addFOSUserTest(){
-        FOSUser newUser = new FOSUser("hoang tien dat111111","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
-        FOSUser expectUser = new FOSUser(1L,"hoang tien dat111111","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
+        FOSUser newUser = new FOSUser("hoang tien dat111111","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
+        FOSUser expectUser = new FOSUser(1L,"hoang tien dat111111","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
         newUser.setPassword(bcryptEncoder.encode(newUser.getPassword()));
         Mockito.when(fosUserRepository.save(newUser)).thenReturn(expectUser);
         FOSUser result = fosUserService.addFOSUser(newUser);
@@ -65,8 +65,8 @@ public class FOSUserServiceTest {
         Role roleExpect = new Role(1l,"ADMIN");
         Role roleUpdate = new Role(2l,"STAFF");
 
-        FOSUser oldUser = new FOSUser(1l, "hoang tien dat111111","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",roleExpect);
-        FOSUser fosUserForUpdate = new FOSUser(1l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",roleUpdate);
+        FOSUser oldUser = new FOSUser(1l, "hoang tien dat111111","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",roleExpect);
+        FOSUser fosUserForUpdate = new FOSUser(1l, "hoang tien dat","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",roleUpdate);
 
         Mockito.when(roleRepository.findByRoleId(fosUserForUpdate.getRole().getRoleId())).thenReturn(roleUpdate);
         Mockito.when(fosUserRepository.findFOSUserById(fosUserForUpdate.getUserId())).thenReturn(oldUser);
@@ -80,8 +80,8 @@ public class FOSUserServiceTest {
 
     @Test
     public void getFOSUserByIdTest(){
-        FOSUser expect = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
-        FOSUser actual = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
+        FOSUser expect = new FOSUser(20l, "hoang tien dat","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
+        FOSUser actual = new FOSUser(20l, "hoang tien dat","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
 
         Mockito.when(fosUserRepository.findFOSUserById(actual.getUserId())).thenReturn(expect);
         FOSUser result = fosUserService.getFOSUserById(expect.getUserId());
@@ -90,8 +90,8 @@ public class FOSUserServiceTest {
 
     @Test
     public void deleteFOSUserByIdTest(){
-        FOSUser fosUser = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
-        FOSUser actual = new FOSUser(20l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
+        FOSUser fosUser = new FOSUser(20l, "hoang tien dat","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
+        FOSUser actual = new FOSUser(20l, "hoang tien dat","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
         Mockito.when(fosUserRepository.findFOSUserById(fosUser.getUserId())).thenReturn(actual);
         fosUserRepository.delete(fosUser);
 //        Mockito.when(fosUserRepository.delete(fosUser)).thenReturn(actual);
@@ -103,8 +103,8 @@ public class FOSUserServiceTest {
 
     @Test
     public void checkExistUserByUserNameAndContactAndEmailTest(){
-        FOSUser expect = new FOSUser(1l, "hoang tien dat","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
-        FOSUser actual = new FOSUser(1l, "hoang tien anh","dat1", "12345","nam","0966564666","dat1@gmail.com",1,"image",null);
+        FOSUser expect = new FOSUser(1l, "hoang tien dat","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
+        FOSUser actual = new FOSUser(1l, "hoang tien anh","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
 
         Mockito.when(fosUserRepository.checkExistUserByUserNameAndContactAndEmail(actual.getUserName(),actual.getContact(),actual.getEmail())).thenReturn(expect);
         boolean result = fosUserService.checkExistUserByUserNameAndContactAndEmail(actual);

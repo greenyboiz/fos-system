@@ -6,6 +6,7 @@ import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.entities.FOSUser;
 import fpt.edu.capstone.implementService.IFOSUserService;
 import fpt.edu.capstone.response.ResponseObject;
+import fpt.edu.capstone.validation.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +23,9 @@ import java.util.List;
 public class FOSUserController {
     @Autowired
     private IFOSUserService ifosUserService;
+
+    @Autowired
+    private Validate validate;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/users")
@@ -41,19 +45,71 @@ public class FOSUserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/users/add")
     public ResponseEntity<?> saveFOSUser(@RequestBody FOSUser fosUser){
-        boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
-        if(!checkExistUser){
-            FOSUser fosUserAdd = ifosUserService.addFOSUser(fosUser);
+        try {
+            ResponseEntity<?> responseEntity = validate.validateFOSUser(fosUser);
+            if(responseEntity.getStatusCode() == HttpStatus.OK){
+                FOSUser fosUserAdd = ifosUserService.addFOSUser(fosUser);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                            new ResponseObject("ok", "successfull",true, fosUserAdd)
+                    );
+            }
+            return  responseEntity;
+        }catch (Exception e){
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "successfull",true, fosUserAdd)
+                    new ResponseObject("fail", e.getMessage(),false, null)
             );
         }
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("fail", "Account exist",false, null)
+
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/users/update")
+    public ResponseEntity<?> updateFOSUser(@RequestBody FOSUser fosUser){
+        try {
+            ResponseEntity<?> responseEntity = validate.validateUpdateFOSUser(fosUser);
+            if(responseEntity.getStatusCode() == HttpStatus.OK){
+                ifosUserService.updateFOSUser(fosUser);
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("ok", "Update FOSUser succsessfully",true, ifosUserService.updateFOSUser(fosUser))
+                );
+            }
+            return responseEntity;
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("fail", e.getMessage(),false, null)
+            );
+        }
+
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/users/delete/{id}")
+    public ResponseEntity<?> deleteFOSUser(@PathVariable("id") Long id){
+        boolean deleteFOSUser =  ifosUserService.deleteFOSUser(id);
+        if (deleteFOSUser){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Delete FOSUser succsessfully",true, deleteFOSUser)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Can not find FOSUserID: "+id,false,"null")
         );
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> findFOSUserById(@PathVariable Long id){
+        FOSUser fosUser = ifosUserService.getFOSUserById(id);
+        if(fosUser!=null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, fosUser)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Can not find FOSUserID: "+id,false,"null")
+        );
+    }
+
+    //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    @PostMapping( value = "/users/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
 //    public ResponseEntity<?> addFOSUser(@RequestParam("file") MultipartFile file, @RequestPart("users") String users){
 //        ObjectMapper objectMapper = new ObjectMapper();
@@ -86,30 +142,4 @@ public class FOSUserController {
 //            );
 //        }
 //    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/users/update")
-    public FOSUser updateFOSUser(@RequestBody FOSUser fosUser){
-        return ifosUserService.updateFOSUser(fosUser);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/users/delete/{id}")
-    public boolean deleteFOSUser(@PathVariable("id") Long id){
-        return ifosUserService.deleteFOSUser(id);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/users/{id}")
-    public ResponseEntity<?> findFOSUserById(@PathVariable Long id){
-        FOSUser fosUser = ifosUserService.getFOSUserById(id);
-        if(fosUser!=null){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, fosUser)
-            );
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("fail", "Can not find FOSUserID: "+id,false,"null")
-        );
-    }
 }

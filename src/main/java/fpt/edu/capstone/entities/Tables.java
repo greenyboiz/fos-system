@@ -1,6 +1,7 @@
 package fpt.edu.capstone.entities;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import javax.persistence.*;
 @Table(name = "Tables")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Tables {
 
     @Id

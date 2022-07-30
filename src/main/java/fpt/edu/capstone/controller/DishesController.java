@@ -58,7 +58,49 @@ public class DishesController {
         );
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/dishes")
+    public  ResponseEntity<?> updateDishes(@RequestBody Dishes dishes){
+        Dishes dishes1 = iDishesService.getDishesById(dishes.getDishesId());
+        if(dishes1 != null){
+            iDishesService.updateDishes(dishes);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Update dishes successfull",true, iDishesService.updateDishes(dishes1))
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "this dishes is exist",false, null)
+        );
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/dishes/delete/{id}")
+    public ResponseEntity<?> deleteDishes(@PathVariable("id") Long id){
+        boolean dishesDelete = iDishesService.deleteDishes(id);
+        if(dishesDelete){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Delete dishes succsessfully",true, dishesDelete)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Can not find dishesId: "+id,false,"null")
+        );
+    }
+
+    @GetMapping("/dishes/{id}")
+    public ResponseEntity<?> findDishesById(@PathVariable Long id){
+        Dishes dishes = iDishesService.getDishesById(id);
+        if(dishes != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, dishes)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Can not find dishesId: "+id,false,"null")
+        );
+    }
+
+    //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    @PostMapping( value = "/dishes/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
 //    public ResponseEntity<?> addDishes(@RequestParam("file")MultipartFile file, @RequestPart("dishes") String dishes){
 //        ObjectMapper objectMapper = new ObjectMapper();
@@ -82,30 +124,5 @@ public class DishesController {
 //        }
 //
 //    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/dishes/update")
-    private Dishes updateDishes(@RequestBody Dishes dishes){
-        return iDishesService.updateDishes(dishes);
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/dishes/delete/{id}")
-    public boolean deleteDishes(@PathVariable("id") Long id){
-        return iDishesService.deleteDishes(id);
-    }
-
-    @GetMapping("/dishes/{id}")
-    public ResponseEntity<?> findDishesById(@PathVariable Long id){
-        Dishes dishes = iDishesService.getDishesById(id);
-        if(dishes != null){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, dishes)
-            );
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("fail", "Can not find dishesId: "+id,false,"null")
-        );
-    }
 
 }

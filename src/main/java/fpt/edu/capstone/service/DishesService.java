@@ -36,6 +36,7 @@ public class DishesService implements IDishesService {
     private CategoryRepository categoryRepository;
     @Override
     public Dishes addDishes(Dishes dishes) {
+        dishes.setStatus(true);
         return dishesRepository.save(dishes);
     }
 
@@ -54,11 +55,6 @@ public class DishesService implements IDishesService {
     @Override
     public Dishes updateDishes(Dishes dishes) {
         Category category = categoryRepository.findByCategoryId(dishes.getCategory().getCategoryId());
-//        Category category =
-//                categoryRepository.findById(dishes.getCategory().getCategoryId())
-//                        .orElseThrow(() -> {
-//                            throw new RuntimeException("(updateDishes)category not found");
-//                        });
         if(dishes != null) {
             Dishes dishes1 = dishesRepository.findDishesById(dishes.getDishesId());
             if(dishes1 != null) {
