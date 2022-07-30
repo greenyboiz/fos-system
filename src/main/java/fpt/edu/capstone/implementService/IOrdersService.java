@@ -19,7 +19,7 @@ public interface IOrdersService {
     public List<Orders> getAllOrders();
     public Orders getOrderById(Long id);
 
-    public boolean checkOrderExist(Orders orders);
+    public Orders checkOrderExist(Orders orders);
 
     boolean checkCustomerExistInOrder(Orders orders);
 

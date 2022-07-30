@@ -90,9 +90,9 @@ public class OrdersService implements IOrdersService {
     }
 
     @Override
-    public boolean checkOrderExist(Orders orders) {
-        Orders orders1 = ordersRepository.findByCustomerIdAndQrCodeAndOrderStatus(orders.getCustomer().getContact(), orders.getQrCode().getQRCodeId());
-        return orders1 == null ? false : true;
+    public Orders checkOrderExist(Orders orders) {
+        return ordersRepository.findByCustomerIdAndQrCodeAndOrderStatus(orders.getCustomer().getContact(), orders.getQrCode().getQRCodeId());
+//        return orders1 == null ? false : true;
     }
 
     @Override

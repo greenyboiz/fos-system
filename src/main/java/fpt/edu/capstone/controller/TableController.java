@@ -74,11 +74,11 @@ public class TableController {
                 iOrdersService.addOrder(order);
                 // chuyển bàn cũ sang mới và update status table
                 Tables tablesOld = iTablesService.getTableByQRCodeId(qrCodeIdOld);
-                tablesOld.setStatus("1");
+                tablesOld.setStatus(true);
                 iTablesService.addTable(tablesOld);
 
                 Tables tablesNew = iTablesService.getTableByQRCodeId(qrCodeIdNew);
-                tablesNew.setStatus("0");
+                tablesNew.setStatus(false);
                 iTablesService.addTable(tablesNew);
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new ResponseObject("ok", "change table successful",true, order)
@@ -101,7 +101,7 @@ public class TableController {
         boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(table.getQrCode().getQRCodeLink());
         if(!checkQRCodeExist){
             iqrCodeService.addQRCode(table.getQrCode());
-            table.setStatus("1");
+            table.setStatus(true);
             iTablesService.addTable(table);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "successfull",true, iTablesService.addTable(table))

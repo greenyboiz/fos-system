@@ -23,7 +23,7 @@ public class Tables {
     private String numberOfSeats;
 
     @Column(name = "status")
-    private String status;
+    private Boolean status;
 
     @OneToOne
     @JoinColumn(name = "QRCodeID", nullable = true)

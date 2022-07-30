@@ -112,9 +112,9 @@ public class OrderServiceTest {
         Orders actual = new Orders(1l,actualCustomer,actualQRCode,null,null,null,0,"rất tuyệt vời",10);
 
         Mockito.when(ordersRepository.findByCustomerIdAndQrCodeAndOrderStatus(actual.getCustomer().getContact(),actual.getQrCode().getQRCodeId())).thenReturn(actual);
-        boolean result = ordersService.checkOrderExist(actual);
+        Orders result = ordersService.checkOrderExist(actual);
 
-        Assert.assertEquals(result,true);
+        Assert.assertEquals(result,actual);
     }
 
     @Test

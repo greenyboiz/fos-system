@@ -66,4 +66,9 @@ public class CustomerService implements ICustomerService {
         }
         return false;
     }
+
+    @Override
+    public Customer getCustomerByContact(String contact) {
+        return customerRepository.checkContactExist(contact);
+    }
 }

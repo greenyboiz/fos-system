@@ -18,4 +18,6 @@ public interface ICustomerService {
     public Customer getCustomerById(Long id);
 
     boolean checkCustomerExist(Customer customer);
+
+    Customer getCustomerByContact(String contact);
 }

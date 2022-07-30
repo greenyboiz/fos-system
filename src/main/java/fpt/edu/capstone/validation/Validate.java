@@ -18,12 +18,6 @@ public class Validate {
     private final String EMAIL = "^(.+)@gmail.com$";
 
     public ResponseEntity<?> validateFOSUser(FOSUser fosUser) {
-//        FOSUser fosUser1 = ifosUserService.getFOSUserById(fosUser.getUserId());
-//        if(fosUser1 == null){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    new ResponseObject("fail", "User is not exist",false, null)
-//            );
-//        }
         //validate exist user
         boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
         if(checkExistUser){
@@ -67,39 +61,6 @@ public class Validate {
                     new ResponseObject("fail", "User is not exist",false, null)
             );
         }
-        //validate exist user
-        boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
-        if(checkExistUser){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("fail", "User is exist",false, null)
-            );
-        }
-        //validate contact of user
-        String contact = fosUser.getContact();
-        if(contact.trim().isEmpty()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("fail", "Contact of is not null",false, null)
-            );
-        }
-        if (!contact.matches(PHONE_NUMBER)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("fail", "Contact of is incorrect format of phone number VietNamese",false, null)
-            );
-        }
-        //validate email of user
-        String email = fosUser.getEmail();
-        if(email.trim().isEmpty()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("fail", "Email of user must not null",false, null)
-            );
-        }
-        if (!email.matches(EMAIL)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("fail", "Email of is incorrect format of email with domain @gmail.com",false, null)
-            );
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("ok", "Validate successfull",true, null)
-        );
+        return validateFOSUser(fosUser);
     }
 }

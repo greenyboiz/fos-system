@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -67,63 +66,39 @@ public class OrdersController {
 
     @PostMapping("/orders")
     public ResponseEntity<?> saveOrders(@RequestBody Orders orders){
-        boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
-
+//        boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
+        Orders orders1 = iOrdersService.checkOrderExist(orders);
 //        boolean checkCustomerExistInOrder = iOrdersService.checkCustomerExistInOrder(orders);
 //        boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
-        if (!checkOrderExist){
+        if (orders1 == null){
             Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
-            tables.setStatus("0");
-            Customer customer = iCustomerService.addCustomer(orders.getCustomer());
-            orders.setCustomer(customer);
-            // check qrCode đã có người ngồi và chưa thanh toán
+//            if(tables.getStatus()==true){
+//                tables.setStatus(false);
+//            }
+            if (tables.getStatus()==false){
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                        new ResponseObject("fail", "Table is not empty",false, null)
+                );
+            }
+            tables.setStatus(false);
+            Customer customerSystem = iCustomerService.getCustomerByContact(orders.getCustomer().getContact());
+            if(customerSystem == null){
+                Customer customer = iCustomerService.addCustomer(orders.getCustomer());
+                orders.setCustomer(customer);
+            }
+            orders.setCustomer(customerSystem);
             iOrdersService.addOrder(orders);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "add order succsessfully",true, iOrdersService.addOrder(orders))
             );
         }
         else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                    new ResponseObject("fail", "Order is exist",false,"null")
+//            Orders orders1 = iOrdersService.getOrderById(orders.getOrderId());
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Order is exist",true,orders1)
             );
         }
     }
-
-//    @PostMapping("/orders")
-//    public ResponseEntity<?> saveOrders(@RequestBody Orders orders){
-//        try {
-//            boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
-//
-////            boolean checkCustomerExistInOrder = iOrdersService.checkCustomerExistInOrder(orders);
-//            boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
-//            if (!checkOrderExist){
-//                Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
-//                tables.setStatus("0");
-//                if(!checkCustomerExist){
-//                    Customer customer = iCustomerService.addCustomer(orders.getCustomer());
-//                    orders.setCustomer(customer);
-//                    // check qrCode đã có người ngồi và chưa thanh toán
-//                    iOrdersService.addOrder(orders);
-//                    return ResponseEntity.status(HttpStatus.OK).body(
-//                            new ResponseObject("ok", "add order succsessfully",true, iOrdersService.addOrder(orders))
-//                    );
-//                }
-//                iOrdersService.addOrder(orders);
-//                return ResponseEntity.status(HttpStatus.OK).body(
-//                        new ResponseObject("ok", "add order succsessfully",true, iOrdersService.addOrder(orders))
-//                );
-//            }
-//            else {
-//                return ResponseEntity.status(HttpStatus.CONFLICT).body(
-//                        new ResponseObject("fail", "Order is exist",false,"null")
-//                );
-//            }
-//        }catch (Exception e){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//                    new ResponseObject("fail", e.getMessage(),false, null)
-//            );
-//        }
-//    }
 
     @PutMapping("/orders/update")
     public Orders updateOrders(@RequestBody Orders orders){
@@ -166,7 +141,7 @@ public class OrdersController {
             iOrdersService.addOrder(orders);
             //set table is Empty
             Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
-            tables.setStatus("1");
+            tables.setStatus(true);
             iTablesService.addTable(tables);
             ///------------
             BigDecimal totalMoney = iPaymentService.getTotalAmountByOrder(orderId);
@@ -200,7 +175,7 @@ public class OrdersController {
                 throw new Exception();
             }
             Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
-            tables.setStatus("1");
+            tables.setStatus(true);
             iTablesService.addTable(tables);
             iOrderItemService.deleteOrderItemByOrderId(orders);
             boolean orderDelete = iOrdersService.deleteOrder(id);
