@@ -94,7 +94,7 @@ public class TableController {
         }
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @PostMapping("/tables/add")
     public ResponseEntity<?> saveTable(@RequestBody Tables table){
 
@@ -114,13 +114,13 @@ public class TableController {
 
 
 
-
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @PutMapping("/tables/update")
     public Tables updateTable(@RequestBody Tables table){
         return iTablesService.updateTable(table);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @DeleteMapping("/tables/delete/{id}")
     public ResponseEntity<?> deleteTable(@PathVariable("id") Long id){
         boolean checkTableExist = iTablesService.checkTableExist(id);

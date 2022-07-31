@@ -32,6 +32,7 @@ public class CategoryController {
         );
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/category/add")
     public ResponseEntity<?> saveCategory(@RequestBody Category category){
         boolean checkCategoryExist = iCategoryService.checkCategoryExist(category.getCategoryName());
@@ -74,7 +75,6 @@ public class CategoryController {
         );
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/category/{id}")
     ResponseEntity<ResponseObject> findTableById(@PathVariable Long id){
         return iCategoryService.getCategoryById(id);

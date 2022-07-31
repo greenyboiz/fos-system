@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class CustomerController {
         );
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/customers/add")
     public ResponseEntity<?> saveCustomer(@RequestBody Customer customer){
         boolean checkCustomerExist = iCustomerService.checkCustomerExist(customer);
@@ -47,6 +49,7 @@ public class CustomerController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/customers/update")
     public Customer updateFOSUser(@RequestBody Customer customer){
         return iCustomerService.updateCustomer(customer);

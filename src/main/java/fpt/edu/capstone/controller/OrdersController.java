@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -105,6 +105,7 @@ public class OrdersController {
         return iOrdersService.updateOrder(orders);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @PutMapping("/orders/confirm/{orderId}")
     public ResponseEntity<?> confirmOrders(@PathVariable("orderId") Long orderId, @RequestBody PaymentUserDTO paymentUserDTO){
         try {
@@ -143,6 +144,7 @@ public class OrdersController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @DeleteMapping("/orders/delete/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable("id") Long id){
         try {
