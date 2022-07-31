@@ -63,6 +63,18 @@ public class CustomerServiceTest {
     }
 
     @Test
+    public void updateCustomerTestFail(){
+        Customer expect = new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi");
+        Customer actual = new Customer(1l,"tang nguyet","065623266","mn@gmail.com","Ha Noi");
+
+        Mockito.when(customerRepository.findByCustomerId(2l)).thenReturn(null);
+        Mockito.when(customerRepository.save(actual)).thenReturn(expect);
+
+        Customer result = customerService.updateCustomer(actual);
+        Assert.assertEquals(result,expect);
+    }
+
+    @Test
     public void  deleteCustomerByIdTest(){
 
         Customer expect = new Customer(1l,"minh nguyet","065623266","mn@gmail.com","Ha Noi");

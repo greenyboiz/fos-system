@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Validate {
+public class ValidateFOSUser {
     @Autowired
     private IFOSUserService ifosUserService;
 
