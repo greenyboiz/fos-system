@@ -36,8 +36,16 @@ public class TableController {
     private IOrdersService iOrdersService;
 
     @GetMapping("/tables")
-    public List<Tables> getAllTables(){
-        return iTablesService.getAllTables();
+    public ResponseEntity<?> getAllTables(){
+        List<Tables> tables = iTablesService.getAllTables();
+        if(tables != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successful",true, tables)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Not exist any table",false, null)
+        );
     }
 
     @GetMapping("/tableByOrder/{tableId}")
