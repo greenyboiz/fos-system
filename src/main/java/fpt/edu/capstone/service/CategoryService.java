@@ -58,17 +58,12 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> getCategoryById(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        if(category.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, category)
-            );
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", "Can not find CategoryID: "+id,false,"null")
-            );
+    public Category getCategoryById(Long id) {
+        Category category = categoryRepository.findByCategoryId(id);
+        if(category != null){
+            return category;
         }
+        return null;
     }
 
     @Override

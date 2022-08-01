@@ -76,8 +76,17 @@ public class CategoryController {
     }
 
     @GetMapping("/category/{id}")
-    ResponseEntity<ResponseObject> findTableById(@PathVariable Long id){
-        return iCategoryService.getCategoryById(id);
+    public  ResponseEntity<?> findTableById(@PathVariable Long id){
+        Category category = iCategoryService.getCategoryById(id);
+        if(category != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, category)
+            );
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "Can not find CategoryID: "+id,false,"null")
+            );
+        }
     }
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")

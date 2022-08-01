@@ -16,7 +16,7 @@ public interface ICategoryService {
 
     boolean deleteCategory(Long id);
 
-    ResponseEntity<ResponseObject> getCategoryById(Long id);
+    Category getCategoryById(Long id);
 
     boolean checkCategoryExist(String categoryName);
 }
