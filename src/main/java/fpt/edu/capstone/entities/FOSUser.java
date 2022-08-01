@@ -1,6 +1,7 @@
 package fpt.edu.capstone.entities;
 
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 
@@ -55,10 +56,10 @@ public class FOSUser {
         this.role = role;
     }
 
-    public boolean isActive(){
-        if(this.status == true){
-            return true;
-        }
-        return false;
-    }
+//    public boolean isActive(){
+//        if(this.status == true){
+//            return true;
+//        }
+//        return false;
+//    }
 }

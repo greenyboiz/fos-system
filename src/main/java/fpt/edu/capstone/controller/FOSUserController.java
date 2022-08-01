@@ -31,7 +31,7 @@ public class FOSUserController {
                     new ResponseObject("ok", "successfull",true, fosUserList)
             );
         }else {
-            return ResponseEntity.status(HttpStatus.OK).body(
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseObject("fail", "Does not exist any account",true, fosUserList)
             );
         }

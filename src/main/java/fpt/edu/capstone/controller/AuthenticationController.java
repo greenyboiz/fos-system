@@ -65,7 +65,7 @@ public class AuthenticationController {
                     .body(ResponseObject.builder().status("401").message("sign in request: username or pasword wrong!")
                             .success(false).build());
         }
-        if (!user.isActive()) {
+        if (!user.getStatus()) {
             log.error("Account inactive!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseObject.builder().status("401")
                     .message("Authenticate request: account lock!").success(false).build());
