@@ -31,14 +31,57 @@ public class QRCodeService implements IQRCodeService {
     @Autowired
     private QRCodeRepository qrCodeRepository;
 
-    @Autowired
-    private Cloudinary cloudinary;
     @Override
     public QRCode addQRCode(QRCode qrCode) {
         return qrCodeRepository.save(qrCode);
     }
 
-//    @Override
+    @Override
+    public QRCode updateQRCode(QRCode qrCode) {
+        if(qrCode != null){
+            QRCode qrCodeUpdate = qrCodeRepository.findByQRCodeId(qrCode.getQRCodeId());
+            if(qrCodeUpdate != null){
+                qrCodeUpdate.setQRCodeLink(qrCode.getQRCodeLink());
+                return qrCodeRepository.save(qrCodeUpdate);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteQRCode(Long id) {
+        QRCode qrCode = qrCodeRepository.getById(id);
+        if(qrCode != null){
+            qrCodeRepository.delete(qrCode);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public List<QRCode> getAllQRCodes() {
+        return qrCodeRepository.findAll();
+    }
+
+    @Override
+    public QRCode getQRCodeById(Long id) {
+        QRCode qrCode = qrCodeRepository.findByQRCodeId(id);
+        if(qrCode != null){
+            return qrCode;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean checkQRCodeExist(String qrCodeLink) {
+        QRCode qrCode = qrCodeRepository.checkQRCodeExist(qrCodeLink);
+        if(qrCode != null){
+            return true;
+        }
+        return false;
+    }
+
+    //    @Override
 //    public QRCode saveImageToDB(MultipartFile file, QRCode qrCode){
 ////        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 //        if(fileName.contains("..")){
@@ -67,63 +110,4 @@ public class QRCodeService implements IQRCodeService {
 //        }
 //        return qrCodeRepository.save(qrCode);
 //    }
-
-    @Override
-    public QRCode updateQRCode(QRCode qrCode) {
-        if(qrCode != null){
-            QRCode qrCodeUpdate = qrCodeRepository.getById(qrCode.getQRCodeId());
-            if(qrCodeUpdate != null){
-//                qrCodeUpdate.setQRCodeImage(qrCode.getQRCodeImage());
-                qrCodeUpdate.setQRCodeLink(qrCode.getQRCodeLink());
-
-                return qrCodeRepository.save(qrCodeUpdate);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean deleteQRCode(Long id) {
-        QRCode qrCode = qrCodeRepository.getById(id);
-        if(qrCode != null){
-            qrCodeRepository.delete(qrCode);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public List<QRCode> getAllQRCodes() {
-        return qrCodeRepository.findAll();
-    }
-
-    @Override
-    public QRCode getQRCodeById(Long id) {
-        QRCode qrCode = qrCodeRepository.findByQRCodeId(id);
-//        byte[] byteData = qrCode.get().getQRCodeImage2().getBytes();
-//        Blob blob = null;
-//        InputStream in = null;
-//        BufferedImage image = null;
-//        try {
-//            blob = new SerialBlob(byteData);
-//            in = blob.getBinaryStream();
-//            image = ImageIO.read(in);
-//        } catch (SQLException | IOException e) {
-//            throw new RuntimeException(e);
-//        }
-        if(qrCode != null){
-            return qrCode;
-        }
-        return null;
-    }
-
-    @Override
-    public boolean checkQRCodeExist(String qrCodeLink) {
-        QRCode qrCode = qrCodeRepository.checkQRCodeExist(qrCodeLink);
-        if(qrCode != null){
-            return true;
-        }
-        return false;
-    }
-
 }

@@ -20,7 +20,7 @@ public class Tables {
     private Long tableId;
 
     @Column(name = "numberOfSeats")
-    private String numberOfSeats;
+    private Integer numberOfSeats;
 
     @Column(name = "status")
     private Boolean status;

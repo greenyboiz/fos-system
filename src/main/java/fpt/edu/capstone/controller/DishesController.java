@@ -59,7 +59,7 @@ public class DishesController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/dishes")
+    @PutMapping("/dishes/update")
     public  ResponseEntity<?> updateDishes(@RequestBody Dishes dishes){
         Dishes dishes1 = iDishesService.getDishesById(dishes.getDishesId());
         if(dishes1 != null){

@@ -35,10 +35,10 @@ public class TablesServiceTest {
     @Test
     public void getAllTablesTest(){
         List<Tables> expect = new ArrayList<>();
-        expect.add(new Tables(1l,"5",true,null));
+        expect.add(new Tables(1l,5,true,null));
 
         List<Tables> actual = new ArrayList<>();
-        actual.add(new Tables(1l,"5",true,null));
+        actual.add(new Tables(1l,5,true,null));
         Mockito.when(tableRepository.findAll()).thenReturn(actual);
         List<Tables> results = tableService.getAllTables();
         Assert.assertEquals(results,actual);
@@ -46,8 +46,8 @@ public class TablesServiceTest {
 
     @Test
     public void addTableTest(){
-        Tables newTable = new Tables(1l,"5",true,null);
-        Tables expectTable = new Tables(1l,"5",true,null);
+        Tables newTable = new Tables(1l,5,true,null);
+        Tables expectTable = new Tables(1l,5,true,null);
 
 
         Mockito.when(tableRepository.save(newTable)).thenReturn(expectTable);
@@ -60,8 +60,8 @@ public class TablesServiceTest {
         QRCode qrCodeExpect = new QRCode(1l, "link1");
         QRCode qrCodeUpdate = new QRCode(2l, "link2");
 
-        Tables oldTable = new Tables(1l,"4",true,qrCodeExpect);
-        Tables tableUpdate = new Tables(1l,"4",true,qrCodeUpdate);
+        Tables oldTable = new Tables(1l,4,true,qrCodeExpect);
+        Tables tableUpdate = new Tables(1l,4,true,qrCodeUpdate);
 
         Mockito.when(qrCodeRepository.findByQRCodeId(tableUpdate.getQrCode().getQRCodeId())).thenReturn(qrCodeUpdate);
 
@@ -76,8 +76,8 @@ public class TablesServiceTest {
     public void deleteTableByIdTest(){
         QRCode qrCodeExpect = new QRCode(1l, "link1");
         QRCode qrCodeUpdate = new QRCode(2l, "link2");
-        Tables table = new Tables(1l,"4",true,qrCodeExpect);
-        Tables actual = new Tables(1l,"4",true,qrCodeUpdate);
+        Tables table = new Tables(1l,4,true,qrCodeExpect);
+        Tables actual = new Tables(1l,4,true,qrCodeUpdate);
         Mockito.when(tableRepository.getById(table.getTableId())).thenReturn(actual);
 
 
@@ -91,8 +91,8 @@ public class TablesServiceTest {
     public void checkTableExistTest(){
         QRCode qrCodeExpect = new QRCode(1l, "link1");
         QRCode qrCodeUpdate = new QRCode(2l, "link2");
-        Tables table = new Tables(1l,"4",true,qrCodeExpect);
-        Tables actual = new Tables(1l,"4",true,qrCodeUpdate);
+        Tables table = new Tables(1l,4,true,qrCodeExpect);
+        Tables actual = new Tables(1l,4,true,qrCodeUpdate);
 
         Mockito.when(tableRepository.findTableById(actual.getTableId())).thenReturn(table);
         boolean result = tableService.checkTableExist(actual.getTableId());
@@ -103,8 +103,8 @@ public class TablesServiceTest {
     public void getQRCodeIdByTableIdTest(){
         QRCode qrCodeExpect = new QRCode(1l, "link1");
         QRCode qrCodeUpdate = new QRCode(2l, "link2");
-        Tables expect = new Tables(1l,"4",true,qrCodeExpect);
-        Tables actual = new Tables(1l,"4",true,qrCodeUpdate);
+        Tables expect = new Tables(1l,4,true,qrCodeExpect);
+        Tables actual = new Tables(1l,4,true,qrCodeUpdate);
 
         Mockito.when(tableRepository.findQRCodeIdByTableId(actual.getTableId())).thenReturn(expect.getTableId());
         Long result = tableService.getQRCodeIdByTableId(actual.getTableId());
@@ -115,8 +115,8 @@ public class TablesServiceTest {
     public void checkTableIsEmptyTest(){
         QRCode qrCodeExpect = new QRCode(1l, "link1");
         QRCode qrCodeUpdate = new QRCode(2l, "link2");
-        Tables expect = new Tables(1l,"4",true,qrCodeExpect);
-        Tables actual = new Tables(1l,"4",true,qrCodeUpdate);
+        Tables expect = new Tables(1l,4,true,qrCodeExpect);
+        Tables actual = new Tables(1l,4,true,qrCodeUpdate);
 
         Mockito.when(tableRepository.checkTableIsEmpty(actual.getQrCode().getQRCodeId())).thenReturn(true);
         boolean result = tableService.checkTableIsEmpty(actual.getQrCode().getQRCodeId());

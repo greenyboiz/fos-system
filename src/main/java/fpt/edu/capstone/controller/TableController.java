@@ -120,8 +120,6 @@ public class TableController {
         );
     }
 
-
-
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @PutMapping("/tables/update")
     public ResponseEntity<?> updateTable(@RequestBody Tables table){
