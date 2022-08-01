@@ -200,7 +200,7 @@ export default {
         },
       });
 
-      if (res.status === 200) {
+      if (res.success) {
         this.totalPriceOrder = res.data;
       }
     },

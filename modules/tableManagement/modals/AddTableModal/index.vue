@@ -13,7 +13,7 @@
       <div class="info-table__detail">
         <div class="info-table__item">
           <label for="numOfSeat">Số lượng ghế:</label>
-          <input id="numOfSeat" v-model.number="formTable.numberOfSeats" type="text" placeholder="Nhập số ghế" />
+          <input id="numOfSeat" v-model.number="formTable.numberOfSeats" type="number" placeholder="Nhập số ghế" />
         </div>
 
         <div class="info-table__item">
@@ -62,6 +62,12 @@ import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import { tableManagementService } from '@/services';
 import QrCode from 'vue-qrcode-component';
 import { toNumber } from 'lodash';
+
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
 
 export default {
   name: 'AddUserModal',
@@ -144,6 +150,17 @@ export default {
       }
     },
 
+    validator() {
+      if (!this.formTable.qrCode.qrcodeLink) {
+        Vue.$toast.error('Vui lòng nhập link của mã QR');
+        return;
+      }
+
+      if (!this.statusSelected) {
+        Vue.$toast.error('Vui lòng chọn trạng thái bàn');
+      }
+    },
+
     async addTable(requestParams) {
       const res = await tableManagementService.addTable(requestParams, {
         headers: {
@@ -151,7 +168,7 @@ export default {
         },
       });
 
-      if (res.status === 200) {
+      if (res.success) {
         this.$emit('complete');
       } else {
         this.isDone = false;
@@ -165,7 +182,7 @@ export default {
         },
       });
 
-      if (res.status === 200) {
+      if (res.success) {
         this.$emit('complete');
       } else {
         this.isDone = false;
@@ -173,6 +190,9 @@ export default {
     },
 
     handleSave() {
+      if (!this.validator()) {
+        return;
+      }
       const requestParams = {
         numberOfSeats: this.formTable.numberOfSeats,
         qrCode: {
@@ -182,6 +202,7 @@ export default {
       };
 
       if (this.modalTitle === 'update') {
+        requestParams.tableId = this.tableId;
         this.updateTable(requestParams);
       } else {
         this.addTable(requestParams);

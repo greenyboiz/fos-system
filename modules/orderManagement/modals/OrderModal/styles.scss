@@ -1,7 +1,7 @@
 ::v-deep {
   .modal-dialog {
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
   }
   .modal__content {
     border: 0;
@@ -60,7 +60,7 @@
     align-items: center;
     justify-content: center;
 
-    &:not(:nth-child(4)) {
+    &:not(:nth-child(5)) {
       border-right: 1px solid #dbdbdb;
     }
   }
@@ -73,7 +73,7 @@
     align-items: center;
     justify-content: center;
 
-    &:not(:nth-child(4)) {
+    &:not(:nth-child(5)) {
       border-right: 1px solid #dbdbdb;
     }
   }

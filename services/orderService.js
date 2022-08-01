@@ -22,25 +22,25 @@ class OrderService {
   async postOrderItem(params, header) {
     const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/orderItem', params, header);
 
-    return res;
+    return res.data;
   }
 
   async getTotalPayment(orderId, header) {
     const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/payment/${orderId}`, header);
 
-    return res;
+    return res.data;
   }
 
   async deleteOrder(orderId, header) {
     const res = await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/orders/delete/${orderId}`, header);
 
-    return res;
+    return res.data;
   }
 
   async deleteOrderItem(orderItemId, header) {
     const res = await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/orderItem/${orderItemId}`, header);
 
-    return res;
+    return res.data;
   }
 }
 

@@ -6,7 +6,8 @@
         <div class="headline__title">Quản lý thực đơn</div>
 
         <div class="headline__right">
-          <button class="btn__add" @click="handleShowAddDishesModal()">Thêm món ăn</button>
+          <button class="btn__add mr-2" @click="handleShowAddDishesModal()">Thêm món ăn</button>
+          <button class="btn__add" @click="handleShowCategoryModal()">Các loại món ăn</button>
 
           <div class="searchArea">
             <div class="searchBox d-flex align-items-center">
@@ -58,7 +59,7 @@
                 <div class="tableRow">{{ currencyFormatter(item.costPrice) }}</div>
                 <div class="tableRow">{{ currencyFormatter(item.salePrice) }}</div>
                 <div class="tableRow">
-                  <span v-if="item.status === 1" class="status had">Còn hàng</span>
+                  <span v-if="item.status" class="status had">Còn hàng</span>
                   <span v-else class="status sold">Hết hàng</span>
                 </div>
                 <div class="tableRow align-items-center">
@@ -89,12 +90,14 @@
     </div>
 
     <AddDishModal ref="addDishModalRef" :dishesId="dishesId" @doneAdd="addedDish" @doneUpdate="updatedDish" />
+    <CategoriesModal ref="categoriesModalRef" />
   </div>
 </template>
 
 <script>
 import { menuManagementService } from '@/services';
 import AddDishModal from '../modals/AddDishModal/index.vue';
+import CategoriesModal from '../modals/CategoriesModal/index.vue';
 import Loading from '@/components/common/Loading/index.vue';
 import commonMixin from '@/plugins/commonMixin';
 
@@ -104,6 +107,7 @@ export default {
   components: {
     AddDishModal,
     Loading,
+    CategoriesModal
   },
 
   mixins: [commonMixin],
@@ -158,6 +162,10 @@ export default {
       this.$refs.addDishModalRef.show();
     },
 
+    handleShowCategoryModal() {
+      this.$refs.categoriesModalRef.show();
+    },
+
     addedDish(val) {
       if (val) {
         this.getListDish();
@@ -183,7 +191,10 @@ export default {
           this.isLoading = false;
         });
 
-      this.listDishes = res.data.content;
+      if (res.content) {
+        this.listDishes = res.content;
+      }
+
     },
 
     deleteDish(dishId) {
@@ -199,7 +210,7 @@ export default {
             },
           });
 
-          if (res.status === 200) {
+          if (res.success) {
             this.getListDish();
           }
         },
@@ -210,4 +221,3 @@ export default {
 </script>
 
 <style lang="scss" src="./styles.scss" scoped></style>
->

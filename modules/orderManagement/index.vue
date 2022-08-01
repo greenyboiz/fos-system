@@ -21,8 +21,6 @@
             <div class="table__col">Mã ĐH</div>
             <div class="table__col">Tên khách hàng</div>
             <div class="table__col">Số điện thoại</div>
-            <div class="table__col">Địa chỉ</div>
-            <div class="table__col">Đánh giá</div>
             <div class="table__col">Thao tác</div>
           </div>
 
@@ -38,8 +36,6 @@
                 <div class="table__row">{{ item.orderId }}</div>
                 <div class="table__row">{{ item.customer.fullName }}</div>
                 <div class="table__row">{{ item.customer.contact }}</div>
-                <div class="table__row">{{ item.customer.address }}</div>
-                <div class="table__row">{{ item.description }}</div>
 
                 <div class="table__row align-items-center">
                   <div class="btn-group align-top">
@@ -157,7 +153,7 @@ export default {
             },
           });
 
-          if (res) {
+          if (res.success) {
             this.getOrderList();
           }
         },

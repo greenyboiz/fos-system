@@ -79,11 +79,10 @@ export default {
           Authorization: this.$auth.$storage._state['_token.local'],
         },
       });
-      console.log(res);
-      this.listDish = res.data.content;
+      this.listDish = res.content;
 
       this.listTypeOrder = uniqBy(
-        res.data.content.map((x) => x.category),
+        res.content.map((x) => x.category),
         'categoryId'
       );
 

@@ -38,7 +38,7 @@
                 <tr v-for="item in listTable" :key="item.tableId" class="tw-cursor-pointer" @click="handleQRCode(item)">
                   <th scope="row">{{ item.tableId }}</th>
                   <td>{{ item.numberOfSeats }}</td>
-                  <td>{{ item.status === 1 ? 'Còn trống' : 'Hết chỗ' }}</td>
+                  <td>{{ item.status ? 'Còn trống' : 'Hết chỗ' }}</td>
                   <td class="align-items-center">
                     <div class="btn-group align-top">
                       <button
@@ -62,7 +62,7 @@
       </div>
 
       <!--  -->
-      <div v-if="isOpenQRCode" class="tableManagement__qr">
+      <!-- <div v-if="isOpenQRCode" class="tableManagement__qr">
         <div class="qr">
           <div class="qr__title title">Bàn số {{ selectedTable.id }}</div>
           <div class="qr__link">
@@ -79,7 +79,7 @@
         <div class="qr__img">
           <QrCode id="specificQrCode" class="qr__code" :size="400" :text="selectedTable.qr_url"></QrCode>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <AddTableModal ref="addTableModalRef" :tableId="tableId" @complete="complete" />
@@ -100,7 +100,6 @@ export default {
   components: {
     AddTableModal,
     Loading,
-    QrCode,
   },
 
   data() {
@@ -189,7 +188,7 @@ export default {
             },
           });
 
-          if (res.status === 200) {
+          if (res.success) {
             this.getListTable();
           }
         },

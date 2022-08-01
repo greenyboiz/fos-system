@@ -59,7 +59,7 @@
                 shape="circle"
                 type="radio"
                 styleCheck="dot"
-                :keyValue="gender.id"
+                :keyValue="`${gender.id}g`"
                 :inputValue="gender.id"
                 :customLabel="true"
               >
@@ -127,6 +127,7 @@ import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
+import { toNumber } from 'lodash';
 Vue.use(VueToast, { position: 'top' });
 export default {
   name: 'AddUserModal',
@@ -234,9 +235,15 @@ export default {
     },
 
     validator() {
+      const regexName = /^([a-zA-Z ]){2,30}$/;
       if (!this.formUser.fullName) {
         Vue.$toast.error('Bạn chưa nhập Họ và tên');
         return false;
+      }
+
+      if (!regexName.test(this.formUser.fullName)) {
+        Vue.$toast.error('Họ và tên phải là chữ cái và có đội dài từ 2-30 kí tự');
+        return;
       }
 
       if (!this.formUser.userName) {
@@ -249,18 +256,32 @@ export default {
         return false;
       }
 
+      const regexPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+      if (!regexPass.test(this.formUser.password)) {
+        Vue.$toast.error('Mật khẩu phải chứa ít nhất 8 kí tự bao gồm 1 kí tự số, 1 chữ in hoa và 1 chữ in thường');
+        return false;
+      }
+
       if (!this.formUser.contact) {
         Vue.$toast.error('Bạn chưa nhập Số điện thoại');
         return false;
       }
 
-      if (!this.formUser.contact.match(/(84|0[3|5|7|8|9])+([0-9]{8})\b/g)) {
-        Vue.$toast.error('Bạn chưa nhập đúng định dạng');
+      const regexPhone = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
+      if (!regexPhone.test(this.formUser.contact)) {
+        Vue.$toast.error('Bạn chưa nhập đúng định dạng số điện thoại');
         return false;
       }
 
       if (!this.formUser.email) {
         Vue.$toast.error('Bạn chưa nhập Email');
+        return false;
+      }
+
+      const regexEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+
+      if (!regexEmail.test(this.formUser.email)) {
+        Vue.$toast.error('Bạn chưa nhập đúng định dạng email');
         return false;
       }
 
@@ -318,7 +339,7 @@ export default {
         },
       });
 
-      if (res.status === 200) {
+      if (res.success) {
         this.isDone = true;
         this.$emit('doneAdd', this.isDone);
       } else {
@@ -333,7 +354,7 @@ export default {
         },
       });
 
-      if (res.status === 200) {
+      if (res.success) {
         this.isDone = true;
         this.$emit('doneUpdate', this.isDone);
       } else {
@@ -357,9 +378,9 @@ export default {
         this.avatar = user.profileImage;
         this.formUser.email = user.email;
         this.formUser.gender = user.gender;
-        this.statusSelected = user.status;
+        this.statusSelected = user.status ? 1 : 0;
         this.roleSelected = user.role.roleName;
-        this.genderSelected = parseInt(user.gender);
+        this.genderSelected = user.gender ? 1 : 0;
       }
     },
 
@@ -375,7 +396,7 @@ export default {
         password: this.formUser.password,
         contact: this.formUser.contact,
         email: this.formUser.email,
-        gender: this.genderSelected.toString(),
+        gender: toNumber(this.genderSelected.toString()),
         role: {
           roleId: this.roleIdSelected,
           roleName: this.roleSelected,
@@ -383,10 +404,8 @@ export default {
         status: this.statusSelected,
       };
 
-      console.log(requestParams);
-
       if (this.modalTitle) {
-        requestParams.id = this.userId;
+        requestParams.userId = this.userId;
         this.updateUser(requestParams);
       } else {
         this.addUser(requestParams);

@@ -214,7 +214,7 @@ export default {
     async getListDish() {
       const res = await menuManagementService.getListDish();
 
-      const dishesList = res.data.content;
+      const dishesList = res.content;
 
       map(dishesList, (item) => {
         item.numberOfDish = 0;
@@ -228,7 +228,7 @@ export default {
     async getListCategory() {
       const res = await menuManagementService.getListCategory();
 
-      if (res.status === 200) {
+      if (res.success) {
         this.listCategory = res.data.data;
       }
     },
@@ -255,7 +255,7 @@ export default {
 
       const res = await orderService.postOrderItem(requestParam);
 
-      if (res.status === 200) {
+      if (res.success) {
         this.updateOrderId(orderIdTmp);
         console.log(orderIdTmp);
         this.getOrderItemList(orderIdTmp);
@@ -284,7 +284,7 @@ export default {
     async getTotalPayment(orderId) {
       const res = await orderService.getTotalPayment(orderId);
 
-      if (res.status === 200) {
+      if (res.success) {
         this.updateTotalPriceOrder(res.data);
       }
     },

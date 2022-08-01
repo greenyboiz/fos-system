@@ -136,7 +136,7 @@ export default {
         }
       });
 
-      if (res) {
+      if (res.success) {
         this.listTable = res.data;
       }
     },

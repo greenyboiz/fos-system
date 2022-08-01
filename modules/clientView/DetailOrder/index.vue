@@ -192,7 +192,7 @@ export default {
         this.isLoading = false;
       });
 
-      if (res) {
+      if (res.success) {
         this.getOrderItemList();
       }
     },

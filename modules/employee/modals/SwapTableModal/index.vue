@@ -90,8 +90,9 @@ export default {
         },
       });
 
-      // console.log(res);
-      this.listTable = res.data;
+      if (res.success) {
+        this.listTable = res.data;
+      }
     },
 
     checkStatus(status) {

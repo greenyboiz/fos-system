@@ -151,10 +151,6 @@ export default {
       this.$refs.addDish.hide();
     },
 
-    createUsers() {},
-
-    updateUsers() {},
-
     chooseAvatar() {
       // this.$refs.avatarRef.click();
       window.cloudinary.createUploadWidget(
@@ -190,8 +186,8 @@ export default {
         },
       });
 
-      if (res.status === 200) {
-        this.listCategory = res.data.data;
+      if (res.success) {
+        this.listCategory = res.data;
       }
     },
 
@@ -207,7 +203,7 @@ export default {
         },
       });
 
-      if (res.status === 200) {
+      if (res.success) {
         this.isDone = true;
         this.$emit('doneAdd', this.isDone);
       } else {
@@ -228,7 +224,7 @@ export default {
         },
       });
 
-      if (res.status === 200) {
+      if (res.success) {
         this.isDone = true;
         this.$emit('doneUpdate', this.isDone);
       } else {
@@ -248,7 +244,7 @@ export default {
 
         this.formDish = dish;
         this.selectedCategory = dish.category;
-        this.statusSelected = dish.status;
+        this.statusSelected = dish.status ? 1 : 0;
       }
     },
 
@@ -276,18 +272,13 @@ export default {
         return false;
       }
 
-      if (!this.formDish.dishesName) {
-        Vue.$toast.error('Vui lòng nhập giá mua');
-        return false;
-      }
-
       if (!this.formDish.salePrice) {
         Vue.$toast.error('Vui lòng nhập giá bán');
         return false;
       }
 
       if (!this.formDish.costPrice) {
-        Vue.$toast.error('Vui lòng nhập giá bán');
+        Vue.$toast.error('Vui lòng nhập giá mua');
         return false;
       }
 

@@ -12,6 +12,7 @@
     <div class="detail">
       <div class="detail__head">
         <div class="detail__col">Hình ảnh</div>
+        <div class="detail__col">Tên món ăn</div>
         <div class="detail__col">Thời gian đặt</div>
         <div class="detail__col">Số lượng</div>
         <div class="detail__col">Giá</div>
@@ -29,9 +30,10 @@
             <div class="detail__row detail__img">
               <img :src="item.dishes.dishImage" alt="" />
             </div>
+            <div class="detail__row">{{ item.dishes.dishesName }}</div>
             <div class="detail__row">{{ convertTime(item.createDate) }}</div>
             <div class="detail__row">{{ item.quantity }}</div>
-            <div class="detail__row">{{ item.price }} đ</div>
+            <div class="detail__row">{{ currencyFormatter(item.price) }} đ</div>
           </div>
         </template>
       </div>
@@ -43,6 +45,7 @@
 import moment from 'moment';
 import { orderService } from '@/services';
 import Loading from '@/components/common/Loading/index.vue';
+import commonMixin from '@/plugins/commonMixin';
 
 export default {
   name: 'AddUserModal',
@@ -50,6 +53,8 @@ export default {
   components: {
     Loading,
   },
+
+  mixins: [commonMixin],
 
   data() {
     return {
@@ -60,7 +65,6 @@ export default {
 
   methods: {
     show(id) {
-      console.log(id);
       this.$refs.detailOrder.show();
       this.getDetail(id);
     },

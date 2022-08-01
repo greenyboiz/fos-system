@@ -51,14 +51,14 @@
             </template>
 
             <template v-else>
-              <div v-for="item in listStaffSearch" :key="'a' + item.id" class="table__body">
+              <div v-for="item in listStaffSearch" :key="'staff' + item.userId" class="table__body">
                 <div class="table__row">{{ item.userId }}</div>
                 <div class="table__row">{{ item.fullName }}</div>
                 <div class="table__row">{{ item.userName }}</div>
                 <div class="table__row">
                   <span>{{ item.password }}</span>
                 </div>
-                <div class="table__row">{{ item.gender }}</div>
+                <div class="table__row">{{ item.gender ? 'Nam' : 'Nữ' }}</div>
                 <div class="table__row">{{ item.contact }}</div>
                 <div class="table__row">
                   <span>{{ item.email }}</span>
@@ -136,7 +136,7 @@ export default {
           return this.searchText
             .toLowerCase()
             .split(' ')
-            .every((v) => item.name.toLowerCase().includes(v));
+            .every((v) => item.userName.toLowerCase().includes(v));
         });
       } else {
         return this.listStaff;
@@ -194,7 +194,9 @@ export default {
           this.isLoading = false;
         });
 
-      this.listStaff = res.data;
+      if (res.success) {
+        this.listStaff = res.data;
+      }
     },
 
     deleteUser(userId) {
@@ -210,9 +212,13 @@ export default {
         confirmText: 'Xóa',
 
         confirmed: async () => {
-          const res = await staffManagementService.deleteUser(userId);
+          const res = await staffManagementService.deleteUser(userId, {
+            headers: {
+              Authorization: this.$auth.$storage._state['_token.local'],
+            },
+          });
 
-          if (res.status === 200) {
+          if (res.success) {
             this.getListUser();
           }
         },

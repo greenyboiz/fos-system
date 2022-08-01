@@ -3,7 +3,7 @@ class EmployeeService {
   async getDishes(header) {
     const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/dishes', header);
 
-    return res;
+    return res.data;
   }
 
   async getTables(header) {

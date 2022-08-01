@@ -4,25 +4,25 @@ class MenuManagementService {
   async getListDish(header) {
     const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/dishes', header);
 
-    return res;
+    return res.data;
   }
 
   async addDish(params, header) {
     const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/dishes/add', params, header);
 
-    return res;
+    return res.data;
   }
 
   async updateDish(params, header) {
     const res = await axios.put('https://project-for-fos-mld.herokuapp.com/api/dishes/update', params, header);
 
-    return res;
+    return res.data;
   }
 
   async deleteDish(dishId, header) {
     const res = await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/dishes/delete/${dishId}`, header);
 
-    return res;
+    return res.data;
   }
 
   async getDishById(dishId) {
@@ -34,7 +34,7 @@ class MenuManagementService {
   async getListCategory(header) {
     const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/category', header);
 
-    return res;
+    return res.data;
   }
 }
 
