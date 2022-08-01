@@ -50,7 +50,7 @@ public class QRCodeService implements IQRCodeService {
 
     @Override
     public boolean deleteQRCode(Long id) {
-        QRCode qrCode = qrCodeRepository.getById(id);
+        QRCode qrCode = qrCodeRepository.findByQRCodeId(id);
         if(qrCode != null){
             qrCodeRepository.delete(qrCode);
             return true;

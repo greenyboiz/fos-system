@@ -13,6 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -35,6 +38,57 @@ public class QRCodeServiceTest {
 
     @Test
     public void updateQRCodeTest(){
+        QRCode expect = new QRCode(1l,"https://fos-web.herokuapp.com/khach-hang/table/1");
+        QRCode actual = new QRCode(1l,"https://fos-web.herokuapp.com/khach-hang/table/2");
 
+        Mockito.when(qrCodeRepository.findByQRCodeId(actual.getQRCodeId())).thenReturn(expect);
+        Mockito.when(qrCodeRepository.save(actual)).thenReturn(expect);
+        QRCode result = qrCodeService.updateQRCode(actual);
+        Assert.assertEquals(result,expect);
+    }
+
+    @Test
+    public void deleteQRCodeTest(){
+        QRCode expect = new QRCode(1l,"https://fos-web.herokuapp.com/khach-hang/table/1");
+        QRCode actual = new QRCode(1l,"https://fos-web.herokuapp.com/khach-hang/table/2");
+
+        Mockito.when(qrCodeRepository.findByQRCodeId(actual.getQRCodeId())).thenReturn(expect);
+        qrCodeRepository.delete(actual);
+        Mockito.verify(qrCodeRepository,Mockito.timeout(1)).delete(actual);
+        boolean result = qrCodeService.deleteQRCode(actual.getQRCodeId());
+        Assert.assertEquals(result,true);
+    }
+
+    @Test
+    public void getAllQRCodesTest(){
+        List<QRCode> expect = new ArrayList<>();
+        expect.add(new QRCode(1l,"https://fos-web.herokuapp.com/khach-hang/table/1"));
+        List<QRCode> actual = new ArrayList<>();
+        actual.add(new QRCode(1l,"https://fos-web.herokuapp.com/khach-hang/table/2"));
+
+        Mockito.when(qrCodeRepository.findAll()).thenReturn(expect);
+        List<QRCode> results = qrCodeService.getAllQRCodes();
+        Assert.assertEquals(results,expect);
+    }
+
+    @Test
+    public void getQRCodeByIdTest(){
+        QRCode expect = new QRCode(1l,"https://fos-web.herokuapp.com/khach-hang/table/1");
+        QRCode actual = new QRCode(1l,"https://fos-web.herokuapp.com/khach-hang/table/2");
+
+        Mockito.when(qrCodeRepository.findByQRCodeId(actual.getQRCodeId())).thenReturn(expect);
+        QRCode result = qrCodeService.getQRCodeById(actual.getQRCodeId());
+        Assert.assertEquals(result,expect);
+    }
+
+    @Test
+    public void checkQRCodeExistTest(){
+        QRCode expect = new QRCode(1l,"https://fos-web.herokuapp.com/khach-hang/table/1");
+        QRCode actual = new QRCode(1l,"https://fos-web.herokuapp.com/khach-hang/table/2");
+
+        Mockito.when(qrCodeRepository.checkQRCodeExist(actual.getQRCodeLink())).thenReturn(expect);
+        boolean result = qrCodeService.checkQRCodeExist(actual.getQRCodeLink());
+
+        Assert.assertEquals(result,true);
     }
 }
