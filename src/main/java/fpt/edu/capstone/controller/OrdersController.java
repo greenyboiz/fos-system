@@ -67,14 +67,11 @@ public class OrdersController {
     @PostMapping("/orders")
     public ResponseEntity<?> saveOrders(@RequestBody Orders orders){
 //        boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
-        Orders orders1 = iOrdersService.checkOrderExist(orders);
 //        boolean checkCustomerExistInOrder = iOrdersService.checkCustomerExistInOrder(orders);
 //        boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
+        Orders orders1 = iOrdersService.checkOrderExist(orders);
         if (orders1 == null){
             Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
-//            if(tables.getStatus()==true){
-//                tables.setStatus(false);
-//            }
             if (tables.getStatus()==false){
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(
                         new ResponseObject("fail", "Table is not empty",false, null)
@@ -86,7 +83,9 @@ public class OrdersController {
                 Customer customer = iCustomerService.addCustomer(orders.getCustomer());
                 orders.setCustomer(customer);
             }
-            orders.setCustomer(customerSystem);
+            if(customerSystem != null) {
+                orders.setCustomer(customerSystem);
+            }
             iOrdersService.addOrder(orders);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "add order succsessfully",true, iOrdersService.addOrder(orders))
