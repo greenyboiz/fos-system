@@ -39,12 +39,14 @@ public class TableService implements ITablesService {
 
     @Override
     public Tables updateTable(Tables table) {
-        QRCode qrCode = qrCodeRepository.findByQRCodeId(table.getQrCode().getQRCodeId());
+//        QRCode qrCode = qrCodeRepository.findByQRCodeId(table.getQrCode().getQRCodeId());
+        QRCode qrCode = qrCodeRepository.findByQRCodeLink(table.getQrCode().getQRCodeLink());
         if(table != null){
             Tables table1 = tableRepository.getById(table.getTableId());
             if (table1 != null){
                 table1.setNumberOfSeats(table.getNumberOfSeats());
                 table1.setStatus(table.getStatus());
+                table1.setQrCode(qrCode);
                 table1.setQrCode(qrCode);
 
                 return tableRepository.save(table1);

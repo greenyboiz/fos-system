@@ -120,9 +120,24 @@ public class TableController {
         );
     }
 
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
+//    @PutMapping("/tables/update")
+//    public ResponseEntity<?> updateTable(@RequestBody Tables table){
+//        Tables tables = iTablesService.updateTable(table);
+//        if(tables != null){
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "Update tableId "+ table.getTableId() + " successfull",true, tables)
+//            );
+//        }
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+//                new ResponseObject("fail", "This tableId " + table.getTableId() + " not exist",true, null)
+//        );
+//    }
+
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @PutMapping("/tables/update")
     public ResponseEntity<?> updateTable(@RequestBody Tables table){
+
         Tables tables = iTablesService.updateTable(table);
         if(tables != null){
             return ResponseEntity.status(HttpStatus.OK).body(

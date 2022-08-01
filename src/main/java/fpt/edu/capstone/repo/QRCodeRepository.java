@@ -12,4 +12,7 @@ public interface QRCodeRepository extends JpaRepository<QRCode,Long> {
 
     @Query("select c from QRCode c where c.QRCodeLink = ?1")
     QRCode checkQRCodeExist(String qrCodeLink);
+
+    @Query("select c from QRCode c where c.QRCodeLink = ?1")
+    QRCode findByQRCodeLink(String qrCodeLink);
 }

@@ -33,7 +33,7 @@ public class RoleService implements IRoleService {
 
     @Override
     public boolean deleteRole(Long id) {
-        Role role = roleRepository.getById(id);
+        Role role = roleRepository.findByRoleId(id);
         if(role != null){
             roleRepository.delete(role);
             return true;
@@ -47,7 +47,7 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public Optional<Role> getRoleById(Long id) {
-        return Optional.empty();
+    public Role getRoleById(Long id) {
+        return roleRepository.findByRoleId(id);
     }
 }

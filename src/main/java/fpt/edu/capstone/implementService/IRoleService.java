@@ -15,5 +15,5 @@ public interface IRoleService {
 
     public List<Role> getAllRole();
 
-    public Optional<Role> getRoleById(Long id);
+    public Role getRoleById(Long id);
 }
