@@ -61,6 +61,32 @@ public class ValidateFOSUser {
                     new ResponseObject("fail", "User is not exist",false, null)
             );
         }
-        return validateFOSUser(fosUser);
+        //validate contact of user
+        String contact = fosUser.getContact();
+        if(contact.trim().isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Contact of is not null",false, null)
+            );
+        }
+        if (!contact.matches(PHONE_NUMBER)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Contact of is incorrect format of phone number VietNamese",false, null)
+            );
+        }
+        //validate email of user
+        String email = fosUser.getEmail();
+        if(email.trim().isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Email of user must not null",false, null)
+            );
+        }
+        if (!email.matches(EMAIL)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Email of is incorrect format of email with domain @gmail.com",false, null)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Validate successfull",true, null)
+        );
     }
 }

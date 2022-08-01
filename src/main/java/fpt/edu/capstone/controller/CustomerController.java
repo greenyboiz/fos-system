@@ -51,8 +51,17 @@ public class CustomerController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/customers/update")
-    public Customer updateFOSUser(@RequestBody Customer customer){
-        return iCustomerService.updateCustomer(customer);
+    public ResponseEntity<?> updateFOSUser(@RequestBody Customer customer){
+        Customer customer1 = iCustomerService.updateCustomer(customer);
+        if(customer1 != null){
+            iCustomerService.updateCustomer(customer);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Update Customer succsessfully",true, customer1)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Customer is not exist ",false,"null")
+        );
     }
 
     @DeleteMapping("/customers/delete/{id}")
