@@ -46,7 +46,7 @@ public class FOSUserService implements IFOSUserService {
             if(fosUser1 != null){
                 fosUser1.setFullName(fosUser.getFullName());
 //                fosUser1.setUserName(fosUser.getUserName());
-                fosUser1.setPassword(fosUser.getPassword());
+                fosUser1.setPassword(bcryptEncoder.encode(fosUser.getPassword()));
                 fosUser1.setRole(role);
                 fosUser1.setContact(fosUser.getContact());
                 fosUser1.setEmail(fosUser.getEmail());

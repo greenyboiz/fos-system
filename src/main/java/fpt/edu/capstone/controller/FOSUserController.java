@@ -37,42 +37,71 @@ public class FOSUserController {
         }
     }
 
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PostMapping("/users/add")
+//    public ResponseEntity<?> saveFOSUser(@RequestBody FOSUser fosUser){
+//        try {
+//            ResponseEntity<?> responseEntity = validateFOSUser.validateFOSUser(fosUser);
+//            if(responseEntity.getStatusCode() == HttpStatus.OK){
+//                FOSUser fosUserAdd = ifosUserService.addFOSUser(fosUser);
+//                return ResponseEntity.status(HttpStatus.OK).body(
+//                            new ResponseObject("ok", "successfull",true, fosUserAdd)
+//                    );
+//            }
+//            return  responseEntity;
+//        }catch (Exception e){
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("fail", e.getMessage(),false, null)
+//            );
+//        }
+//    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/users/add")
     public ResponseEntity<?> saveFOSUser(@RequestBody FOSUser fosUser){
-        try {
-            ResponseEntity<?> responseEntity = validateFOSUser.validateFOSUser(fosUser);
-            if(responseEntity.getStatusCode() == HttpStatus.OK){
-                FOSUser fosUserAdd = ifosUserService.addFOSUser(fosUser);
-                return ResponseEntity.status(HttpStatus.OK).body(
-                            new ResponseObject("ok", "successfull",true, fosUserAdd)
-                    );
-            }
-            return  responseEntity;
-        }catch (Exception e){
+        boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
+        if(!checkExistUser){
+            FOSUser fosUserAdd = ifosUserService.addFOSUser(fosUser);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("fail", e.getMessage(),false, null)
+                    new ResponseObject("ok", "successfull",true, fosUserAdd)
             );
         }
-
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject("fail", "User is exist",false, null)
+        );
     }
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PutMapping("/users/update")
+//    public ResponseEntity<?> updateFOSUser(@RequestBody FOSUser fosUser){
+//        try {
+//            ResponseEntity<?> responseEntity = validateFOSUser.validateUpdateFOSUser(fosUser);
+//            if(responseEntity.getStatusCode() == HttpStatus.OK){
+//                ifosUserService.updateFOSUser(fosUser);
+//                return ResponseEntity.status(HttpStatus.OK).body(
+//                        new ResponseObject("ok", "Update FOSUser succsessfully",true, ifosUserService.updateFOSUser(fosUser))
+//                );
+//            }
+//            return responseEntity;
+//        }catch (Exception e){
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("fail", e.getMessage(),false, null)
+//            );
+//        }
+//    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/users/update")
     public ResponseEntity<?> updateFOSUser(@RequestBody FOSUser fosUser){
-        try {
-            ResponseEntity<?> responseEntity = validateFOSUser.validateUpdateFOSUser(fosUser);
-            if(responseEntity.getStatusCode() == HttpStatus.OK){
-                ifosUserService.updateFOSUser(fosUser);
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("ok", "Update FOSUser succsessfully",true, ifosUserService.updateFOSUser(fosUser))
-                );
-            }
-            return responseEntity;
-        }catch (Exception e){
+        FOSUser fosUser1 = ifosUserService.getFOSUserById(fosUser.getUserId());
+        if(fosUser1 != null){
+            ifosUserService.updateFOSUser(fosUser);
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("fail", e.getMessage(),false, null)
+                    new ResponseObject("ok", "Update FOSUser succsessfully",true, ifosUserService.updateFOSUser(fosUser))
             );
         }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject("fail", "User is not exist",false, null)
+        );
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
