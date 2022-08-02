@@ -23,6 +23,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -40,14 +42,22 @@ public class DishesServiceTest {
     public void getAllDishesTest(){
         List<Dishes> expect = new ArrayList<>();
         expect.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(50000), null, 10l, true, null));
-
         List<Dishes> actual = new ArrayList<>();
         actual.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(60000), null, 10l, true, null));
-
         Mockito.when(dishesRepository.findAll()).thenReturn(actual);
         List<Dishes> results = dishesService.getAllDishes();
-
         Assert.assertEquals(results,actual);
+    }
+
+    @Test
+    public void getAllDishesTestFail(){
+        List<Dishes> expect = new ArrayList<>();
+        expect.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(50000), null, 10l, true, null));
+        List<Dishes> actual = new ArrayList<>();
+        actual.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(60000), null, 10l, true, null));
+        Mockito.when(dishesRepository.findAll()).thenThrow(new NullPointerException(""));
+        NullPointerException result = assertThrows(NullPointerException.class, () -> dishesService.getAllDishes());
+        Assert.assertEquals("",result.getMessage());
     }
 
     @Test
@@ -65,19 +75,45 @@ public class DishesServiceTest {
     }
 
     @Test
-    public void updateDishesTest(){
+    public void addDishesTestFail(){
         Category expectCategory = new Category(1l,"ga");
         Category actualCategory = new Category(2l,"lon");
 
         Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, true, expectCategory);
-        Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, true, actualCategory);
+        Dishes actual = new Dishes( "ga tan cao cap", "ngon ngon", "image1", null, null, 10l, true, actualCategory);
 
+        Mockito.when(dishesRepository.save(actual)).thenThrow(new NullPointerException(""));
+        NullPointerException result = assertThrows(NullPointerException.class, () -> dishesService.addDishes(actual));
+
+        Assert.assertEquals("",result.getMessage());
+    }
+
+    @Test
+    public void updateDishesTest(){
+        Category expectCategory = new Category(1l,"ga");
+        Category actualCategory = new Category(2l,"lon");
+        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, true, expectCategory);
+        Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, true, actualCategory);
         Mockito.when(categoryRepository.findByCategoryId(actual.getCategory().getCategoryId())).thenReturn(actualCategory);
         Mockito.when(dishesRepository.findDishesById(actual.getDishesId())).thenReturn(expect);
         Mockito.when(dishesRepository.save(actual)).thenReturn(expect);
 
         Dishes result = dishesService.updateDishes(actual);
         Assert.assertEquals(result,actual);
+    }
+
+    @Test
+    public void updateDishesTestFail(){
+        Category expectCategory = new Category(1l,"ga");
+        Category actualCategory = new Category(2l,"lon");
+        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, true, expectCategory);
+        Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, true, actualCategory);
+        Mockito.when(categoryRepository.findByCategoryId(actual.getCategory().getCategoryId())).thenReturn(actualCategory);
+        Mockito.when(dishesRepository.findDishesById(actual.getDishesId())).thenReturn(expect);
+        Mockito.when(dishesRepository.save(actual)).thenThrow(new NullPointerException(""));
+
+        NullPointerException result = assertThrows(NullPointerException.class, () -> dishesService.updateDishes(actual));
+        Assert.assertEquals("",result.getMessage());
     }
 
     @Test
@@ -89,9 +125,25 @@ public class DishesServiceTest {
         Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, true, actualCategory);
 
         Mockito.when(dishesRepository.findDishesById(expect.getDishesId())).thenReturn(actual);
-//        Mockito.when(dishesRepository.delete(actual);)
+        dishesRepository.delete(actual);
+        Mockito.verify(dishesRepository,Mockito.timeout(1)).delete(actual);
         boolean result = dishesService.deleteDishes(actual.getDishesId());
         Assert.assertEquals(result,true);
+    }
+
+    @Test
+    public void  deleteDishesByIdTestFail(){
+        Category expectCategory = new Category(1l,"ga");
+        Category actualCategory = new Category(2l,"lon");
+
+        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", null, null, 10l, true, expectCategory);
+        Dishes actual = new Dishes( 1l,"ga tan cao cap", "ngon ngon", "image1", null, null, 10l, true, actualCategory);
+
+        Mockito.when(dishesRepository.findDishesById(expect.getDishesId())).thenThrow(new NullPointerException(""));
+        dishesRepository.delete(actual);
+        Mockito.verify(dishesRepository,Mockito.timeout(1)).delete(actual);
+        NullPointerException result = assertThrows(NullPointerException.class, () -> dishesService.deleteDishes(actual.getDishesId()));
+        Assert.assertEquals("",result.getMessage());
     }
 
     @Test
@@ -108,6 +160,19 @@ public class DishesServiceTest {
     }
 
     @Test
+    public void getDishesByIdTestFail(){
+        Category expectCategory = new Category(1l,"ga");
+        Category actualCategory = new Category(2l,"lon");
+
+        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(80000), BigDecimal.valueOf(50000), 10l, true, expectCategory);
+        Dishes actual = new Dishes( "ga tan cao cap", "ngon ngon", "image1", BigDecimal.valueOf(70000), BigDecimal.valueOf(50000), 10l, true, actualCategory);
+
+        Mockito.when(dishesRepository.findDishesById(actual.getDishesId())).thenThrow(new NullPointerException(""));
+        NullPointerException result = assertThrows(NullPointerException.class, () -> dishesService.getDishesById(actual.getDishesId()));
+        Assert.assertEquals("",result.getMessage());
+    }
+
+    @Test
     public void getDishesExistTest(){
         Category expectCategory = new Category(1l,"ga");
         Category actualCategory = new Category(2l,"lon");
@@ -117,26 +182,39 @@ public class DishesServiceTest {
 
         Mockito.when(dishesRepository.findDishesByDishesName(actual.getDishesName())).thenReturn(expect);
         boolean result = dishesService.getDishesExist(actual.getDishesName());
-        Assert.assertEquals(result,true);
+        Assert.assertEquals(true,result);
     }
 
     @Test
-    public void listDishesTest(){
-        List<Dishes> expect = new ArrayList<>();
-        expect.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(50000), null, 10l, true, null));
+    public void getDishesExistTestFail(){
+        Category expectCategory = new Category(1l,"ga");
+        Category actualCategory = new Category(2l,"lon");
 
-        List<Dishes> actual = new ArrayList<>();
-        actual.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(60000), null, 10l, true, null));
+        Dishes expect = new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(80000), BigDecimal.valueOf(50000), 10l, true, expectCategory);
+        Dishes actual = new Dishes( "ga tan cao cap", "ngon ngon", "image1", BigDecimal.valueOf(70000), BigDecimal.valueOf(50000), 10l, true, actualCategory);
 
-        int pageNum = 1;
-        int pageSize = 1;
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
-        Mockito.when(dishesRepository.findAll(pageable)).thenReturn((Page<Dishes>) expect);
-
-        Page<Dishes> result = dishesService.listDishes(pageNum,pageSize);
-
-        Assert.assertEquals(result,(Page<Dishes>) expect);
+        Mockito.when(dishesRepository.findDishesByDishesName(actual.getDishesName())).thenThrow(new NullPointerException(""));
+        NullPointerException result = assertThrows(NullPointerException.class, () -> dishesService.getDishesExist(actual.getDishesName()));
+        Assert.assertEquals("",result.getMessage());
     }
+
+//    @Test
+//    public void listDishesTest(){
+//        List<Dishes> expect = new ArrayList<>();
+//        expect.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(50000), null, 10l, true, null));
+//
+//        List<Dishes> actual = new ArrayList<>();
+//        actual.add(new Dishes(1l, "ga tan", "ngon ngon", "image1", BigDecimal.valueOf(60000), null, 10l, true, null));
+//
+//        int pageNum = 1;
+//        int pageSize = 1;
+//        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
+//        Mockito.when(dishesRepository.findAll(pageable)).thenReturn((Page<Dishes>) expect);
+//
+//        Page<Dishes> result = dishesService.listDishes(pageNum,pageSize);
+//
+//        Assert.assertEquals(result,(Page<Dishes>) expect);
+//    }
 
 //    @Test
 //    public void updateDishesTest1() {
