@@ -20,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -50,7 +52,30 @@ public class FOSUserServiceTest {
     }
 
     @Test
+    public void getAllFOSUserTestFail(){
+        List<FOSUser> expect = new ArrayList<>();
+        expect.add(new FOSUser(20l, "hoang tien dat","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null));
+        List<FOSUser> actual = new ArrayList<>();
+        actual.add(new FOSUser(20l, "hoang tien dat","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null));
+
+        Mockito.when(fosUserRepository.findAll()).thenThrow(new NullPointerException(""));
+        NullPointerException results = assertThrows(NullPointerException.class, () -> fosUserService.getAllFOSUser());
+        Assert.assertEquals("",results.getMessage());
+    }
+
+    @Test
     public void addFOSUserTest(){
+        FOSUser newUser = new FOSUser("hoang tien dat111111","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
+        FOSUser expectUser = new FOSUser(1L,"hoang tien dat111111","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
+        newUser.setPassword(bcryptEncoder.encode(newUser.getPassword()));
+        Mockito.when(fosUserRepository.save(newUser)).thenReturn(expectUser);
+        FOSUser result = fosUserService.addFOSUser(newUser);
+//        Assert.assertEquals(result.getUserId(),new Long(1));
+        Assert.assertEquals(result,expectUser);
+    }
+
+    @Test
+    public void addFOSUserTestFail(){
         FOSUser newUser = new FOSUser("hoang tien dat111111","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
         FOSUser expectUser = new FOSUser(1L,"hoang tien dat111111","dat1", "12345",true,"0966564666","dat1@gmail.com",true,"image",null);
         newUser.setPassword(bcryptEncoder.encode(newUser.getPassword()));
