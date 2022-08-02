@@ -50,4 +50,13 @@ public class RoleService implements IRoleService {
     public Role getRoleById(Long id) {
         return roleRepository.findByRoleId(id);
     }
+
+    @Override
+    public boolean checkRoleExist(String roleName) {
+        Role role = roleRepository.checkRoleExist(roleName);
+        if(role != null){
+            return true;
+        }
+        return false;
+    }
 }

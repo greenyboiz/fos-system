@@ -16,4 +16,6 @@ public interface IRoleService {
     public List<Role> getAllRole();
 
     public Role getRoleById(Long id);
+
+    boolean checkRoleExist(String roleName);
 }

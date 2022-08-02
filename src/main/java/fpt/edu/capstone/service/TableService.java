@@ -47,7 +47,6 @@ public class TableService implements ITablesService {
                 table1.setNumberOfSeats(table.getNumberOfSeats());
                 table1.setStatus(table.getStatus());
                 table1.setQrCode(qrCode);
-                table1.setQrCode(qrCode);
 
                 return tableRepository.save(table1);
             }
