@@ -63,7 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // dont authenticate this particular request
                 .authorizeRequests().antMatchers("/api/login", "/api/register", "/api/orders/**"
                         ,"/api/orderItem/**", "/api/payment/**", "/api/dishes","/api/category","/api/category/{id}"
-                        ,"/api/dishes/{id}","/api/dishes" ).permitAll().
+                        ,"/api/dishes/{id}","/api/dishes" ,"/api/category","/api/category/{id}").permitAll().
                 // all other requests need to be authenticated
                         anyRequest().authenticated().and().
                 // make sure we use stateless session; session won't be used to
