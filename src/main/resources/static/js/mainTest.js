@@ -17,7 +17,7 @@ connect();
 
 function onConnected() {
     // Subscribe to the Public Topic
-    stompClient.subscribe('/topic/publicChatRoom', onMessageReceived);
+    stompClient.subscribe('/topic/staffRoom', onMessageReceived);
 }
 
 

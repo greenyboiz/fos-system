@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class WebSocketController {
 
     @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/publicChatRoom")
+    @SendTo("/topic/staffRoom")
     public Chat sendMessage(@Payload Chat chat) {
         System.out.println("noi dung: " + chat.getContent());
         return chat;
     }
 
     @MessageMapping("/chat.addUser")
-    @SendTo("/topic/publicChatRoom")
+    @SendTo("/topic/staffRoom")
     public Chat addUser(@Payload Chat chat, SimpMessageHeaderAccessor headerAccessor) {
         // Add username in web socket session
         headerAccessor.getSessionAttributes().put("username", chat.getSender());
