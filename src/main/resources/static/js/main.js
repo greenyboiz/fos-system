@@ -57,6 +57,8 @@ function sendMessage(event) {
 }
 
 
+
+
 function onMessageReceived(payload) {
     console.log("ok");
     var message = JSON.parse(payload.body);

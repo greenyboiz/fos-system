@@ -2,12 +2,14 @@ package fpt.edu.capstone.controller;
 
 
 import fpt.edu.capstone.entities.Chat;
+import fpt.edu.capstone.entities.Tables;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,11 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class WebSocketController {
 
+//    @MessageMapping("/chat.sendMessage")
+//    @SendTo("/topic/staffRoom")
+//    public Chat sendMessage(@Payload Chat chat) {
+//        System.out.println("noi dung: " + chat.getContent());
+//        return chat;
+//    }
+
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/staffRoom")
-    public Chat sendMessage(@Payload Chat chat) {
-        System.out.println("noi dung: " + chat.getContent());
-        return chat;
+    public Tables sendMessage(@Payload Tables tables) {
+        System.out.println("noi dung: " + tables.getTableId());
+        return tables;
     }
 
     @MessageMapping("/chat.addUser")
