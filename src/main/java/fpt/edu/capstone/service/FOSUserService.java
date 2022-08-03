@@ -104,4 +104,31 @@ public class FOSUserService implements IFOSUserService {
         }
         return fosUserRepository.save(fosUser);
     }
+
+    @Override
+    public boolean checkExistUserByUserName(FOSUser fosUser) {
+        FOSUser fosUser1 = fosUserRepository.findUserByUserName(fosUser.getUserName());
+        if (fosUser1 != null){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkExistUserByContact(FOSUser fosUser) {
+        FOSUser fosUser1 = fosUserRepository.findUserByContact(fosUser.getContact());
+        if (fosUser1 != null){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkExistUserByEmail(FOSUser fosUser) {
+        FOSUser fosUser1 = fosUserRepository.findUserByEamil(fosUser.getEmail());
+        if (fosUser1 != null){
+            return true;
+        }
+        return false;
+    }
 }

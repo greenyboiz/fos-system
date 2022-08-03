@@ -21,4 +21,10 @@ public interface IFOSUserService {
     boolean checkExistUserByUserNameAndContactAndEmail(FOSUser fosUser);
 
     FOSUser addFOSUserImage(MultipartFile file, FOSUser fosUser);
+
+    boolean checkExistUserByUserName(FOSUser fosUser);
+
+    boolean checkExistUserByContact(FOSUser fosUser);
+
+    boolean checkExistUserByEmail(FOSUser fosUser);
 }

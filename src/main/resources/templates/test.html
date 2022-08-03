@@ -1,49 +1,49 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Spring Boot WebSocket</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Spring Boot WebSocket</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/main.css}" />-->
 
-    <!-- https://cdnjs.com/libraries/sockjs-client -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
-    <!-- https://cdnjs.com/libraries/stomp.js/ -->
-    <script  src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <style>
-        .grid-container {
-            display: grid;
-            grid-template-columns: auto auto auto;
-            background-color: #2196F3;
-            padding: 10px;
-        }
+<!--    &lt;!&ndash; https://cdnjs.com/libraries/sockjs-client &ndash;&gt;-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>-->
+<!--    &lt;!&ndash; https://cdnjs.com/libraries/stomp.js/ &ndash;&gt;-->
+<!--    <script  src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>-->
+<!--    <style>-->
+<!--        .grid-container {-->
+<!--            display: grid;-->
+<!--            grid-template-columns: auto auto auto;-->
+<!--            background-color: #2196F3;-->
+<!--            padding: 10px;-->
+<!--        }-->
 
-        .grid-item {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.8);
-            padding: 20px;
-            font-size: 30px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-<div class="grid-container">
-    <div class="grid-item" id="1" onclick="myFunction(1)">1</div>
-    <div class="grid-item" id="2" onclick="myFunction(2)">2</div>
-    <div class="grid-item" id="3" onclick="myFunction(3)">3</div>
-    <div class="grid-item" id="4" onclick="myFunction(4)">4</div>
-    <div class="grid-item" id="5" onclick="myFunction(5)">5</div>
-    <div class="grid-item" id="6" onclick="myFunction(6)">6</div>
-    <div class="grid-item" id="7" onclick="myFunction(7)">7</div>
-    <div class="grid-item" id="8" onclick="myFunction(8)">8</div>
-    <div class="grid-item" id="9" onclick="myFunction(9)">9</div>
-</div>
+<!--        .grid-item {-->
+<!--            background-color: rgba(255, 255, 255, 0.8);-->
+<!--            border: 1px solid rgba(0, 0, 0, 0.8);-->
+<!--            padding: 20px;-->
+<!--            font-size: 30px;-->
+<!--            text-align: center;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="grid-container">-->
+<!--    <div class="grid-item" id="1" onclick="myFunction(1)">1</div>-->
+<!--    <div class="grid-item" id="2" onclick="myFunction(2)">2</div>-->
+<!--    <div class="grid-item" id="3" onclick="myFunction(3)">3</div>-->
+<!--    <div class="grid-item" id="4" onclick="myFunction(4)">4</div>-->
+<!--    <div class="grid-item" id="5" onclick="myFunction(5)">5</div>-->
+<!--    <div class="grid-item" id="6" onclick="myFunction(6)">6</div>-->
+<!--    <div class="grid-item" id="7" onclick="myFunction(7)">7</div>-->
+<!--    <div class="grid-item" id="8" onclick="myFunction(8)">8</div>-->
+<!--    <div class="grid-item" id="9" onclick="myFunction(9)">9</div>-->
+<!--</div>-->
 
-<script th:src="@{/js/mainTest.js}"></script>
-<script>
-    function myFunction(id) {
-        var element = document.getElementById(id);
-        element.style.backgroundColor = "rgba(255, 255, 255, 0.8";
-    }
-</script>
-</body>
-</html>
+<!--<script th:src="@{/js/mainTest.js}"></script>-->
+<!--<script>-->
+<!--    function myFunction(id) {-->
+<!--        var element = document.getElementById(id);-->
+<!--        element.style.backgroundColor = "rgba(255, 255, 255, 0.8";-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
