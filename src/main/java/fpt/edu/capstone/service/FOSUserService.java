@@ -35,6 +35,7 @@ public class FOSUserService implements IFOSUserService {
     @Override
     public FOSUser addFOSUser(FOSUser fosUser) {
         fosUser.setPassword(bcryptEncoder.encode(fosUser.getPassword()));
+        fosUser.setStatus(true);
         return fosUserRepository.save(fosUser);
     }
 
@@ -46,7 +47,7 @@ public class FOSUserService implements IFOSUserService {
             if(fosUser1 != null){
                 fosUser1.setFullName(fosUser.getFullName());
 //                fosUser1.setUserName(fosUser.getUserName());
-                fosUser1.setPassword(bcryptEncoder.encode(fosUser.getPassword()));
+//                fosUser1.setPassword(bcryptEncoder.encode(fosUser.getPassword()));
                 fosUser1.setRole(role);
                 fosUser1.setContact(fosUser.getContact());
                 fosUser1.setEmail(fosUser.getEmail());
@@ -64,7 +65,9 @@ public class FOSUserService implements IFOSUserService {
     public boolean deleteFOSUser(Long id) {
         FOSUser fosUser = fosUserRepository.findFOSUserById(id);
         if(fosUser != null){
-            fosUserRepository.delete(fosUser);
+//            fosUserRepository.delete(fosUser);
+            fosUser.setStatus(false);
+            fosUserRepository.save(fosUser);
             return true;
         }
         return false;

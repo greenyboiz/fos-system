@@ -35,7 +35,7 @@ public class FOSUser {
     private String email;
 
     @Column(name = "status")
-    private Boolean status = true;
+    private Boolean status;
 
     @Column(name = "profileImage")
     private String profileImage;

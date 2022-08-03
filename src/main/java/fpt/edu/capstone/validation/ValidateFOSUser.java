@@ -54,6 +54,50 @@ public class ValidateFOSUser {
         );
     }
 
+    public ResponseEntity<?> validateAddFOSUser(FOSUser fosUser) {
+        boolean checkExistUserByUserName = ifosUserService.checkExistUserByUserName(fosUser);
+        boolean checkExistUserByContact = ifosUserService.checkExistUserByContact(fosUser);
+        boolean checkExistUserByEmail = ifosUserService.checkExistUserByEmail(fosUser);
+        if(checkExistUserByUserName && checkExistUserByContact && checkExistUserByEmail){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Username and Email and Contact is exist",false, null)
+            );
+        }
+        if(checkExistUserByUserName && checkExistUserByEmail){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Username and Email is exist",false, null)
+            );
+        }
+        if(checkExistUserByUserName && checkExistUserByContact){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Username and Contact is exist",false, null)
+            );
+        }
+        if(checkExistUserByEmail && checkExistUserByContact){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Email and Contact is exist",false, null)
+            );
+        }
+        if(checkExistUserByUserName){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Username is exist",false, null)
+            );
+        }
+        if(checkExistUserByContact){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Contact is exist",false, null)
+            );
+        }
+        if(checkExistUserByEmail){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "Email is exist",false, null)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Validate successfull",true, null)
+        );
+    }
+
     public ResponseEntity<?> validateUpdateFOSUser(FOSUser fosUser) {
         FOSUser fosUser1 = ifosUserService.getFOSUserById(fosUser.getUserId());
         if(fosUser1 == null){
