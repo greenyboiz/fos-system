@@ -1,8 +1,10 @@
 package fpt.edu.capstone.controller;
 
+import fpt.edu.capstone.entities.CurrentUserDetails;
 import fpt.edu.capstone.entities.FOSUser;
 import fpt.edu.capstone.implementService.IFOSUserService;
 import fpt.edu.capstone.response.ResponseObject;
+import fpt.edu.capstone.service.JwtUserDetailsService;
 import fpt.edu.capstone.validation.ValidateFOSUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,9 @@ import java.util.List;
 public class FOSUserController {
     @Autowired
     private IFOSUserService ifosUserService;
+
+    @Autowired
+    private JwtUserDetailsService jwtUserDetailsService;
 
     @Autowired
     private ValidateFOSUser validateFOSUser;
@@ -130,18 +135,39 @@ public class FOSUserController {
 //        }
 //    }
 
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PutMapping("/users/update")
+//    public ResponseEntity<?> updateFOSUser(@RequestBody FOSUser fosUser){
+//        FOSUser fosUser1 = ifosUserService.getFOSUserById(fosUser.getUserId());
+//        if(fosUser1 != null){
+//            ifosUserService.updateFOSUser(fosUser);
+//            return ResponseEntity.status(HttpStatus.OK).body(
+//                    new ResponseObject("ok", "Update FOSUser succsessfully",true, ifosUserService.updateFOSUser(fosUser))
+//            );
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+//                new ResponseObject("fail", "User is not exist",false, null)
+//        );
+//    }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/users/update")
     public ResponseEntity<?> updateFOSUser(@RequestBody FOSUser fosUser){
         FOSUser fosUser1 = ifosUserService.getFOSUserById(fosUser.getUserId());
-        if(fosUser1 != null){
-            ifosUserService.updateFOSUser(fosUser);
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Update FOSUser succsessfully",true, ifosUserService.updateFOSUser(fosUser))
+        CurrentUserDetails currentUserDetails = jwtUserDetailsService.getCurrentUser();
+        if(fosUser1 == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "User is not exist",false, null)
             );
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ResponseObject("fail", "User is not exist",false, null)
+        if(currentUserDetails.getUser().getRoleName() == fosUser1.getRole().getRoleName()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "User Same Role " + fosUser1.getRole().getRoleName() + " can not edit",false, null)
+            );
+        }
+        ifosUserService.updateFOSUser(fosUser);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "Update FOSUser succsessfully",true, ifosUserService.updateFOSUser(fosUser))
         );
     }
 
