@@ -5,7 +5,7 @@
 <script>
 import Employee from '@/modules/employee/index.vue';
 export default {
-  name: 'Page',
+  name: 'NhanVien',
 
   components: {
     Employee,

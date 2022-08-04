@@ -23,7 +23,7 @@
               <tr>
                 <th scope="col">Bàn số</th>
                 <th scope="col">Số ghế</th>
-                <th scope="col">Trạng thái</th>
+                <th scope="col">Link QR</th>
                 <th scope="col">Thao tác</th>
               </tr>
             </thead>
@@ -38,7 +38,7 @@
                 <tr v-for="item in listTable" :key="item.tableId" class="tw-cursor-pointer" @click="handleQRCode(item)">
                   <th scope="row">{{ item.tableId }}</th>
                   <td>{{ item.numberOfSeats }}</td>
-                  <td>{{ item.status ? 'Còn trống' : 'Hết chỗ' }}</td>
+                  <td>{{ item.qrCode.qrcodeLink }}</td>
                   <td class="align-items-center">
                     <div class="btn-group align-top">
                       <button

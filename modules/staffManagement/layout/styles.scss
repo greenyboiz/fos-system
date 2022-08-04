@@ -96,7 +96,7 @@
     display: grid;
     grid-template-columns:
       minmax(50px, 50px) minmax(200px, 200px) minmax(200px, 200px)
-      minmax(200px, 200px) minmax(125px, 125px) minmax(200px, 200px) minmax(200px, 200px) minmax(125px, 125px) minmax(auto, auto);
+      minmax(100px, 100px) minmax(125px, 125px) minmax(200px, 200px) minmax(200px, 200px) minmax(200px, 200px) minmax(auto, auto);
   }
 
   &__col {
@@ -130,7 +130,7 @@
     display: grid;
     grid-template-columns:
       minmax(50px, 50px) minmax(200px, 200px) minmax(200px, 200px)
-      minmax(200px, 200px) minmax(125px, 125px) minmax(200px, 200px) minmax(200px, 200px) minmax(125px, 125px) minmax(auto, auto);
+      minmax(100px, 100px) minmax(125px, 125px) minmax(200px, 200px) minmax(200px, 200px) minmax(200px, 200px) minmax(auto, auto);
     cursor: pointer;
 
     &:hover {

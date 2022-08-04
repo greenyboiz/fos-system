@@ -6,7 +6,7 @@
 import OrderManagement from '~/modules/orderManagement/index.vue';
 
 export default {
-  name: 'Page',
+  name: 'DonHang',
 
   components: {
     OrderManagement,

@@ -5,7 +5,7 @@
 <script>
 import MenuManagement from '@/modules/menuManagement/layout/index.vue';
 export default {
-  name: 'Page',
+  name: 'ThucDon',
 
   components: {
     MenuManagement,

@@ -32,7 +32,7 @@ module.exports = {
     'no-var': 'error',
     'no-unused-vars': 'off',
     'block-scoped-var': 'error',
-    'no-param-reassign': 'error',
+    'no-param-reassign': 'off',
     semi: ['warn', 'always'],
     'space-before-function-paren': ['off', 'never'],
     'key-spacing': [

@@ -189,7 +189,7 @@
   align-items: center;
   justify-content: center;
 
-  &:nth-child(3) {
+  &:nth-child(3), &:nth-child(4) {
     padding: 10px;
   }
 }

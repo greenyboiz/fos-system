@@ -5,7 +5,7 @@
 <script>
 // import MenuManagement from '@/modules/menuManagement/layout/index.vue';
 export default {
-  name: 'Page',
+  name: 'BaoCao',
 
   components: {
     // MenuManagement,

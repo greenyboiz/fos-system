@@ -36,6 +36,24 @@ class MenuManagementService {
 
     return res.data;
   }
+
+  async deleteCategory(categoryId, header) {
+    const res = await axios.delete(`https://project-for-fos-mld.herokuapp.com/api/category/delete/${categoryId}`, header);
+
+    return res.data;
+  }
+
+  async updateCategory(params, header) {
+    const res = await axios.put('https://project-for-fos-mld.herokuapp.com/api/category/update', params, header);
+
+    return res.data;
+  }
+
+  async addCategory(params, header) {
+    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/category/update', params, header);
+
+    return res.data;
+  }
 }
 
 export const menuManagementService = new MenuManagementService();

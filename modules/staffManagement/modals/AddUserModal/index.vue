@@ -25,7 +25,7 @@
       <div class="info-staff__detail">
         <div class="info-staff__item">
           <label for="name">Họ và Tên:</label>
-          <input id="name" v-model="formUser.fullName" type="text" placeholder="Nhập tên người dùng" />
+          <input id="fullname" v-model="formUser.fullName" type="text" placeholder="Nhập tên người dùng" />
         </div>
         <div class="info-staff__item">
           <label for="username">Tên tài khoản:</label>
@@ -39,7 +39,7 @@
           <label for="email">Email:</label>
           <input id="email" v-model="formUser.email" type="text" placeholder="Nhập email" />
         </div>
-        <div class="info-staff__item">
+        <div v-if="!modalTitle" class="info-staff__item">
           <label for="pass">Mật khẩu:</label>
           <input
             id="pass"
@@ -87,7 +87,7 @@
             </div>
           </div>
         </div>
-        <div class="info-staff__item">
+        <div v-if="modalTitle" class="info-staff__item">
           <label for="status">Trạng thái:</label>
           <div class="d-flex" style="width: 100%">
             <div v-for="status in statusType" :key="status.id">
@@ -112,7 +112,8 @@
     <div style="padding: 10px">
       <button class="staff__btn" :disabled="isLoading" @click="handleSave()">
         <!-- <Loading v-if="isLoading" color="white" /> -->
-        <span>Xong</span>
+        <span v-if="!modalTitle">Thêm mới</span>
+        <span v-else>Cập nhật</span>
       </button>
     </div>
   </b-modal>
@@ -122,12 +123,12 @@
 import ImageOrDefault from '@/components/common/ImageOrDefault/index.vue';
 import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import { staffManagementService } from '@/services';
+import { toNumber } from 'lodash';
 
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
-import { toNumber } from 'lodash';
 Vue.use(VueToast, { position: 'top' });
 export default {
   name: 'AddUserModal',
@@ -231,50 +232,71 @@ export default {
       this.roleSelected = '';
       this.genderSelected = '';
       this.statusSelected = null;
+      this.avatar = '';
       this.$refs.addUser.hide();
     },
 
+    removeAscent(str) {
+      if (str === null || str === undefined) return str;
+
+      str = str.toLowerCase();
+      str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
+      str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
+      str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i');
+      str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o');
+      str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u');
+      str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y');
+      str = str.replace(/đ/g, 'd');
+      return str;
+    },
+
     validator() {
-      const regexName = /^([a-zA-Z ]){2,30}$/;
+      const regexName = /^([a-zA-Z ]){2,}$/;
       if (!this.formUser.fullName) {
         Vue.$toast.error('Bạn chưa nhập Họ và tên');
+        document.getElementById('fullname').focus();
         return false;
       }
 
-      if (!regexName.test(this.formUser.fullName)) {
-        Vue.$toast.error('Họ và tên phải là chữ cái và có đội dài từ 2-30 kí tự');
+      if (!regexName.test(this.removeAscent(this.formUser.fullName))) {
+        Vue.$toast.error('Họ và tên phải là chữ cái và có đội dài từ 2 kí tự');
+        this.formUser.fullName = '';
+        document.getElementById('fullname').focus();
         return;
       }
 
       if (!this.formUser.userName) {
         Vue.$toast.error('Bạn chưa nhập Tên tài khoản');
+        document.getElementById('username').focus();
         return false;
       }
 
-      if (!this.formUser.password) {
-        Vue.$toast.error('Bạn chưa nhập Mật khẩu');
-        return false;
-      }
+      const regexUsername = /^([a-zA-Z0-9]){2,30}$/;
 
-      const regexPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
-      if (!regexPass.test(this.formUser.password)) {
-        Vue.$toast.error('Mật khẩu phải chứa ít nhất 8 kí tự bao gồm 1 kí tự số, 1 chữ in hoa và 1 chữ in thường');
-        return false;
+      if (!regexUsername.test(this.formUser.userName)) {
+        Vue.$toast.error('Tên tài khoản không được chứa kí tự đặc biệt và có độ dài từ 2-30 kí tự');
+        this.formUser.userName = '';
+        document.getElementById('username').focus();
+        return;
       }
 
       if (!this.formUser.contact) {
         Vue.$toast.error('Bạn chưa nhập Số điện thoại');
+        document.getElementById('phone').focus();
         return false;
       }
 
       const regexPhone = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
       if (!regexPhone.test(this.formUser.contact)) {
         Vue.$toast.error('Bạn chưa nhập đúng định dạng số điện thoại');
+        this.formUser.contact = '';
+        document.getElementById('phone').focus();
         return false;
       }
 
       if (!this.formUser.email) {
         Vue.$toast.error('Bạn chưa nhập Email');
+        document.getElementById('email').focus();
         return false;
       }
 
@@ -282,6 +304,22 @@ export default {
 
       if (!regexEmail.test(this.formUser.email)) {
         Vue.$toast.error('Bạn chưa nhập đúng định dạng email');
+        this.formUser.email = '';
+        document.getElementById('email').focus();
+        return false;
+      }
+
+      if (!this.formUser.password) {
+        Vue.$toast.error('Bạn chưa nhập Mật khẩu');
+        document.getElementById('pass').focus();
+        return false;
+      }
+
+      const regexPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+      if (!regexPass.test(this.formUser.password)) {
+        Vue.$toast.error('Mật khẩu phải chứa ít nhất 8 kí tự bao gồm 1 kí tự số, 1 chữ in hoa và 1 chữ in thường');
+        this.formUser.password = '';
+        document.getElementById('pass').focus();
         return false;
       }
 
@@ -342,8 +380,7 @@ export default {
       if (res.success) {
         this.isDone = true;
         this.$emit('doneAdd', this.isDone);
-      } else {
-        this.isDone = false;
+        Vue.$toast.success('Thêm nhân viên thành công');
       }
     },
 
@@ -357,6 +394,7 @@ export default {
       if (res.success) {
         this.isDone = true;
         this.$emit('doneUpdate', this.isDone);
+        Vue.$toast.success('Cập nhật nhân viên thành công');
       } else {
         this.isDone = false;
       }
@@ -380,7 +418,7 @@ export default {
         this.formUser.gender = user.gender;
         this.statusSelected = user.status ? 1 : 0;
         this.roleSelected = user.role.roleName;
-        this.genderSelected = user.gender ? 1 : 0;
+        this.genderSelected = user.gender ? 1 : 2;
       }
     },
 
@@ -393,7 +431,7 @@ export default {
         profileImage: this.avatar,
         fullName: this.formUser.fullName,
         userName: this.formUser.userName,
-        password: this.formUser.password,
+        // password: this.formUser.password,
         contact: this.formUser.contact,
         email: this.formUser.email,
         gender: toNumber(this.genderSelected.toString()),
@@ -408,6 +446,7 @@ export default {
         requestParams.userId = this.userId;
         this.updateUser(requestParams);
       } else {
+        requestParams.password = this.formUser.password;
         this.addUser(requestParams);
       }
 

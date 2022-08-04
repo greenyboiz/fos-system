@@ -52,6 +52,7 @@
 
 <script>
 import { menuManagementService } from '@/services';
+import { map } from 'lodash';
 import Loading from '@/components/common/Loading/index.vue';
 import BEditableTable from 'bootstrap-vue-editable-table';
 import {
@@ -61,6 +62,11 @@ import {
   BIconCheck,
   BButton,
 } from 'bootstrap-vue';
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
 export default {
   name: 'CategoriesModal',
 
@@ -82,14 +88,14 @@ export default {
       fields: [
         { key: 'delete', label: '' },
         {
-          key: 'categoryId',
+          key: 'id',
           label: 'Mã loại',
           type: 'number',
           editable: false,
           class: 'id-col',
         },
         {
-          key: 'categoryName',
+          key: 'name',
           label: 'Tên loại',
           type: 'text',
           editable: true,
@@ -112,26 +118,53 @@ export default {
     },
 
     editClick(val) {
-      this.isEdit = !this.isEdit;
-      this.cateEdit = val.categoryName;
+      this.isEdit = true;
+      this.cateEdit = val.item.name;
       console.log(val);
       this.rowUpdate = { edit: true, id: val.id };
     },
 
     removeCategory(val) {
-      this.rowUpdate = { id: val.id, action: 'delete' };
+      console.log('sasa');
+      const catId = val.item.categoryId;
+      this.$confirmPopup.open({
+        title: 'Xác nhận',
+        message: 'Bạn có chắc muốn xóa loại này không?',
+        confirmText: 'Xóa',
+
+        confirmed: async () => {
+          const res = await menuManagementService.deleteCategory(catId, {
+            headers: {
+              Authorization: this.$auth.$storage._state['_token.local'],
+            },
+          });
+
+          if (res.success) {
+            this.getListCategory();
+            this.rowUpdate = { id: val.id, action: 'delete' };
+          }
+        },
+      });
     },
 
     handleAddMoreCategory() {
-      this.rowUpdate = {
-        edit: true,
-        action: 'add',
-        id: this.listCategory[this.listCategory.length - 1].categoryId + 1,
-        data: {
-          categoryId: this.listCategory[this.listCategory.length - 1].categoryId + 1,
-          categoryName: '',
-        }
-      };
+      const newId = this.listCategory[this.listCategory.length - 1].categoryId + 1;
+      // this.rowUpdate = {
+      //   edit: true,
+      //   action: 'add',
+      //   id: newId,
+      //   data: {
+      //     categoryId: newId,
+      //     categoryName: '',
+      //     id: newId,
+      //     name: '',
+      //   }
+      // };
+      this.listCategory.push({
+        categoryId: newId,
+        categoryName: '',
+      });
+      this.rowUpdate = { edit: true, id: newId };
     },
 
     handleSubmit(data, update) {
@@ -140,6 +173,23 @@ export default {
         id: data.id,
         action: update ? 'update' : 'cancel',
       };
+      if (this.rowUpdate.action === 'cancel') {
+        return;
+      }
+      console.log(data.item.name);
+      // console.log(this.cateEdit);
+      const reqParam = {
+        categoryId: data.item.categoryId,
+        categoryName: data.item.name,
+      };
+
+      if (this.isEdit) {
+        this.updateCategory(reqParam);
+      } else {
+        this.addNewCategory({
+          categoryName: data.item.name,
+        });
+      }
     },
 
     async getListCategory() {
@@ -156,8 +206,36 @@ export default {
 
       if (res.success) {
         this.listCategory = res.data;
+        map(this.listCategory, (item) => {
+          item.id = item.categoryId;
+          item.name = item.categoryName;
+        });
       }
     },
+
+    async addNewCategory(reqParam) {
+      const res = await menuManagementService.addCategory(reqParam, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
+
+      if (res.success) {
+        Vue.$toast.success('Thêm mới thành công');
+      }
+    },
+
+    async updateCategory(reqParam) {
+      const res = await menuManagementService.updateCategory(reqParam, {
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
+
+      if (res.success) {
+        Vue.$toast.success('Chỉnh sửa thành công');
+      }
+    }
   },
 };
 </script>

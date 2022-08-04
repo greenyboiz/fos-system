@@ -6,12 +6,12 @@
         <div class="headline__title">Quản lý nhân viên</div>
 
         <div class="headline__right">
-          <button class="btn__add" @click="handleShowAddUserModal()">Thêm người dùng</button>
+          <button class="btn__add" @click="handleShowAddUserModal()">Thêm nhân viên</button>
 
           <div class="searchArea">
             <div class="searchBox d-flex align-items-center">
               <img class="searchBox__icon" src="~/assets/icons/search_gray_icon.png" />
-              <input v-model="searchText" class="searchBox__input" placeholder="Tìm kiếm thông tin người dùng" />
+              <input v-model="searchText" class="searchBox__input" placeholder="Tìm kiếm thông tin nhân viên" />
               <div v-if="searchText" class="cursor-pointer" @click="removeKeyword()">
                 <img class="searchBox__remove" src="~/assets/icons/remove_search.svg" />
               </div>
@@ -35,11 +35,11 @@
             <div class="table__col">ID</div>
             <div class="table__col">Họ và tên</div>
             <div class="table__col">Tên tài khoản</div>
-            <div class="table__col">Mật khẩu</div>
             <div class="table__col">Giới tính</div>
             <div class="table__col">SĐT</div>
             <div class="table__col">Email</div>
             <div class="table__col">Role</div>
+            <div class="table__col">Trạng thái</div>
             <div class="table__col">Action</div>
           </div>
 
@@ -55,15 +55,15 @@
                 <div class="table__row">{{ item.userId }}</div>
                 <div class="table__row">{{ item.fullName }}</div>
                 <div class="table__row">{{ item.userName }}</div>
-                <div class="table__row">
-                  <span>{{ item.password }}</span>
-                </div>
                 <div class="table__row">{{ item.gender ? 'Nam' : 'Nữ' }}</div>
                 <div class="table__row">{{ item.contact }}</div>
                 <div class="table__row">
                   <span>{{ item.email }}</span>
                 </div>
-                <div class="table__row">{{ item.role.roleName }}</div>
+                <div class="table__row">{{ handleSplitRole(item.role.roleName) }}</div>
+                <div class="table__row">
+                  <span>{{ item.status ? 'Đang hoạt động' : 'Đã nghỉ việc' }}</span>
+                </div>
 
                 <div class="table__row align-items-center">
                   <div class="btn-group align-top">
@@ -71,7 +71,8 @@
                       Edit
                     </button>
                     <button class="btn__delete" @click="remove(item.userId)">
-                      <img src="@/assets/icons/delete.png" alt="" />
+                      <!-- <img src="@/assets/icons/delete.png" alt="" /> -->
+                      Chuyển trạng thái
                     </button>
                   </div>
                 </div>
@@ -182,6 +183,10 @@ export default {
       this.deleteUser(val);
     },
 
+    handleSplitRole(str) {
+      return str.slice(5);
+    },
+
     async getListUser() {
       this.isLoading = true;
       const res = await staffManagementService
@@ -208,8 +213,8 @@ export default {
       // }
       this.$confirmPopup.open({
         title: 'Xác nhận',
-        message: 'Bạn có chắc muốn xóa tài khoản này không?',
-        confirmText: 'Xóa',
+        message: 'Bạn có chắc muốn đổi trạng thái tài khoản này không?',
+        confirmText: 'Đổi',
 
         confirmed: async () => {
           const res = await staffManagementService.deleteUser(userId, {

@@ -36,7 +36,7 @@
             <div class="tableCol">STT</div>
             <div class="tableCol">Tên món ăn</div>
             <div class="tableCol">Mô tả</div>
-            <div class="tableCol">Giảm giá (%)</div>
+            <div class="tableCol">Phân loại</div>
             <div class="tableCol">Giá mua (đ)</div>
             <div class="tableCol">Giá bán (đ)</div>
             <div class="tableCol">Trạng thái</div>
@@ -52,10 +52,10 @@
 
             <template v-else>
               <div v-for="item in listDishSearch" :key="item.id" class="table__body">
-                <div class="tableRow">{{ item.dishesId }}</div>
+                <div class="tableRow">{{ `D${item.dishesId}` }}</div>
                 <div class="tableRow">{{ item.dishesName }}</div>
                 <div class="tableRow">{{ item.description }}</div>
-                <div class="tableRow">{{ item.discount }}</div>
+                <div class="tableRow">{{ item.category.categoryName }}</div>
                 <div class="tableRow">{{ currencyFormatter(item.costPrice) }}</div>
                 <div class="tableRow">{{ currencyFormatter(item.salePrice) }}</div>
                 <div class="tableRow">

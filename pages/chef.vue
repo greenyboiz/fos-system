@@ -6,7 +6,7 @@
 import Chef from '@/modules/ChefScreen/index.vue';
 
 export default {
-  name: 'Page',
+  name: 'Chef',
 
   components: {
     Chef,

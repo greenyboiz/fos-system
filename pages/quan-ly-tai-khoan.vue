@@ -5,7 +5,7 @@
 <script>
 import StaffManagement from '@/modules/staffManagement/layout/index.vue';
 export default {
-  name: 'Page',
+  name: 'QuanLyTaiKhoan',
 
   components: {
     StaffManagement,

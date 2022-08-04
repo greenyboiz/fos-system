@@ -5,7 +5,7 @@
 <script>
 import TableManagement from '@/modules/tableManagement/layout/index.vue';
 export default {
-  name: 'Page',
+  name: 'BanAn',
 
   components: {
     TableManagement,
