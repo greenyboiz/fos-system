@@ -8,28 +8,29 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfiguration {
 
-//    @Bean
-//    public WebMvcConfigurer getCorsConfiguration() {
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                System.out.println("here");
-//                registry.addMapping("/**")
-//                        .allowedOrigins("*")
-//                        .allowedMethods("PUT", "DELETE", "POST", "PUT")
-//                        .allowedHeaders("*")
-//                        .exposedHeaders("*")
-//                        .allowCredentials(false).maxAge(3600);
-//            }
-//        };
-
-        @Bean
-        public WebMvcConfigurer corsConfigurer() {
-            return new WebMvcConfigurer() {
+    @Bean
+    public WebMvcConfigurer getCorsConfiguration() {
+        return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedMethods("*");
+                System.out.println("here");
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("PUT", "DELETE", "POST", "PUT")
+                        .allowedHeaders("*")
+                        .exposedHeaders("*")
+                        .allowCredentials(false).maxAge(3600);
             }
         };
     }
+
+//        @Bean
+//        public WebMvcConfigurer corsConfigurer() {
+//            return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**").allowedMethods("*");
+//            }
+//        };
+//    }
 }
