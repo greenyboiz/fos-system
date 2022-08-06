@@ -22,4 +22,5 @@ public interface IQRCodeService {
     public QRCode getQRCodeById(Long id);
 
     boolean checkQRCodeExist(String qrCodeLink);
+
 }

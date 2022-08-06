@@ -61,60 +61,6 @@ public class FOSUserController {
         }
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @PostMapping("/users/add1")
-//    public ResponseEntity<?> saveFOSUser1(@RequestBody FOSUser fosUser){
-//        boolean checkExistUser = ifosUserService.checkExistUserByUserNameAndContactAndEmail(fosUser);
-//        boolean checkExistUserByUserName = ifosUserService.checkExistUserByUserName(fosUser);
-//        boolean checkExistUserByContact = ifosUserService.checkExistUserByContact(fosUser);
-//        boolean checkExistUserByEmail = ifosUserService.checkExistUserByEmail(fosUser);
-////        if(!checkExistUser){
-////            FOSUser fosUserAdd = ifosUserService.addFOSUser(fosUser);
-////            return ResponseEntity.status(HttpStatus.OK).body(
-////                    new ResponseObject("ok", "successfull",true, fosUserAdd)
-////            );
-////        }
-//        if(checkExistUserByUserName && checkExistUserByContact && checkExistUserByEmail){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    new ResponseObject("fail", "Username and Email and Contact is exist",false, null)
-//            );
-//        }
-//        if(checkExistUserByUserName && checkExistUserByEmail){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    new ResponseObject("fail", "Username and Email is exist",false, null)
-//            );
-//        }
-//        if(checkExistUserByUserName && checkExistUserByContact){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    new ResponseObject("fail", "Username and Contact is exist",false, null)
-//            );
-//        }
-//        if(checkExistUserByEmail && checkExistUserByContact){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    new ResponseObject("fail", "Email and Contact is exist",false, null)
-//            );
-//        }
-//        if(checkExistUserByUserName){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    new ResponseObject("fail", "Username is exist",false, null)
-//            );
-//        }
-//        if(checkExistUserByContact){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    new ResponseObject("fail", "Contact is exist",false, null)
-//            );
-//        }
-//        if(checkExistUserByEmail){
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                    new ResponseObject("fail", "Email is exist",false, null)
-//            );
-//        }
-//        FOSUser fosUserAdd = ifosUserService.addFOSUser(fosUser);
-//        return ResponseEntity.status(HttpStatus.OK).body(
-//                new ResponseObject("ok", "successfull",true, fosUserAdd)
-//        );
-//
-//    }
 
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
 //    @PutMapping("/users/update")
@@ -133,21 +79,6 @@ public class FOSUserController {
 //                    new ResponseObject("fail", e.getMessage(),false, null)
 //            );
 //        }
-//    }
-
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @PutMapping("/users/update")
-//    public ResponseEntity<?> updateFOSUser(@RequestBody FOSUser fosUser){
-//        FOSUser fosUser1 = ifosUserService.getFOSUserById(fosUser.getUserId());
-//        if(fosUser1 != null){
-//            ifosUserService.updateFOSUser(fosUser);
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "Update FOSUser succsessfully",true, ifosUserService.updateFOSUser(fosUser))
-//            );
-//        }
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                new ResponseObject("fail", "User is not exist",false, null)
-//        );
 //    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

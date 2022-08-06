@@ -42,7 +42,7 @@ public class TableService implements ITablesService {
 //        QRCode qrCode = qrCodeRepository.findByQRCodeId(table.getQrCode().getQRCodeId());
         QRCode qrCode = qrCodeRepository.findByQRCodeLink(table.getQrCode().getQRCodeLink());
         if(table != null){
-            Tables table1 = tableRepository.getById(table.getTableId());
+            Tables table1 = tableRepository.findTableById(table.getTableId());
             if (table1 != null){
                 table1.setNumberOfSeats(table.getNumberOfSeats());
                 table1.setStatus(table.getStatus());
