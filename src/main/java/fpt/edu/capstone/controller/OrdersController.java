@@ -155,7 +155,9 @@ public class OrdersController {
             tables.setStatus(true);
             iTablesService.addTable(tables);
             iOrderItemService.deleteOrderItemByOrderId(orders);
-            boolean orderDelete = iOrdersService.deleteOrder(id);
+            Payment payment = iPaymentService.getPaymentByOrderId(orders.getOrderId());
+            iPaymentService.deletePaymentById(payment.getPaymentId());
+            boolean orderDelete = iOrdersService.deleteOrder(orders.getOrderId());
             if(orderDelete){
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new ResponseObject("ok", "Delete Order succsessfully",true, orderDelete)

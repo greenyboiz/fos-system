@@ -3,6 +3,7 @@ package fpt.edu.capstone.controller;
 import fpt.edu.capstone.dto.PaymentDTO;
 import fpt.edu.capstone.entities.OrderItem;
 import fpt.edu.capstone.entities.Orders;
+import fpt.edu.capstone.entities.Payment;
 import fpt.edu.capstone.entities.Tables;
 import fpt.edu.capstone.implementService.*;
 import fpt.edu.capstone.response.ResponseObject;
@@ -57,6 +58,19 @@ public class PaymentController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponseObject("fail", "Order is not exist",false, null)
+        );
+    }
+
+    @DeleteMapping("/payment/{paymentId}")
+    public ResponseEntity<?> deletePayment(@PathVariable(name = "paymentId") Long paymentId){
+        boolean payment = iPaymentService.deletePaymentById(paymentId);
+        if(payment){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Delete Payment successfull",true, payment)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Payment is not exist",false, null)
         );
     }
 }

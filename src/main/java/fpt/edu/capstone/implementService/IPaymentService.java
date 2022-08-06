@@ -10,4 +10,8 @@ public interface IPaymentService {
     public Payment getTotalMoneyOrder(Long orderId);
 
     public Payment savePayment(Payment payment);
+
+    boolean deletePaymentById(Long paymentId);
+
+    Payment getPaymentByOrderId(Long orderId);
 }

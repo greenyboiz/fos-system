@@ -44,4 +44,23 @@ public class PaymentService implements IPaymentService {
         return paymentRepository.save(payment);
     }
 
+    @Override
+    public boolean deletePaymentById(Long paymentId) {
+        Payment payment = paymentRepository.findPaymentById(paymentId);
+        if(payment != null){
+            paymentRepository.delete(payment);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Payment getPaymentByOrderId(Long orderId) {
+        Payment payment = paymentRepository.findPaymentByOrderId(orderId);
+        if(payment != null){
+            return payment;
+        }
+        return null;
+    }
+
 }
