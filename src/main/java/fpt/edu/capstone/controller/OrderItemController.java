@@ -21,8 +21,11 @@ public class OrderItemController {
     private IOrderItemService iOrderItemService;
 
     @GetMapping("/orderItem")
-    public List<OrderItem> getAllOrderItems(){
-        return iOrderItemService.listOrderItems();
+    public ResponseEntity<?> getAllOrderItems(){
+        List<OrderItem> orderItemList = iOrderItemService.listOrderItems();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "successfull",true, orderItemList)
+        );
     }
 
     @GetMapping("/orderItem/order/{oderId}")

@@ -22,13 +22,8 @@ public class CategoryController {
     @GetMapping("/category")
     public ResponseEntity<?> getAlllCategories(){
         List<Category> categories = iCategoryService.getAllCategory();
-        if(categories != null){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "successfull",true, categories)
-            );
-        }
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("fail", "Not exist any category",false, null)
+                new ResponseObject("ok", "successfull",true, categories)
         );
     }
 

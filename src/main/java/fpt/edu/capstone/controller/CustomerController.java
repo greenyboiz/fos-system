@@ -22,19 +22,14 @@ public class CustomerController {
     @GetMapping("/customers")
     public ResponseEntity<?> getAllCustomer(){
         List<Customer> customers = iCustomerService.getAllCustomer();
-        if(customers !=null){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, customers)
-            );
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("fail", "Can not find any customer",false,"null")
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "succsessfully",true, customers)
         );
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/customers/add")
-    public ResponseEntity<?> saveCustomer(@RequestBody Customer customer){
+    public ResponseEntity<?> addCustomer(@RequestBody Customer customer){
         boolean checkCustomerExist = iCustomerService.checkCustomerExist(customer);
 
         if(!checkCustomerExist){
@@ -65,7 +60,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/customers/delete/{id}")
-    public ResponseEntity<?> deletecustomers(@PathVariable("id") Long id){
+    public ResponseEntity<?> deleteCustomers(@PathVariable("id") Long id){
         boolean deleteCustomer = iCustomerService.deleteCustomer(id);
         if(deleteCustomer){
             return ResponseEntity.status(HttpStatus.OK).body(
@@ -78,7 +73,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/{id}")
-    public ResponseEntity<ResponseObject> findCustomerById(@PathVariable Long id){
+    public ResponseEntity<ResponseObject> getCustomerById(@PathVariable Long id){
         Customer customer = iCustomerService.getCustomerById(id);
         if(customer != null){
             return ResponseEntity.status(HttpStatus.OK).body(

@@ -22,13 +22,8 @@ public class RoleController {
     @GetMapping("/role")
     public ResponseEntity<?> getAllRoles(){
         List<Role> roles = iRoleService.getAllRole();
-        if(roles != null){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "successfull",true, roles)
-            );
-        }
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("fail", "Not exist any role",false, null)
+                new ResponseObject("ok", "successfull",true, roles)
         );
     }
 

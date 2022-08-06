@@ -31,15 +31,9 @@ public class FOSUserController {
     @GetMapping("/users")
     public ResponseEntity<?> getAllFOSUser(){
         List<FOSUser> fosUserList = ifosUserService.getAllFOSUser();
-        if (fosUserList != null){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "successfull",true, fosUserList)
-            );
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", "Does not exist any account",true, fosUserList)
-            );
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "successfull",true, fosUserList)
+        );
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

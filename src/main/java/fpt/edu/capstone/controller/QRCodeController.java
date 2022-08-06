@@ -23,8 +23,11 @@ public class QRCodeController {
     public IQRCodeService iqrCodeService;
 
     @GetMapping("/qrcode")
-    public List<QRCode> getAllQRCode(){
-        return iqrCodeService.getAllQRCodes();
+    public ResponseEntity<?> getAllQRCode(){
+        List<QRCode> qrCodeList = iqrCodeService.getAllQRCodes();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "successfull",true, qrCodeList)
+        );
     }
 
     @PostMapping(value = "/qrcode/add")
@@ -40,6 +43,31 @@ public class QRCodeController {
                 new ResponseObject("fail", "QRCode is exist",false, null)
         );
 
+    }
+
+
+
+    @PutMapping("/qrcode/update")
+    private QRCode updateQRCode(@RequestBody QRCode qrCode){
+        return iqrCodeService.updateQRCode(qrCode);
+    }
+
+    @DeleteMapping("/qrcode/delete/{id}")
+    public boolean deleteQRCode(@PathVariable("id") Long id){
+        return iqrCodeService.deleteQRCode(id);
+    }
+
+    @GetMapping("/qrcode/{id}")
+    ResponseEntity<ResponseObject> findQRCodeById(@PathVariable Long id){
+        QRCode qrCode = iqrCodeService.getQRCodeById(id);
+        if(qrCode != null){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "successfull",true, qrCode)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("fail", "QRCode is not exist",false, qrCode)
+        );
     }
 
 //    @PostMapping( value = "/qrcode/upload", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -82,28 +110,4 @@ public class QRCodeController {
 //            }
 //        }
 //    }
-
-
-    @PutMapping("/qrcode/update")
-    private QRCode updateQRCode(@RequestBody QRCode qrCode){
-        return iqrCodeService.updateQRCode(qrCode);
-    }
-
-    @DeleteMapping("/qrcode/delete/{id}")
-    public boolean deleteQRCode(@PathVariable("id") Long id){
-        return iqrCodeService.deleteQRCode(id);
-    }
-
-    @GetMapping("/qrcode/{id}")
-    ResponseEntity<ResponseObject> findQRCodeById(@PathVariable Long id){
-        QRCode qrCode = iqrCodeService.getQRCodeById(id);
-        if(qrCode != null){
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "successfull",true, qrCode)
-            );
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("fail", "QRCode is not exist",false, qrCode)
-        );
-    }
 }

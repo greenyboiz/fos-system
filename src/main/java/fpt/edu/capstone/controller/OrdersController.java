@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -40,29 +41,23 @@ public class OrdersController {
     @Autowired
     private IFOSUserService ifosUserService;
 
-//    @GetMapping("/orders")
-//    public ResponseEntity<?> getAllOrders(){
-//        List<Orders> orders = iOrdersService.getAllOrders();
-//        if(orders != null){
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "succsessfully",true, orders)
-//            );
-//        }else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//                    new ResponseObject("fail", "List order is empty ",false,"null")
-//            );
-//        }
-//    }
-
     @GetMapping("/orders")
-    public Page<Orders> listAllOrders(
-//            PagingRequest pagingRequest
-            @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
-    ){
-        log.info("(listAll)pageNum: {}, pageSize: {}", pageNum, pageSize);
-        return iOrdersService.listOrders(pageNum, pageSize);
+    public ResponseEntity<?> getAllOrders(){
+        List<Orders> orders = iOrdersService.getAllOrders();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "succsessfully",true, orders)
+        );
     }
+
+//    @GetMapping("/orders")
+//    public Page<Orders> listAllOrders(
+////            PagingRequest pagingRequest
+//            @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
+//            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
+//    ){
+//        log.info("(listAll)pageNum: {}, pageSize: {}", pageNum, pageSize);
+//        return iOrdersService.listOrders(pageNum, pageSize);
+//    }
 
     @PostMapping("/orders")
     public ResponseEntity<?> saveOrders(@RequestBody Orders orders){

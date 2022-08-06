@@ -28,20 +28,23 @@ public class DishesController {
     @Autowired
     public IDishesService iDishesService;
 
-//    @GetMapping("/dishes")
-//    public List<Dishes> getAllDishes(){
-//        return iDishesService.getAllDishes();
-//    }
-
     @GetMapping("/dishes")
-    public Page<Dishes> listAll(
-//            PagingRequest pagingRequest
-            @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
-            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
-    ){
-        log.info("(listAll)pageNum: {}, pageSize: {}", pageNum, pageSize);
-        return iDishesService.listDishes(pageNum, pageSize);
+    public ResponseEntity<?> getAllDishes(){
+        List<Dishes> dishes = iDishesService.getAllDishes();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "successfull",true, dishes)
+        );
     }
+
+//    @GetMapping("/dishes")
+//    public Page<Dishes> listAll(
+////            PagingRequest pagingRequest
+//            @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
+//            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
+//    ){
+//        log.info("(listAll)pageNum: {}, pageSize: {}", pageNum, pageSize);
+//        return iDishesService.listDishes(pageNum, pageSize);
+//    }
 
 
     @PostMapping("/dishes/add")
