@@ -21,7 +21,7 @@
           <input id="link" v-model="formTable.qrCode.qrcodeLink" type="text" placeholder="Nhập link QR" />
         </div>
 
-        <div class="info-table__item a">
+        <!-- <div class="info-table__item a">
           <div class="b">Trạng thái:</div>
           <div class="d-flex tw-justify-around" style="width: 100%">
             <template v-for="status in statusType">
@@ -40,7 +40,7 @@
               </CustomCheckbox>
             </template>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="info-table__qr">
@@ -74,7 +74,7 @@ export default {
 
   components: {
     // ImageOrDefault,
-    CustomCheckbox,
+    // CustomCheckbox,
     QrCode,
   },
 
@@ -151,14 +151,16 @@ export default {
     },
 
     validator() {
-      if (!this.formTable.qrCode.qrcodeLink) {
-        Vue.$toast.error('Vui lòng nhập link của mã QR');
-        return;
+      if (!this.formTable.numberOfSeats) {
+        Vue.$toast.error('Vui lòng nhập số ghế');
+        return false;
       }
 
-      if (!this.statusSelected) {
-        Vue.$toast.error('Vui lòng chọn trạng thái bàn');
+      if (!this.formTable.qrCode.qrcodeLink) {
+        Vue.$toast.error('Vui lòng nhập link của mã QR');
+        return false;
       }
+      return true;
     },
 
     async addTable(requestParams) {
@@ -198,7 +200,7 @@ export default {
         qrCode: {
           qrcodeLink: this.formTable.qrCode.qrcodeLink,
         },
-        status: this.statusSelected,
+        status: 1,
       };
 
       if (this.modalTitle === 'update') {

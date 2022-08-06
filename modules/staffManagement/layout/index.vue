@@ -51,8 +51,8 @@
             </template>
 
             <template v-else>
-              <div v-for="item in listStaffSearch" :key="'staff' + item.userId" class="table__body">
-                <div class="table__row">{{ item.userId }}</div>
+              <div v-for="(item, index) in listStaffSearch" :key="'staff' + item.userId" class="table__body">
+                <div class="table__row">{{ index + 1 }}</div>
                 <div class="table__row">{{ item.fullName }}</div>
                 <div class="table__row">{{ item.userName }}</div>
                 <div class="table__row">{{ item.gender ? 'Nam' : 'Nữ' }}</div>
@@ -86,8 +86,15 @@
       <div class="pagination">
         <section class="pagination__wrap">
           <div class="pagination__list">
-            <button class="pagination__button active">1</button>
-            <button class="pagination__button">2</button>
+            <Paginate
+    :page-count="20"
+    :page-range="3"
+    :margin-pages="2"
+    :prev-text="'Prev'"
+    :next-text="'Next'"
+    :container-class="'pagination'"
+    :page-class="'page-item'">
+  </Paginate>
           </div>
         </section>
       </div>
@@ -99,9 +106,11 @@
 
 <script>
 import { staffManagementService } from '@/services';
+import { filter } from 'lodash';
 import AddUserModal from '../modals/AddUserModal/index.vue';
 import Loading from '@/components/common/Loading/index.vue';
 // import { mapState, mapMutations } from 'vue'
+import Paginate from 'vuejs-paginate';
 
 export default {
   name: 'StaffManagement',
@@ -109,6 +118,7 @@ export default {
   components: {
     AddUserModal,
     Loading,
+    Paginate
   },
 
   data() {
@@ -200,7 +210,10 @@ export default {
         });
 
       if (res.success) {
-        this.listStaff = res.data;
+        const resData = res.data;
+        filter(resData, (item) => item.role.roleName === 'ROLE_ADMIN');
+        console.log(resData);
+        this.listStaff = resData;
       }
     },
 

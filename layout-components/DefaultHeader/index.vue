@@ -2,7 +2,7 @@
   <div>
     <nav class="navbar navbar-expand-sm bg-success">
       <div class="header-logo">
-        <nuxt-link to="/web" class="navbar-brand d-flex">MLD Restaurant</nuxt-link>
+        <nuxt-link to="/" class="navbar-brand d-flex">MLD Restaurant</nuxt-link>
       </div>
       <button
         class="navbar-toggler border-success"

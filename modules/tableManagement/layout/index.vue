@@ -35,8 +35,8 @@
               </template>
 
               <template v-else>
-                <tr v-for="item in listTable" :key="item.tableId" class="tw-cursor-pointer" @click="handleQRCode(item)">
-                  <th scope="row">{{ item.tableId }}</th>
+                <tr v-for="(item, index) in listTable" :key="item.tableId" class="tw-cursor-pointer" @click="handleQRCode(item)">
+                  <th scope="row">{{ `B${ index + 1 }` }}</th>
                   <td>{{ item.numberOfSeats }}</td>
                   <td>{{ item.qrCode.qrcodeLink }}</td>
                   <td class="align-items-center">

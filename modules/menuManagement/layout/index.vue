@@ -51,8 +51,8 @@
             </template>
 
             <template v-else>
-              <div v-for="item in listDishSearch" :key="item.id" class="table__body">
-                <div class="tableRow">{{ `D${item.dishesId}` }}</div>
+              <div v-for="(item, index) in listDishSearch" :key="item.id" class="table__body">
+                <div class="tableRow">{{ `D${index + 1}` }}</div>
                 <div class="tableRow">{{ item.dishesName }}</div>
                 <div class="tableRow">{{ item.description }}</div>
                 <div class="tableRow">{{ item.category.categoryName }}</div>
@@ -82,8 +82,16 @@
       <div class="pagination">
         <section class="pagination__wrap">
           <div class="pagination__list">
-            <button class="pagination__button active">1</button>
-            <button class="pagination__button">2</button>
+            <Paginate
+              :pageCount="pageCount"
+              :pageRange="5"
+              :margin-pages="4"
+              :prev-text="'Prev'"
+              :next-text="'Next'"
+              :container-class="'pagination'"
+              :page-class="'page-item'"
+            >
+            </Paginate>
           </div>
         </section>
       </div>
@@ -100,6 +108,7 @@ import AddDishModal from '../modals/AddDishModal/index.vue';
 import CategoriesModal from '../modals/CategoriesModal/index.vue';
 import Loading from '@/components/common/Loading/index.vue';
 import commonMixin from '@/plugins/commonMixin';
+import Paginate from 'vuejs-paginate';
 
 export default {
   name: 'MenuManagement',
@@ -107,7 +116,8 @@ export default {
   components: {
     AddDishModal,
     Loading,
-    CategoriesModal
+    CategoriesModal,
+    Paginate
   },
 
   mixins: [commonMixin],
@@ -118,6 +128,8 @@ export default {
       listDishes: [],
       dishesId: null,
       isLoading: false,
+      pageCount: 0,
+      currentPage: 1,
     };
   },
 
@@ -193,6 +205,7 @@ export default {
 
       if (res.content) {
         this.listDishes = res.content;
+        this.pageCount = res.totalPages;
       }
 
     },

@@ -26,15 +26,15 @@
         </div>
         <div class="info-dish__item">
           <label for="salePrice">Giá bán:</label>
-          <input id="salePrice" v-model.number="formDish.salePrice" type="number" placeholder="Nhập giá mua" />
+          <input id="salePrice" v-model.number="formDish.salePrice" type="number" placeholder="Nhập giá mua" min="0" />
         </div>
         <div class="info-dish__item">
           <label for="costPrice">Giá mua:</label>
-          <input id="costPrice" v-model.number="formDish.costPrice" type="number" placeholder="Nhập giá bán" />
+          <input id="costPrice" v-model.number="formDish.costPrice" type="number" placeholder="Nhập giá bán" min="0" />
         </div>
         <div class="info-dish__item">
           <label for="discount">Giảm giá:</label>
-          <input id="discount" v-model.number="formDish.discount" type="number" placeholder="Nhập phần trăm giảm" />
+          <input id="discount" v-model.number="formDish.discount" type="number" placeholder="Nhập phần trăm giảm" min="0" />
         </div>
         <div class="info-dish__item">
           <label for="category">Phân loại:</label>
@@ -72,7 +72,8 @@
     <div style="padding: 10px">
       <button class="dish__btn" :disabled="isLoading" @click="handleSave()">
         <!-- <Loading v-if="isLoading" color="white" /> -->
-        <span>Xong</span>
+        <span v-if="!modalTitle">Thêm mới</span>
+        <span v-else>Cập nhật</span>
       </button>
     </div>
   </b-modal>
@@ -124,7 +125,7 @@ export default {
       statusSelected: '',
       statusType: [
         { id: 1, name: 'Còn hàng' },
-        { id: 2, name: 'Hết hàng' },
+        { id: 0, name: 'Hết hàng' },
       ],
       listCategory: [],
       selectedCategory: {},
@@ -142,12 +143,24 @@ export default {
 
   methods: {
     show(title) {
-      this.modalTitle = title;
+      if (title) {
+        this.modalTitle = title;
+        this.getDishById();
+      }
       this.getListCategory();
       this.$refs.addDish.show();
     },
 
     handleHideModal() {
+      this.formDish.dishesName = '';
+      this.formDish.description = '';
+      this.formDish.salePrice = 0;
+      this.formDish.costPrice = 0;
+      this.formDish.discount = 0;
+      this.selectedCategory = {};
+      this.statusSelected = '';
+      this.avatar = '';
+      this.formDish.dishImage = '';
       this.$refs.addDish.hide();
     },
 
@@ -206,6 +219,7 @@ export default {
       if (res.success) {
         this.isDone = true;
         this.$emit('doneAdd', this.isDone);
+        Vue.$toast.success('Thêm món ăn thành công');
       } else {
         this.isDone = false;
       }
@@ -227,6 +241,7 @@ export default {
       if (res.success) {
         this.isDone = true;
         this.$emit('doneUpdate', this.isDone);
+        Vue.$toast.success('Cập nhật món ăn thành công');
       } else {
         this.isDone = false;
       }
@@ -245,6 +260,7 @@ export default {
         this.formDish = dish;
         this.selectedCategory = dish.category;
         this.statusSelected = dish.status ? 1 : 0;
+        this.avatar = dish.dishImage;
       }
     },
 
@@ -267,6 +283,13 @@ export default {
         return false;
       }
 
+      const regexDishname = /^([a-zA-Z0-9]){2,40}$/;
+
+      if (!regexDishname.test(this.formDish.dishesName)) {
+        Vue.$toast.error('Tên món ăn không được chứa kí tự đặc biệt và có độ dài từ 2-30 kí tự');
+        return false;
+      }
+
       if (!this.formDish.description) {
         Vue.$toast.error('Vui lòng mô tả món ăn');
         return false;
@@ -277,9 +300,19 @@ export default {
         return false;
       }
 
+      if (this.formDish.salePrice <= 0) {
+        Vue.$toast.error('Giá bán phải lớn hơn 0');
+        return;
+      }
+
       if (!this.formDish.costPrice) {
         Vue.$toast.error('Vui lòng nhập giá mua');
         return false;
+      }
+
+      if (this.formDish.costPrice < 0) {
+        Vue.$toast.error('Giá mua không được nhỏ hơn 0');
+        return;
       }
 
       if (this.formDish.salePrice < this.formDish.costPrice) {
@@ -292,9 +325,15 @@ export default {
         return false;
       }
 
-      if (!this.statusSelected) {
+
+      if (this.statusSelected === '') {
         Vue.$toast.error('Vui lòng chọn trạng thái');
         return false;
+      }
+
+      if (!this.avatar) {
+        Vue.$toast.error('Vui lòng thêm ảnh cho món');
+        return;
       }
 
       return true;

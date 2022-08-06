@@ -149,22 +149,17 @@ export default {
 
     handleAddMoreCategory() {
       const newId = this.listCategory[this.listCategory.length - 1].categoryId + 1;
-      // this.rowUpdate = {
-      //   edit: true,
-      //   action: 'add',
-      //   id: newId,
-      //   data: {
-      //     categoryId: newId,
-      //     categoryName: '',
-      //     id: newId,
-      //     name: '',
-      //   }
-      // };
-      this.listCategory.push({
-        categoryId: newId,
-        categoryName: '',
-      });
-      this.rowUpdate = { edit: true, id: newId };
+      this.rowUpdate = {
+        edit: true,
+        action: 'add',
+        id: newId,
+        data: {
+          categoryId: newId,
+          categoryName: '',
+          id: newId,
+          name: '',
+        }
+      };
     },
 
     handleSubmit(data, update) {

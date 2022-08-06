@@ -89,8 +89,9 @@
         </div>
         <div v-if="modalTitle" class="info-staff__item">
           <label for="status">Trạng thái:</label>
-          <div class="d-flex" style="width: 100%">
-            <div v-for="status in statusType" :key="status.id">
+          <div style="width: 100%">{{ statusSelected === 1 ? 'Đang làm việc' : 'Đã nghỉ việc' }}</div>
+          <!-- <div class="d-flex" style="width: 100%"> -->
+            <!-- <div v-for="status in statusType" :key="status.id">
               <CustomCheckbox
                 v-model="statusSelected"
                 class="mr-2"
@@ -104,8 +105,8 @@
               >
                 <template slot="custom-label"> {{ status.name }} </template>
               </CustomCheckbox>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div> -->
         </div>
       </div>
     </div>
@@ -171,7 +172,6 @@ export default {
       genderSelected: 1,
       roleSelected: 'ROLE_ADMIN',
       roleType: [
-        { roleId: 1, roleName: 'ADMIN' },
         { roleId: 2, roleName: 'STAFF' },
         { roleId: 3, roleName: 'CHEF' },
         { roleId: 4, roleName: 'CUSTOMER' },
@@ -210,7 +210,10 @@ export default {
 
   methods: {
     show(title) {
-      this.modalTitle = title;
+      if (title) {
+        this.modalTitle = title;
+        this.getUserById();
+      }
       this.$refs.addUser.show();
     },
 
@@ -429,11 +432,11 @@ export default {
 
       const requestParams = {
         profileImage: this.avatar,
-        fullName: this.formUser.fullName,
-        userName: this.formUser.userName,
+        fullName: this.formUser.fullName.trim(),
+        userName: this.formUser.userName.trim(),
         // password: this.formUser.password,
-        contact: this.formUser.contact,
-        email: this.formUser.email,
+        contact: this.formUser.contact.trim(),
+        email: this.formUser.email.trim(),
         gender: toNumber(this.genderSelected.toString()),
         role: {
           roleId: this.roleIdSelected,
@@ -446,7 +449,7 @@ export default {
         requestParams.userId = this.userId;
         this.updateUser(requestParams);
       } else {
-        requestParams.password = this.formUser.password;
+        requestParams.password = this.formUser.password.trim();
         this.addUser(requestParams);
       }
 
