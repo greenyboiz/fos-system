@@ -13,12 +13,12 @@
       <div class="info-table__detail">
         <div class="info-table__item">
           <label for="numOfSeat">Số lượng ghế:</label>
-          <input id="numOfSeat" v-model.number="formTable.numberOfSeats" type="number" placeholder="Nhập số ghế" />
+          <input id="numOfSeat" v-model.number="formTable.numberOfSeats" type="number" placeholder="Nhập số ghế" min="0" />
         </div>
 
         <div class="info-table__item">
-          <label for="link">QR Code Link:</label>
-          <input id="link" v-model="formTable.qrCode.qrcodeLink" type="text" placeholder="Nhập link QR" />
+          <label for="qrlink">QR Code Link:</label>
+          <input id="qrlink" v-model="formTable.qrCode.qrcodeLink" type="text" placeholder="Nhập link QR" />
         </div>
 
         <!-- <div class="info-table__item a">
@@ -50,7 +50,8 @@
     <div style="padding: 10px">
       <button class="staff__btn" :disabled="isLoading" @click="handleSave()">
         <!-- <Loading v-if="isLoading" color="white" /> -->
-        <span>Xong</span>
+        <span v-if="!modalTitle">Thêm mới</span>
+        <span v-else>Cập nhật</span>
       </button>
     </div>
   </b-modal>
@@ -153,11 +154,29 @@ export default {
     validator() {
       if (!this.formTable.numberOfSeats) {
         Vue.$toast.error('Vui lòng nhập số ghế');
+        document.getElementById('numOfSeat').focus();
+        return false;
+      }
+
+      if (this.formTable.numberOfSeats <= 0) {
+        Vue.$toast.error('Số ghế phải lớn hơn 0');
+        this.formTable.numberOfSeats = '';
+        document.getElementById('numOfSeat').focus();
+        return false;
+      }
+
+      const regexNumSeat = /^([0-9])$/;
+
+      if (!regexNumSeat.test(this.formTable.numberOfSeats)) {
+        Vue.$toast.error('Số ghế phải là số tự nhiên');
+        this.formTable.numberOfSeats = '';
+        document.getElementById('numOfSeat').focus();
         return false;
       }
 
       if (!this.formTable.qrCode.qrcodeLink) {
         Vue.$toast.error('Vui lòng nhập link của mã QR');
+        document.getElementById('qrlink').focus();
         return false;
       }
       return true;
@@ -172,6 +191,7 @@ export default {
 
       if (res.success) {
         this.$emit('complete');
+        Vue.$toast.success('Thêm bàn thành công');
       } else {
         this.isDone = false;
       }
@@ -186,6 +206,7 @@ export default {
 
       if (res.success) {
         this.$emit('complete');
+        Vue.$toast.success('Cập nhật bàn thành công');
       } else {
         this.isDone = false;
       }

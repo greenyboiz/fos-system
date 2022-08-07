@@ -93,6 +93,11 @@ import { tableManagementService } from '@/services';
 import AddTableModal from '../modals/AddTableModal/index.vue';
 import { size, forEach } from 'lodash';
 import QrCode from 'vue-qrcode-component';
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
 
 export default {
   name: 'TableManagement',
@@ -190,6 +195,7 @@ export default {
 
           if (res.success) {
             this.getListTable();
+            Vue.$toast.success('Xóa bàn thành công');
           }
         },
       });

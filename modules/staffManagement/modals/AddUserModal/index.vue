@@ -346,7 +346,7 @@ export default {
 
     chooseAvatar() {
       window.cloudinary
-        .createUploadWidget({ cloud_name: 'dk7clbldt', upload_preset: 'ml_default' }, (error, result) => {
+        .createUploadWidget({ cloud_name: 'dk7clbldt', upload_preset: 'xm84zfhu' }, (error, result) => {
           if (!error && result && result.event === 'success') {
             console.log('Done uploading..: ', result.info);
             this.avatar = result.info.url;

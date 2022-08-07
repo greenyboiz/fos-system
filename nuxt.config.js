@@ -34,7 +34,7 @@ export default {
         src: 'https://upload-widget.cloudinary.com/global/all.js',
       },
       {
-        src: 'https://unpkg.com/vuejs-paginate@latest'
+        src: 'https://unpkg.com/vuejs-paginate@0.9.0'
       }
     ],
   },

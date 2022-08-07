@@ -3,11 +3,11 @@
     <!-- Top -->
     <div class="headline">
       <div class="headline__top">
-        <div class="headline__title">Quản lý thực đơn</div>
+        <div class="headline__title">Quản lý món ăn</div>
 
         <div class="headline__right">
           <button class="btn__add mr-2" @click="handleShowAddDishesModal()">Thêm món ăn</button>
-          <button class="btn__add" @click="handleShowCategoryModal()">Các loại món ăn</button>
+          <button class="btn__add" @click="handleShowCategoryModal()">Danh mục món ăn</button>
 
           <div class="searchArea">
             <div class="searchBox d-flex align-items-center">
@@ -22,7 +22,7 @@
       </div>
 
       <div class="headline__bottom">
-        <span>Danh sách thực đơn</span> -
+        <span>Danh sách món ăn</span> -
         <span class="headline__count">{{ totalDish }} món ăn</span>
       </div>
     </div>
@@ -82,16 +82,6 @@
       <div class="pagination">
         <section class="pagination__wrap">
           <div class="pagination__list">
-            <Paginate
-              :pageCount="pageCount"
-              :pageRange="5"
-              :margin-pages="4"
-              :prev-text="'Prev'"
-              :next-text="'Next'"
-              :container-class="'pagination'"
-              :page-class="'page-item'"
-            >
-            </Paginate>
           </div>
         </section>
       </div>
@@ -108,7 +98,11 @@ import AddDishModal from '../modals/AddDishModal/index.vue';
 import CategoriesModal from '../modals/CategoriesModal/index.vue';
 import Loading from '@/components/common/Loading/index.vue';
 import commonMixin from '@/plugins/commonMixin';
-import Paginate from 'vuejs-paginate';
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
 
 export default {
   name: 'MenuManagement',
@@ -117,7 +111,6 @@ export default {
     AddDishModal,
     Loading,
     CategoriesModal,
-    Paginate
   },
 
   mixins: [commonMixin],
@@ -203,9 +196,9 @@ export default {
           this.isLoading = false;
         });
 
-      if (res.content) {
-        this.listDishes = res.content;
-        this.pageCount = res.totalPages;
+      if (res.success) {
+        this.listDishes = res.data;
+        this.pageCount = this.listDishes.length;
       }
 
     },
@@ -225,6 +218,7 @@ export default {
 
           if (res.success) {
             this.getListDish();
+            Vue.$toast.success('Xóa món ăn thành công');
           }
         },
       });

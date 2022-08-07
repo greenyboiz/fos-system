@@ -1,5 +1,5 @@
 <template>
-  <div class="menuManagement">
+  <div class="staffManagement">
     <!-- Top -->
     <div class="headline">
       <div class="headline__top">
@@ -29,8 +29,8 @@
     <!-- Content -->
 
     <div class="main">
-      <div class="table">
-        <table class="table__wrapper">
+      <div class="table__wrapper">
+        <!-- <table class="table__wrapper">
           <div class="table__head">
             <div class="table__col">ID</div>
             <div class="table__col">Họ và tên</div>
@@ -51,7 +51,7 @@
             </template>
 
             <template v-else>
-              <div v-for="(item, index) in listStaffSearch" :key="'staff' + item.userId" class="table__body">
+              <div v-for="(item, index) in pageOfItems" :key="'staff' + item.userId" class="table__body">
                 <div class="table__row">{{ index + 1 }}</div>
                 <div class="table__row">{{ item.fullName }}</div>
                 <div class="table__row">{{ item.userName }}</div>
@@ -71,7 +71,6 @@
                       Edit
                     </button>
                     <button class="btn__delete" @click="remove(item.userId)">
-                      <!-- <img src="@/assets/icons/delete.png" alt="" /> -->
                       Chuyển trạng thái
                     </button>
                   </div>
@@ -79,25 +78,65 @@
               </div>
             </template>
           </tbody>
-        </table>
+        </table> -->
+        <b-table
+          id="my-table"
+          :items="listStaffSearch"
+          :per-page="10"
+          :current-page="currentPage"
+          :fields="fields"
+          small
+        >
+          <template #cell(userId)="data">
+            <div v-if="currentPage > 1">
+              {{ `${currentPage - 1}${data.index + 1}` }}
+            </div>
+            <div v-else>
+              {{ data.index + 1 }}
+            </div>
+          </template>
+          <template #cell(gender)="data">
+            {{ data.item.gender ? 'Nam' : 'Nữ' }}
+          </template>
+          <template #cell(role[roleName])="data">
+            {{ handleSplitRole(data.item.role.roleName) }}
+          </template>
+          <template #cell(status)="data">
+            {{ data.item.status ? 'Đang làm việc' : 'Đã nghỉ việc' }}
+          </template>
+          <template #cell(action)="data">
+            <div class="table__row align-items-center">
+              <div class="btn-group align-top">
+                <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(data.item)">
+                  Edit
+                </button>
+                <button class="btn__delete" @click="remove(data.item.userId)">
+                  Chuyển trạng thái
+                </button>
+              </div>
+            </div>
+          </template>
+          <template v-if="isLoading" #table-busy>
+            <div class="text-center text-danger my-2">
+              <div class="loading">
+                <Loading />
+              </div>
+            </div>
+          </template>
+        </b-table>
       </div>
 
       <!-- Paging -->
-      <div class="pagination">
-        <section class="pagination__wrap">
-          <div class="pagination__list">
-            <Paginate
-    :page-count="20"
-    :page-range="3"
-    :margin-pages="2"
-    :prev-text="'Prev'"
-    :next-text="'Next'"
-    :container-class="'pagination'"
-    :page-class="'page-item'">
-  </Paginate>
-          </div>
-        </section>
-      </div>
+      <section class="pagination__wrap">
+        <div class="pagination__list">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalStaff"
+            :per-page="10"
+            aria-controls="my-table"
+          ></b-pagination>
+        </div>
+      </section>
     </div>
 
     <AddUserModal ref="addUserModalRef" :userId="userId" @doneAdd="onAdded" @doneUpdate="onUpdated" />
@@ -110,7 +149,12 @@ import { filter } from 'lodash';
 import AddUserModal from '../modals/AddUserModal/index.vue';
 import Loading from '@/components/common/Loading/index.vue';
 // import { mapState, mapMutations } from 'vue'
-import Paginate from 'vuejs-paginate';
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+// import JwPagination from 'jw-vue-pagination';
+
+Vue.use(VueToast, { position: 'top' });
 
 export default {
   name: 'StaffManagement',
@@ -118,7 +162,7 @@ export default {
   components: {
     AddUserModal,
     Loading,
-    Paginate
+    // JwPagination
   },
 
   data() {
@@ -137,6 +181,19 @@ export default {
         gender: '',
         role: {},
       },
+      pageOfItems: [],
+      currentPage: 1,
+      fields: [
+        { key: 'userId', label: 'ID' },
+        { key: 'fullName', label: 'Họ và tên' },
+        { key: 'userName', label: 'Tên tài khoản' },
+        { key: 'gender', label: 'Giới tính' },
+        { key: 'contact', label: 'SĐT' },
+        { key: 'email', label: 'Email' },
+        { key: 'role[roleName]', label: 'Role' },
+        { key: 'status', label: 'Trạng thái' },
+        { key: 'action', label: 'Action' }
+      ]
     };
   },
 
@@ -182,6 +239,10 @@ export default {
       if (val) {
         this.getListUser();
       }
+    },
+
+    onChangePage(val) {
+      this.pageOfItems = val;
     },
 
     editClick(val) {
@@ -238,6 +299,7 @@ export default {
 
           if (res.success) {
             this.getListUser();
+            Vue.$toast.success('Đổi trạng thái thành công');
           }
         },
       });

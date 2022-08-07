@@ -2,7 +2,7 @@
   <b-modal
     ref="categoryRef"
     centered
-    title="Các loại món ăn"
+    title="Danh mục món ăn"
     body-class="modal__body"
     content-class="modal__content"
     scrollable

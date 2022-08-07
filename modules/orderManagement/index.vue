@@ -78,6 +78,11 @@ import { size } from 'lodash';
 import { orderService } from '@/services';
 import Loading from '@/components/common/Loading/index.vue';
 import OrderModal from './modals/OrderModal/index.vue';
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
 
 export default {
   name: 'OrderManagement',
@@ -155,6 +160,7 @@ export default {
 
           if (res.success) {
             this.getOrderList();
+            Vue.$toast.success('Xóa đơn hàng thành công');
           }
         },
       });
