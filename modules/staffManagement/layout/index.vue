@@ -96,7 +96,6 @@
             </div>
           </template>
           <template #cell(gender)="data">
-            {{ data.item.gender }}
             {{ data.item.gender ? 'Nam' : 'Nữ' }}
           </template>
           <template #cell(role[roleName])="data">
