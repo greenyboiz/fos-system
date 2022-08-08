@@ -28,12 +28,12 @@ public class WebSocketController {
         return tables;
     }
 
-    @MessageMapping("/chat.addUser")
-    @SendTo("/topic/staffRoom")
-    public Chat addUser(@Payload Chat chat, SimpMessageHeaderAccessor headerAccessor) {
-        // Add username in web socket session
-        headerAccessor.getSessionAttributes().put("username", chat.getSender());
-        return chat;
-    }
+//    @MessageMapping("/chat.addUser")
+//    @SendTo("/topic/staffRoom")
+//    public Chat addUser(@Payload Chat chat, SimpMessageHeaderAccessor headerAccessor) {
+//        // Add username in web socket session
+//        headerAccessor.getSessionAttributes().put("username", chat.getSender());
+//        return chat;
+//    }
 
 }

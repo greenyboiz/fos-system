@@ -5,7 +5,7 @@ import fpt.edu.capstone.entities.FOSUser;
 import fpt.edu.capstone.implementService.IFOSUserService;
 import fpt.edu.capstone.response.ResponseObject;
 import fpt.edu.capstone.service.JwtUserDetailsService;
-import fpt.edu.capstone.validation.ValidateFOSUser;
+import fpt.edu.capstone.until.ValidateFOSUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

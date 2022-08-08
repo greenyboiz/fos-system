@@ -1,4 +1,4 @@
-package fpt.edu.capstone.validation;
+package fpt.edu.capstone.until;
 
 import fpt.edu.capstone.entities.FOSUser;
 import fpt.edu.capstone.implementService.IFOSUserService;
