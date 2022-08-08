@@ -114,10 +114,17 @@ public class FOSUserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/users/delete/{id}")
     public ResponseEntity<?> deleteFOSUser(@PathVariable("id") Long id){
+        FOSUser fosUser1 = ifosUserService.getFOSUserById(id);
+        CurrentUserDetails currentUserDetails = jwtUserDetailsService.getCurrentUser();
+        if(currentUserDetails.getUser().getRoleName() == fosUser1.getRole().getRoleName()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("fail", "User Same Role " + fosUser1.getRole().getRoleName() + " can not edit",false, null)
+            );
+        }
         boolean deleteFOSUser =  ifosUserService.deleteFOSUser(id);
         if (deleteFOSUser){
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Delete FOSUser succsessfully",true, deleteFOSUser)
+                    new ResponseObject("ok", "Change status of FOSUser succsessfully",true, deleteFOSUser)
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(

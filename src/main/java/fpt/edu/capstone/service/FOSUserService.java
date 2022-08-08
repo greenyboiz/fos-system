@@ -66,7 +66,11 @@ public class FOSUserService implements IFOSUserService {
         FOSUser fosUser = fosUserRepository.findFOSUserById(id);
         if(fosUser != null){
 //            fosUserRepository.delete(fosUser);
-            fosUser.setStatus(false);
+            if(fosUser.getStatus() == true){
+                fosUser.setStatus(false);
+            }else {
+                fosUser.setStatus(true);
+            }
             fosUserRepository.save(fosUser);
             return true;
         }
