@@ -89,13 +89,14 @@
         >
           <template #cell(userId)="data">
             <div v-if="currentPage > 1">
-              {{ `${currentPage - 1}${data.index + 1}` }}
+              {{ data.index + 1 === 10 ? `${currentPage}0` : `${currentPage - 1}${data.index + 1}` }}
             </div>
             <div v-else>
               {{ data.index + 1 }}
             </div>
           </template>
           <template #cell(gender)="data">
+            {{ data.item.gender }}
             {{ data.item.gender ? 'Nam' : 'Nữ' }}
           </template>
           <template #cell(role[roleName])="data">

@@ -166,8 +166,8 @@ export default {
       showPassword: false,
       avatar: null,
       genderType: [
+        { id: 0, name: 'Nữ' },
         { id: 1, name: 'Nam' },
-        { id: 2, name: 'Nữ' },
       ],
       genderSelected: 1,
       roleSelected: 'ROLE_ADMIN',
@@ -325,8 +325,7 @@ export default {
         document.getElementById('pass').focus();
         return false;
       }
-
-      if (!this.genderSelected) {
+      if (this.genderSelected === '') {
         Vue.$toast.error('Bạn chưa chọn giới tính');
         return false;
       }

@@ -142,7 +142,9 @@ export default {
           this.isLoading = false;
         });
 
-      this.listOrder = res.content;
+      if (res.success) {
+        this.listOrder = res.data;
+      }
     },
 
     removeOrder(id) {
