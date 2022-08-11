@@ -103,8 +103,8 @@ public class TableController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @PostMapping("/tables/add")
     public ResponseEntity<?> saveTable(@RequestBody Tables table){
-        String qrCodeLink = table.getQrCode().getQRCodeLink().trim();
-        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(qrCodeLink);
+        String qrCodeLink = table.getQrCode().getQRCodeLink();
+        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(qrCodeLink.trim());
         if(!checkQRCodeExist){
             iqrCodeService.addQRCode(table.getQrCode());
             table.setStatus(true);
@@ -150,7 +150,7 @@ public class TableController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @PutMapping("/tables/update")
     public ResponseEntity<?> updateTable(@RequestBody Tables table){
-        String qrCodeLink = table.getQrCode().getQRCodeLink().trim();
+        String qrCodeLink = table.getQrCode().getQRCodeLink();
         Tables table1 = iTablesService.getTableById(table.getTableId());
         QRCode qrCode = iqrCodeService.getQRCodeById(table1.getQrCode().getQRCodeId());
 
@@ -162,7 +162,7 @@ public class TableController {
                 );
             }
         }
-        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(table.getQrCode().getQRCodeLink());
+        boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(table.getQrCode().getQRCodeLink().trim());
         if(!checkQRCodeExist){
             qrCode.setQRCodeLink(qrCodeLink);
             iqrCodeService.addQRCode(qrCode);
