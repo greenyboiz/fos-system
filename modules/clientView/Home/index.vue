@@ -25,7 +25,7 @@
       </div>
     </div>
     <div v-if="formData.customer.contact" class="getDish" @click="handleGetOrder()">
-      <nuxt-link :to="validateBeforeOrder">
+      <nuxt-link :to="validator ? `/khach-hang/order/${formData.qrCode.qrcodeId}` : '/'">
         <button>Gọi món</button>
       </nuxt-link>
     </div>
@@ -202,6 +202,7 @@ export default {
     },
 
     handleGetOrder() {
+      console.log(this.validateBeforeOrder());
       if (!this.validator()) {
         return;
       }
