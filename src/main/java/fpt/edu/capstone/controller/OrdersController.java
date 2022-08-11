@@ -67,17 +67,21 @@ public class OrdersController {
         Orders orders1 = iOrdersService.checkOrderExist(orders);
         if (orders1 == null){
             Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
+            //check table empty
             if (tables.getStatus()==false){
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(
                         new ResponseObject("fail", "Table is not empty",false, null)
                 );
             }
+            //Nếu table còn trống thì chuyển trạng thái đã có người ngồi
             tables.setStatus(false);
             Customer customerSystem = iCustomerService.getCustomerByContact(orders.getCustomer().getContact());
+            //Check customer theo contact chưa tồn tại thì add customer
             if(customerSystem == null){
                 Customer customer = iCustomerService.addCustomer(orders.getCustomer());
                 orders.setCustomer(customer);
             }
+            //Customer đã tồn tại thì k add chỉ set customerId vào order
             if(customerSystem != null) {
                 orders.setCustomer(customerSystem);
             }
