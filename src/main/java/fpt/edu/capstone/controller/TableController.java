@@ -106,6 +106,7 @@ public class TableController {
         String qrCodeLink = table.getQrCode().getQRCodeLink();
         boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(qrCodeLink.trim());
         if(!checkQRCodeExist){
+            table.getQrCode().setQRCodeLink(qrCodeLink.trim());
             iqrCodeService.addQRCode(table.getQrCode());
             table.setStatus(true);
             iTablesService.addTable(table);
@@ -154,7 +155,8 @@ public class TableController {
         Tables table1 = iTablesService.getTableById(table.getTableId());
         QRCode qrCode = iqrCodeService.getQRCodeById(table1.getQrCode().getQRCodeId());
 
-        if(qrCodeLink.trim().equals(table1.getQrCode().getQRCodeLink())){
+        if(qrCodeLink.trim().equals(qrCode.getQRCodeLink())){
+            table.getQrCode().setQRCodeLink(qrCodeLink.trim());
             Tables tables = iTablesService.updateTable(table);
             if(tables != null){
                 return ResponseEntity.status(HttpStatus.OK).body(
@@ -164,7 +166,7 @@ public class TableController {
         }
         boolean checkQRCodeExist = iqrCodeService.checkQRCodeExist(table.getQrCode().getQRCodeLink().trim());
         if(!checkQRCodeExist){
-            qrCode.setQRCodeLink(qrCodeLink);
+            qrCode.setQRCodeLink(qrCodeLink.trim());
             iqrCodeService.addQRCode(qrCode);
             Tables tables = iTablesService.updateTable(table);
             if(tables != null){
