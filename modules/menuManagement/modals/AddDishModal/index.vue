@@ -283,10 +283,10 @@ export default {
         return false;
       }
 
-      const regexDishname = /^([a-zA-Z0-9]){2,40}$/;
+      const regexDishname = /^([a-zA-Z0-9 ]){2,40}$/;
 
       if (!regexDishname.test(this.formDish.dishesName)) {
-        Vue.$toast.error('Tên món ăn không được chứa kí tự đặc biệt và có độ dài từ 2-30 kí tự');
+        Vue.$toast.error('Tên món ăn không được chứa kí tự đặc biệt và có độ dài từ 2-40 kí tự');
         return false;
       }
 
