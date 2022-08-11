@@ -2,7 +2,7 @@
   <div class="client-view">
     <div class="headline">
       <div class="headline__title">MLD Restaurent</div>
-      <div class="headline__support">Support</div>
+      <div class="headline__support" @click="handleShowSupportModal()">Support</div>
     </div>
     <div class="searchArea">
       <div class="searchBox d-flex align-items-center">
@@ -214,7 +214,7 @@ export default {
     async getListDish() {
       const res = await menuManagementService.getListDish();
 
-      const dishesList = res.content;
+      const dishesList = res.data;
 
       map(dishesList, (item) => {
         item.numberOfDish = 0;
@@ -229,7 +229,7 @@ export default {
       const res = await menuManagementService.getListCategory();
 
       if (res.success) {
-        this.listCategory = res.data.data;
+        this.listCategory = res.data;
       }
     },
 

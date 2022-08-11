@@ -12,6 +12,8 @@ export default {
     Chef,
   },
 
+  middleware: 'auth',
+
   head() {
     return {
       title: 'Đầu bếp',

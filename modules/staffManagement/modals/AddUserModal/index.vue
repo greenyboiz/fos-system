@@ -174,7 +174,6 @@ export default {
       roleType: [
         { roleId: 2, roleName: 'STAFF' },
         { roleId: 3, roleName: 'CHEF' },
-        { roleId: 4, roleName: 'CUSTOMER' },
       ],
       statusSelected: 0,
       statusType: [

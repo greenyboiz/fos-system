@@ -161,7 +161,6 @@ export default {
   methods: {
     tableHaveOrder(val) {
       this.tableId = val;
-      console.log(this.tableId);
       this.getOrderByTableId();
     },
 
@@ -176,7 +175,7 @@ export default {
         },
       });
 
-      if (res && res.success) {
+      if (res.success) {
         this.getOrderItemList(res.data.orderId);
         this.getTotalPayment(res.data.orderId);
         this.orderId = res.data.orderId;

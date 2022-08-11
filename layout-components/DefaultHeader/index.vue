@@ -67,7 +67,7 @@
           >
             <nuxt-link class="nav-link" to="/thuc-don">
               <MenuMenu />
-              <span class="is-hide menuItem__title">Menu</span>
+              <span class="is-hide menuItem__title">Món ăn</span>
             </nuxt-link>
           </li>
           <li

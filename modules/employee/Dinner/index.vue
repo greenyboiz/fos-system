@@ -52,11 +52,11 @@ export default {
     },
 
     checkStatus(status) {
-      if (status === '0') {
+      if (status === false) {
         return 'had';
       }
 
-      if (status === '1') {
+      if (status === true) {
         return 'statue';
       }
     },

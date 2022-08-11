@@ -2,7 +2,7 @@
   <div class="client-home">
     <div class="headline">
       <div class="headline__title">MLD Restaurent</div>
-      <div class="headline__support" @click="handleShowSupportModal()">Support</div>
+      <!-- <div class="headline__support" @click="handleShowSupportModal()">Support</div> -->
     </div>
     <div class="campaign">
       <VueSlickCarousel :arrows="false" :dots="true" :autoplay="true">
@@ -16,15 +16,15 @@
     </div>
     <div class="customer">
       <div class="customer__item">
-        <label for="username">Họ và tên:</label>
-        <input id="username" v-model="formData.customer.fullName" type="text" placeholder="Nhập họ và tên" />
+        <label for="fullname">Họ và tên:</label>
+        <input id="fullname" v-model="formData.customer.fullName" type="text" placeholder="Nhập họ và tên" />
       </div>
       <div class="customer__item">
-        <label for="phone">SĐT:</label>
+        <label for="phone">SĐT: <span style="color: red; margin-bottom: 4px">*</span></label>
         <input id="phone" v-model="formData.customer.contact" type="text" placeholder="Nhập SĐT" required />
       </div>
     </div>
-    <div class="getDish" @click="handleGetOrder()">
+    <div v-if="formData.customer.contact" class="getDish" @click="handleGetOrder()">
       <nuxt-link to="/khach-hang/order/:orderId?">
         <button>Gọi món</button>
       </nuxt-link>
@@ -39,6 +39,12 @@ import VueSlickCarousel from 'vue-slick-carousel';
 import { orderService, tableManagementService } from '@/services';
 import { isEmpty } from 'lodash';
 import SupportModal from '@/components/common/SupportModal/index.vue';
+
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
 export default {
   name: 'Page',
 
@@ -141,7 +147,43 @@ export default {
       }
     },
 
+    validator() {
+      const regexName = /^([a-zA-Z ]){2,}$/;
+      if (!this.formData.customer.fullName) {
+        Vue.$toast.error('Bạn chưa nhập Họ và tên');
+        document.getElementById('fullname').focus();
+        return false;
+      }
+
+      if (!regexName.test(this.removeAscent(this.formData.customer.fullName))) {
+        Vue.$toast.error('Họ và tên phải là chữ cái và có đội dài từ 2 kí tự');
+        this.formData.customer.fullName = '';
+        document.getElementById('fullname').focus();
+        return false;
+      }
+
+      if (!this.formData.customer.contact) {
+        Vue.$toast.error('Bạn chưa nhập Số điện thoại');
+        document.getElementById('phone').focus();
+        return false;
+      }
+
+      const regexPhone = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
+      if (!regexPhone.test(this.formData.customer.contact)) {
+        Vue.$toast.error('Bạn chưa nhập đúng định dạng số điện thoại');
+        this.formData.customer.contact = '';
+        document.getElementById('phone').focus();
+        return false;
+      }
+
+      return true;
+    },
+
     handleGetOrder() {
+      if (!this.validator()) {
+        return;
+      }
+
       if (isEmpty(this.formData.customer.contact)) {
         return;
       }

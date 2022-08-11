@@ -2,7 +2,7 @@
   <div class="client-view">
     <div class="headline">
       <div class="headline__title">MLD Restaurent</div>
-      <div class="headline__support">Support</div>
+      <div class="headline__support" @click="handleShowSupportModal()">Support</div>
     </div>
     <div class="searchArea">
       <div class="searchBox d-flex align-items-center">

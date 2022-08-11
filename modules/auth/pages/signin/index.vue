@@ -118,7 +118,6 @@ export default {
         const res = await this.$auth.loginWith('local', {
           data: reqParams
         });
-        console.log(res);
         const roleName = res.data.data.roleName;
         if (roleName === 'ROLE_ADMIN') {
           this.$router.push('/don-hang');

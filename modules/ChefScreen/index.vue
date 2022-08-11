@@ -12,7 +12,7 @@
         </div>
 
         <div class="table__content">
-          <div v-for="item in 20" :key="'o' + item" class="table__item">
+          <div v-for="item in 10" :key="'o' + item" class="table__item">
             <div class="table__row">Pizza Hải sản</div>
             <div class="table__row time">
               <div>Bàn B3</div>
@@ -50,7 +50,7 @@
             <div class="table__row">Pizza Hải sản</div>
             <div class="table__row time">
               <div>Bàn B3</div>
-              <div class="btn__time" @click="getOrderList()">
+              <div class="btn__time">
                 <img src="@/assets/icons/deadline.png" alt="" />
                 <span>Vài giây trước</span>
               </div>
@@ -69,19 +69,26 @@
 </template>
 
 <script>
-import { size } from 'lodash';
 
 import { orderService } from '@/services';
 export default {
-  name: 'OrderManagement',
+  name: 'Chef',
+
+  data() {
+    return {
+      listOrder: [],
+    };
+  },
 
   methods: {
-    size,
 
     async getOrderList() {
       const res = await orderService.getOrderList();
 
-      console.log(res);
+      if (res.success) {
+        this.listOrder = res.data;
+      }
+
     },
   },
 };
