@@ -13,8 +13,8 @@ class OrderService {
     return res.data;
   }
 
-  async getOrderItem(orderItemId, header) {
-    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/orderItem/order/${orderItemId}`, header);
+  async getOrderItem(orderItemId) {
+    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/orderItem/order/${orderItemId}`);
 
     return res.data;
   }
@@ -28,7 +28,7 @@ class OrderService {
   async getTotalPayment(orderId, header) {
     const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/payment/${orderId}`, header);
 
-    return res.data;
+    return res;
   }
 
   async deleteOrder(orderId, header) {

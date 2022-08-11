@@ -71,7 +71,6 @@
 
   &__category {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
     margin-bottom: 1rem;
 
@@ -82,6 +81,7 @@
       border-radius: 8px;
       padding: 4px 8px;
       margin-bottom: 0.5rem;
+      margin-right: 0.5rem;
     }
 
     .active {

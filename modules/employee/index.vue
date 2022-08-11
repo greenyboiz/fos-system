@@ -199,7 +199,7 @@ export default {
         },
       });
 
-      if (res.success) {
+      if (res) {
         this.totalPriceOrder = res.data;
       }
     },

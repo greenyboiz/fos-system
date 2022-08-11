@@ -46,6 +46,7 @@
 
 <script>
 import { tableManagementService, employeeService } from '@/services';
+import { filter } from 'lodash';
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
@@ -96,13 +97,11 @@ export default {
     },
 
     checkStatus(status) {
-      if (status === '0') {
+      if (!status) {
         return 'had';
       }
 
-      if (status === '1') {
-        return 'statue';
-      }
+      return 'statue';
 
     },
 
@@ -116,9 +115,28 @@ export default {
         this.moveFrom = this.moveTable[0];
         this.moveTo = this.moveTable[1];
       }
+      const fromItem = filter(this.listTable, (item) => item.tableId === this.moveFrom);
+      const toItem = filter(this.listTable, (item) => item.tableId === this.moveTo);
+      console.log(fromItem, toItem);
     },
 
     async handleSwapTable() {
+      const fromItem = filter(this.listTable, (item) => item.tableId === this.moveFrom);
+      const toItem = filter(this.listTable, (item) => item.tableId === this.moveTo);
+      if (fromItem[0].status) {
+        Vue.$toast.error('Bàn chuyển không được là bàn trống');
+        this.moveFrom = null;
+        this.moveTo = null;
+        this.moveTable = [];
+        return;
+      }
+
+      if (!toItem[0].status) {
+        Vue.$toast.error('Bàn chuyển đến phải là bàn trống');
+        this.moveTo = null;
+        return;
+      }
+
       if (!this.moveTo) {
         Vue.$toast.error('Vui lòng chọn bàn muốn chuyển đến');
         return;

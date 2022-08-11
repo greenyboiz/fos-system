@@ -82,7 +82,7 @@ export default {
       this.listDish = res.data;
 
       this.listTypeOrder = uniqBy(
-        res.content.map((x) => x.category),
+        res.data.map((x) => x.category),
         'categoryId'
       );
 

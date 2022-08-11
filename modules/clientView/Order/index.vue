@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="menu__list">
-        <div v-for="(val) in listDishes" :key="val.dishesId" class="menu-item" @click="handleOpenDetailDish(val)">
+        <div v-for="(val) in listDishSearch" :key="val.dishesId" class="menu-item" @click="handleOpenDetailDish(val)">
           <nuxt-link to="/khach-hang/chi-tiet-mon">
             <div class="dishes-image">
               <img :src="val.dishImage" alt="" width="165px" height="165px">
@@ -88,11 +88,11 @@
                 {{ spec.star }}
               </div>
               <div class="spec-quantity">
-                <div class="changeNum">
+                <!-- <div class="changeNum">
                   <span class="downNumber" @click="decreaseDish()"><i class="bi bi-dash-circle"></i></span>
                   <span>{{ spec.numberOfDish }}</span>
                   <span class="upNumber" @click="increaseDish()"><i class="bi bi-plus-circle"></i></span>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -100,7 +100,7 @@
       </div>
     </div>
     <div class="totalOrder" @click="handleOpenOrderList()">
-      <nuxt-link to="/khach-hang/chi-tiet-order/:orderId?">
+      <nuxt-link :to="`/khach-hang/chi-tiet-order/${orderIdLocal}`">
         <button>Bạn đã order ({{ totalOrder }})</button>
       </nuxt-link>
     </div>
@@ -143,6 +143,7 @@ export default {
         { id: 2, name: 'Cocktail None Bloody Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
         { id: 3, name: 'Cocktail Bloody None Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
       ],
+      orderIdLocal: null,
     };
   },
 
@@ -158,6 +159,19 @@ export default {
       orderItemList: (state) => state.orderItemList,
     }),
 
+    listDishSearch() {
+      if (this.searchText) {
+        return this.listDishes.filter((item) => {
+          return this.searchText
+            .toLowerCase()
+            .split(' ')
+            .every((v) => item.dishesName.toLowerCase().includes(v));
+        });
+      } else {
+        return this.listDishes;
+      }
+    },
+
     totalOrder() {
       const totalDish = map(this.listDishes, (item) => item.numberOfDish);
       const total = 0;
@@ -167,9 +181,9 @@ export default {
   },
 
   mounted() {
+    this.orderIdLocal = localStorage.getItem('orderId');
     this.getListCategory();
     this.getListDish();
-    console.log(this.orderId);
   },
 
   methods: {
@@ -284,7 +298,7 @@ export default {
     async getTotalPayment(orderId) {
       const res = await orderService.getTotalPayment(orderId);
 
-      if (res.success) {
+      if (res) {
         this.updateTotalPriceOrder(res.data);
       }
     },

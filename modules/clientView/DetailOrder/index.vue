@@ -77,12 +77,12 @@
           <button>ORDER</button>
         </div>
         <div v-else class="btn-order" @click="handleOrderMore()">
-          <nuxt-link to="/khach-hang/order">
+          <nuxt-link :to="`/khach-hang/order/${orderIdLocal}`">
             <button>Gọi thêm</button>
           </nuxt-link>
         </div>
         <div class="btn-payment" @click="handleGetReceipt()">
-          <nuxt-link to="/khach-hang/hoa-don/:orderId?">
+          <nuxt-link :to="`/khach-hang/hoa-don/${orderIdLocal}`">
             <button>Thanh toán</button>
           </nuxt-link>
         </div>
@@ -122,6 +122,7 @@ export default {
       totalPrice: 0,
       isOrder: false,
       isLoading: false,
+      orderIdLocal: null,
     };
   },
 
@@ -147,6 +148,7 @@ export default {
   },
 
   mounted() {
+    this.orderIdLocal = localStorage.getItem('orderId');
     this.getOrderItemList();
   },
 
@@ -201,9 +203,9 @@ export default {
       this.isOrder = true;
       setTimeout(() => {
         // this.isLoading = false;
-        this.isLoading = true;
-      }, 1000);
-      this.isLoading = false;
+        this.getOrderItemList();
+      }, 1500);
+      // this.isLoading = false;
     },
 
     handleOrderMore() {

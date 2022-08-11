@@ -208,6 +208,8 @@ export default {
       this.formDish.status = this.statusSelected;
       this.formDish.category = this.selectedCategory;
       this.formDish.dishImage = this.avatar;
+      this.formDish.dishesName.trim();
+      this.formDish.description.trim();
       const requestParams = this.formDish;
 
       const res = await menuManagementService.addDish(requestParams, {
@@ -277,6 +279,20 @@ export default {
       this.handleHideModal();
     },
 
+    removeAscent(str) {
+      if (str === null || str === undefined) return str;
+
+      str = str.toLowerCase();
+      str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
+      str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
+      str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i');
+      str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o');
+      str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u');
+      str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y');
+      str = str.replace(/đ/g, 'd');
+      return str;
+    },
+
     validator() {
       if (!this.formDish.dishesName) {
         Vue.$toast.error('Vui lòng nhập tên Món ăn');
@@ -285,7 +301,7 @@ export default {
 
       const regexDishname = /^([a-zA-Z0-9 ]){2,40}$/;
 
-      if (!regexDishname.test(this.formDish.dishesName)) {
+      if (!regexDishname.test(this.removeAscent(this.formDish.dishesName))) {
         Vue.$toast.error('Tên món ăn không được chứa kí tự đặc biệt và có độ dài từ 2-40 kí tự');
         return false;
       }
