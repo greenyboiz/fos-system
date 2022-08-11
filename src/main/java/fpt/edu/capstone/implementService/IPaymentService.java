@@ -1,5 +1,6 @@
 package fpt.edu.capstone.implementService;
 
+import fpt.edu.capstone.dto.PaymentDTO;
 import fpt.edu.capstone.entities.Payment;
 
 import java.math.BigDecimal;
@@ -14,4 +15,6 @@ public interface IPaymentService {
     boolean deletePaymentById(Long paymentId);
 
     Payment getPaymentByOrderId(Long orderId);
+
+    PaymentDTO getPaymentOfTable(Long orderId);
 }

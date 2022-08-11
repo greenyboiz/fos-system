@@ -45,13 +45,7 @@ public class PaymentController {
     public ResponseEntity<?> getPaymentOfTable(@PathVariable(name = "orderId") Long orderId){
         Orders orders = iOrdersService.getOrderById(orderId);
         if(orders != null){
-            Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
-            BigDecimal payment = iPaymentService.getTotalAmountByOrder(orderId);
-            List<OrderItem> itemList = iOrderItemService.getOrderItemByOrderId(orderId);
-            PaymentDTO paymentDTO = new PaymentDTO();
-            paymentDTO.setPayment(payment);
-            paymentDTO.setTableId(tables.getTableId());
-            paymentDTO.setOrderItemList(itemList);
+            PaymentDTO paymentDTO = iPaymentService.getPaymentOfTable(orderId);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "successfull",true, paymentDTO)
             );

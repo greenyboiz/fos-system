@@ -1,15 +1,23 @@
 package fpt.edu.capstone.service;
 
+import fpt.edu.capstone.dto.PaymentDTO;
+import fpt.edu.capstone.entities.OrderItem;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.Payment;
+import fpt.edu.capstone.entities.Tables;
 import fpt.edu.capstone.implementService.IPaymentService;
 import fpt.edu.capstone.repo.OrderItemRepository;
 import fpt.edu.capstone.repo.OrdersRepository;
 import fpt.edu.capstone.repo.PaymentRepository;
+import fpt.edu.capstone.repo.TableRepository;
+import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class PaymentService implements IPaymentService {
@@ -21,6 +29,9 @@ public class PaymentService implements IPaymentService {
 
     @Autowired
     private OrdersRepository ordersRepository;
+
+    @Autowired
+    private TableRepository tableRepository;
 
     @Override
     public BigDecimal getTotalAmountByOrder(Long orderId){
@@ -61,6 +72,22 @@ public class PaymentService implements IPaymentService {
             return payment;
         }
         return null;
+    }
+
+    @Override
+    public PaymentDTO getPaymentOfTable(Long orderId) {
+        PaymentDTO paymentDTO = new PaymentDTO();
+        Orders orders = ordersRepository.getOrdersById(orderId);
+        if(orders != null){
+            Tables tables = tableRepository.findTableByQRCodeId(orders.getQrCode().getQRCodeId());
+            BigDecimal payment = orderItemRepository.findPaymentByOrderId(orderId);
+            List<OrderItem> itemList = orderItemRepository.getOrderItemByOrderId(orderId);
+
+            paymentDTO.setPayment(payment);
+            paymentDTO.setTableId(tables.getTableId());
+            paymentDTO.setOrderItemList(itemList);
+        }
+        return paymentDTO;
     }
 
 }
