@@ -165,7 +165,7 @@ export default {
         return false;
       }
 
-      const regexNumSeat = /^([0-9])$/;
+      const regexNumSeat = /^([0-9]{1,})$/;
 
       if (!regexNumSeat.test(this.formTable.numberOfSeats)) {
         Vue.$toast.error('Số ghế phải là số tự nhiên');

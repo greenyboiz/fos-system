@@ -10,42 +10,56 @@
     @hidden="handleHideModal"
   >
     <div class="categoryWrapper">
-      <div class="addCategory mb-2" @click="handleAddMoreCategory()">
-        <button>Thêm loại mới</button>
+      <div class="actionCate">
+        <input v-model="formData.categoryName" type="text" placeholder="Tên danh mục">
+        <div v-if="!isEdit" class="addCategory" @click="handleSubmit()">
+          <button>Thêm loại mới</button>
+        </div>
+        <div v-else class="addCategory" @click="handleSubmit()">
+          <button>Cập nhật</button>
+        </div>
       </div>
-      <b-editable-table
-        v-model="listCategory"
-        disableDefaultEdit
-        :rowUpdate="rowUpdate"
-        :editMode="'row'"
-        bordered
-        class="editable-table"
-        :fields="fields"
-      >
-        <template #cell(edit)="data">
-          <div v-if="data.isEdit">
-            <BIconX
-              class="edit-icon"
-              @click="handleSubmit(data, false)"
-            ></BIconX>
-            <BIconCheck
-              class="edit-icon"
-              @click="handleSubmit(data, true)"
-            ></BIconCheck>
-          </div>
-          <BIconPencil
-            v-else
-            class="edit-icon"
-            @click="editClick(data, true)"
-          ></BIconPencil>
-        </template>
-        <template #cell(delete)="data">
-          <BIconTrash
-            class="remove-icon"
-            @click="removeCategory(data)"
-          ></BIconTrash>
-        </template>
-      </b-editable-table>
+      <div class="category">
+        <div class="category__head">
+          <div class="category__col">Mã loại</div>
+          <div class="category__col">Tên loại</div>
+          <div class="category__col">Thao tác</div>
+        </div>
+
+        <div class="category__list">
+          <template v-if="isLoad">
+            <div class="loading">
+              <Loading />
+            </div>
+          </template>
+
+          <template v-else>
+            <div
+              v-for="(item, i) in listCategory"
+              :key="'cate' + i"
+              class="category__item"
+            >
+              <div class="category__row">L{{ item.categoryId }}</div>
+              <div class="category__row">{{ item.categoryName }}</div>
+              <div class="category__row align-items-center">
+                <div class="btn-group align-top">
+                  <button
+                    class="btn__edit"
+                    data-toggle="modal"
+                    data-target="#myModal"
+                    @click="editClick(item)"
+                  >
+                    Sửa
+                  </button>
+                  <button class="btn__delete" @click="removeCategory(item.categoryId)">
+                    <img src="@/assets/icons/delete.png" alt="" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
   </b-modal>
 </template>
@@ -54,14 +68,7 @@
 import { menuManagementService } from '@/services';
 import { map } from 'lodash';
 import Loading from '@/components/common/Loading/index.vue';
-import BEditableTable from 'bootstrap-vue-editable-table';
-import {
-  BIconTrash,
-  BIconPencil,
-  BIconX,
-  BIconCheck,
-  BButton,
-} from 'bootstrap-vue';
+
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
@@ -71,39 +78,18 @@ export default {
   name: 'CategoriesModal',
 
   components: {
-    BIconTrash,
-    BIconPencil,
-    BIconX,
-    BIconCheck,
-    BEditableTable,
+    Loading
   },
 
   data() {
     return {
       listCategory: [],
       isEdit: false,
-      cateEdit: '',
       isLoad: false,
-      rowUpdate: {},
-      fields: [
-        { key: 'delete', label: '' },
-        {
-          key: 'id',
-          label: 'Mã loại',
-          type: 'number',
-          editable: false,
-          class: 'id-col',
-        },
-        {
-          key: 'name',
-          label: 'Tên loại',
-          type: 'text',
-          editable: true,
-          class: 'name-col',
-          placeholder: 'Nhập tên loại...',
-        },
-        { key: 'edit', label: '' },
-      ],
+      formData: {
+        categoryId: null,
+        categoryName: ''
+      }
     };
   },
 
@@ -119,14 +105,56 @@ export default {
 
     editClick(val) {
       this.isEdit = true;
-      this.cateEdit = val.item.name;
-      console.log(val);
-      this.rowUpdate = { edit: true, id: val.id };
+      this.formData.categoryId = val.categoryId;
+      this.formData.categoryName = val.categoryName;
+    },
+
+    removeAscent(str) {
+      if (str === null || str === undefined) return str;
+
+      str = str.toLowerCase();
+      str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
+      str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
+      str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i');
+      str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, 'o');
+      str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u');
+      str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y');
+      str = str.replace(/đ/g, 'd');
+      return str;
+    },
+
+    validator() {
+      if (!this.formData.categoryName) {
+        Vue.$toast.error('Vui lòng nhập tên danh mục');
+        return false;
+      }
+
+      const regexDishname = /^([a-zA-Z0-9 ]){2,40}$/;
+
+      if (!regexDishname.test(this.removeAscent(this.formData.categoryName))) {
+        Vue.$toast.error('Tên danh mục không được chứa kí tự đặc biệt và có độ dài từ 2-40 kí tự');
+        return false;
+      }
+    },
+
+    handleSubmit() {
+      if (!this.validator()) {
+        return;
+      }
+      const reqParam = {
+        categoryName: this.formData.categoryName,
+      };
+
+      if (this.isEdit) {
+        reqParam.categoryId = this.formData.categoryId;
+        this.updateCategory(reqParam);
+      } else {
+        this.addNewCategory(reqParam);
+      }
     },
 
     removeCategory(val) {
-      console.log('sasa');
-      const catId = val.item.categoryId;
+      const catId = val;
       this.$confirmPopup.open({
         title: 'Xác nhận',
         message: 'Bạn có chắc muốn xóa loại này không?',
@@ -141,50 +169,9 @@ export default {
 
           if (res.success) {
             this.getListCategory();
-            this.rowUpdate = { id: val.id, action: 'delete' };
           }
         },
       });
-    },
-
-    handleAddMoreCategory() {
-      const newId = this.listCategory[this.listCategory.length - 1].categoryId + 1;
-      this.rowUpdate = {
-        edit: true,
-        action: 'add',
-        id: newId,
-        data: {
-          categoryId: newId,
-          categoryName: '',
-          id: newId,
-          name: '',
-        }
-      };
-    },
-
-    handleSubmit(data, update) {
-      this.rowUpdate = {
-        edit: false,
-        id: data.id,
-        action: update ? 'update' : 'cancel',
-      };
-      if (this.rowUpdate.action === 'cancel') {
-        return;
-      }
-      console.log(data.item.name);
-      // console.log(this.cateEdit);
-      const reqParam = {
-        categoryId: data.item.categoryId,
-        categoryName: data.item.name,
-      };
-
-      if (this.isEdit) {
-        this.updateCategory(reqParam);
-      } else {
-        this.addNewCategory({
-          categoryName: data.item.name,
-        });
-      }
     },
 
     async getListCategory() {
@@ -217,6 +204,7 @@ export default {
 
       if (res.success) {
         Vue.$toast.success('Thêm mới thành công');
+        this.getListCategory();
       }
     },
 
@@ -229,6 +217,10 @@ export default {
 
       if (res.success) {
         Vue.$toast.success('Chỉnh sửa thành công');
+        this.getListCategory();
+        this.isEdit = false;
+        this.formData.categoryId = null;
+        this.formData.categoryName = '';
       }
     }
   },
