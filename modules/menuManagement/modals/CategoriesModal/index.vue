@@ -13,7 +13,7 @@
       <div class="actionCate">
         <input v-model="formData.categoryName" type="text" placeholder="Tên danh mục">
         <div v-if="!isEdit" class="addCategory" @click="handleSubmit()">
-          <button>Thêm loại mới</button>
+          <button>Thêm mới</button>
         </div>
         <div v-else class="addCategory" @click="handleSubmit()">
           <button>Cập nhật</button>

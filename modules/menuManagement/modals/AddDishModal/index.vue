@@ -260,6 +260,8 @@ export default {
         const dish = res.data;
 
         this.formDish = dish;
+        this.formDish.dishesName.trim();
+        this.formDish.description.trim();
         this.selectedCategory = dish.category;
         this.statusSelected = dish.status ? 1 : 0;
         this.avatar = dish.dishImage;

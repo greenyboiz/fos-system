@@ -10,6 +10,9 @@
     @hidden="handleHideModal"
   >
     <div class="dinner">
+      <div class="note">
+        Ghi chú: Vui lòng chọn bàn để chuyển
+      </div>
       <ul class="choice">
         <template v-for="item in listTable">
           <button
@@ -36,9 +39,6 @@
         <button>
           Chuyển bàn
         </button>
-      </div>
-      <div class="note">
-        Ghi chú: Vui lòng chọn bàn để chuyển
       </div>
     </div>
   </b-modal>

@@ -25,7 +25,8 @@
       </div>
     </div>
     <div v-if="formData.customer.contact" class="getDish" @click="handleGetOrder()">
-      <nuxt-link :to="validator ? `/khach-hang/order/${formData.qrCode.qrcodeId}` : '/'">
+      <!-- eslint-disable-next-line max-len -->
+      <nuxt-link :to="isValidate ? `/khach-hang/order/${formData.qrCode.qrcodeId}` : `/khach-hang/table/${formData.qrCode.qrcodeId}`">
         <button>Gọi món</button>
       </nuxt-link>
     </div>
@@ -67,6 +68,7 @@ export default {
         }
       },
       listTable: [],
+      isValidate: false,
     };
   },
 
@@ -202,10 +204,11 @@ export default {
     },
 
     handleGetOrder() {
-      console.log(this.validateBeforeOrder());
       if (!this.validator()) {
+        this.isValidate = false;
         return;
       }
+      this.isValidate = true;
 
       if (isEmpty(this.formData.customer.contact)) {
         return;
