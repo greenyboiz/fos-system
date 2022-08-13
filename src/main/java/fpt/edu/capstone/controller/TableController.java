@@ -56,7 +56,7 @@ public class TableController {
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("fail", "Order not exist",false, null)
+                new ResponseObject("fail", "Order not exist at table: " + tableId ,false, null)
         );
 
 
