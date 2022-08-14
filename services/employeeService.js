@@ -1,4 +1,9 @@
 import axios from 'axios';
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
 class EmployeeService {
   async getDishes(header) {
     const res = await axios.get('https://project-for-fos-mld.herokuapp.com/api/dishes', header);
@@ -13,8 +18,9 @@ class EmployeeService {
   }
 
   async getOrderByTableId(tableId, header) {
-    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/tableByOrder/${tableId}`, header);
-
+    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/tableByOrder/${tableId}`, header).catch(() => {
+      Vue.$toast.error('Bàn đang trống, chưa có order');
+    });
     return res.data;
   }
 

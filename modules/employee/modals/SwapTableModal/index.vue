@@ -115,9 +115,6 @@ export default {
         this.moveFrom = this.moveTable[0];
         this.moveTo = this.moveTable[1];
       }
-      const fromItem = filter(this.listTable, (item) => item.tableId === this.moveFrom);
-      const toItem = filter(this.listTable, (item) => item.tableId === this.moveTo);
-      console.log(fromItem, toItem);
     },
 
     async handleSwapTable() {

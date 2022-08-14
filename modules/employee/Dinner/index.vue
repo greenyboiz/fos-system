@@ -5,8 +5,8 @@
         <button
           :key="item.tableId"
           class="choice__btn"
-          :class="checkStatus(item.status)"
-          @click="onSelectTable(item.tableId)"
+          :class="{ had: !item.status, statue: item.status, active: selectedTable === item.tableId }"
+          @click="onSelectTable(item.tableId, item.status)"
         >
           A{{ item.tableId }}
 
@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       listTable: [],
+      selectedTable: null,
     };
   },
 
@@ -61,8 +62,13 @@ export default {
       }
     },
 
-    onSelectTable(tableId) {
-      this.$root.$emit('tableId', tableId);
+    onSelectTable(tableId, statusTable) {
+      this.selectedTable = tableId;
+      if (statusTable) {
+        this.$root.$emit('valueTable', statusTable);
+        return;
+      }
+      this.$root.$emit('valueTable', tableId);
     },
   },
 };

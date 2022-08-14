@@ -147,11 +147,11 @@ export default {
   },
 
   created() {
-    this.$root.$on('tableId', this.tableHaveOrder);
+    this.$root.$on('valueTable', this.tableHaveOrder);
   },
 
   beforeDestroy() {
-    this.$root.$off('tableId', this.tableHaveOrder);
+    this.$root.$off('valueTable', this.tableHaveOrder);
   },
 
   mounted() {
@@ -160,6 +160,10 @@ export default {
 
   methods: {
     tableHaveOrder(val) {
+      if (val === true) {
+        this.listDishes = [];
+        return;
+      }
       this.tableId = val;
       this.getOrderByTableId();
     },
@@ -179,8 +183,6 @@ export default {
         this.getOrderItemList(res.data.orderId);
         this.getTotalPayment(res.data.orderId);
         this.orderId = res.data.orderId;
-      } else {
-        console.log('as');
       }
     },
 
