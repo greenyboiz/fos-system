@@ -1,5 +1,6 @@
 package fpt.edu.capstone.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,10 +57,16 @@ public class FOSUser {
         this.role = role;
     }
 
-//    public boolean isActive(){
-//        if(this.status == true){
-//            return true;
-//        }
-//        return false;
-//    }
+////    @JsonIgnore
+//    @Transient
+//    private String oldPassword;
+//
+////    @JsonIgnore
+//    @Transient
+//    private String newPassword;
+//
+////    @JsonIgnore
+//    @Transient
+//    private String confirmNewPassword;
+
 }

@@ -34,7 +34,7 @@ public class FOSUserService implements IFOSUserService {
     private Cloudinary cloudinary;
     @Override
     public FOSUser addFOSUser(FOSUser fosUser) {
-        fosUser.setPassword(bcryptEncoder.encode(fosUser.getPassword()));
+//        fosUser.setPassword(bcryptEncoder.encode(fosUser.getPassword()));
         fosUser.setStatus(true);
         return fosUserRepository.save(fosUser);
     }
