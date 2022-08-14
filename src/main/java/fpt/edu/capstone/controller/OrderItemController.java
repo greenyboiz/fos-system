@@ -28,16 +28,16 @@ public class OrderItemController {
         );
     }
 
-    @GetMapping("/orderItem/order/{oderId}")
-    public ResponseEntity<?> showOrderItemByOrderId(@PathVariable(name = "oderId") Long id){
-        List<OrderItem> orderItem = iOrderItemService.getOrderItemByOrderId(id);
+    @GetMapping("/orderItem/order/{orderId}")
+    public ResponseEntity<?> showOrderItemByOrderId(@PathVariable(name = "orderId") Long orderId){
+        List<OrderItem> orderItem = iOrderItemService.getOrderItemByOrderId(orderId);
         if(orderItem != null){
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "succsessfully",true, orderItem)
+                    new ResponseObject("ok", "succsessfully",true, iOrderItemService.getOrderItemByOrderId(orderId))
             );
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", "Can not find OrderItemID: "+id,false,"null")
+                    new ResponseObject("fail", "Can not find OrderItemID: "+orderId,false,"null")
             );
         }
     }

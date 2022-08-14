@@ -33,7 +33,7 @@ public class EmailService implements IEmailService {
 
     @Override
     public void sendMailForgetPass(FOSUser fosUser) throws MessagingException, UnsupportedEncodingException {
-        String subject = "Forget password";
+        String subject = "Forget password from FOS_MLD sytem";
         String senderName = "FOS_MLD";
         String password = generateString(10);
         fosUser.setPassword(passwordEncoder.encode(password));
