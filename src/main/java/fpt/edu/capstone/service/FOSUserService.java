@@ -138,4 +138,9 @@ public class FOSUserService implements IFOSUserService {
         }
         return false;
     }
+
+    @Override
+    public FOSUser getFOSUserByEmail(String email) {
+        return fosUserRepository.findUserByEamil(email);
+    }
 }

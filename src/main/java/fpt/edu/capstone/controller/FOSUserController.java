@@ -3,6 +3,7 @@ package fpt.edu.capstone.controller;
 import fpt.edu.capstone.dto.FOSUserDTO;
 import fpt.edu.capstone.entities.CurrentUserDetails;
 import fpt.edu.capstone.entities.FOSUser;
+import fpt.edu.capstone.implementService.IEmailService;
 import fpt.edu.capstone.implementService.IFOSUserService;
 import fpt.edu.capstone.response.ResponseObject;
 import fpt.edu.capstone.service.JwtUserDetailsService;
@@ -22,6 +23,9 @@ import java.util.List;
 public class FOSUserController {
     @Autowired
     private IFOSUserService ifosUserService;
+
+    @Autowired
+    private IEmailService iEmailService;
 
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
@@ -161,6 +165,29 @@ public class FOSUserController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponseObject("fail", "Can not find FOSUserID: "+id,false,"null")
         );
+    }
+
+    @PostMapping("/forgetPassword")
+    public ResponseEntity<?> sendPasswordToEmail(@RequestBody FOSUser fosUser){
+        if(fosUser == null || fosUser.getEmail()==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "Send mail fail",false,"null")
+            );
+        }
+        try {
+            FOSUser fosUser1 = ifosUserService.getFOSUserByEmail(fosUser.getEmail());
+            if(fosUser1==null){
+                throw new Exception();
+            }
+            iEmailService.sendMailForgetPass(fosUser1);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, fosUser1)
+            );
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", e.getMessage(),false,"null")
+            );
+        }
     }
 
 }

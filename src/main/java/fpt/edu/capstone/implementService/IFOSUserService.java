@@ -27,4 +27,6 @@ public interface IFOSUserService {
     boolean checkExistUserByContact(FOSUser fosUser);
 
     boolean checkExistUserByEmail(FOSUser fosUser);
+
+    FOSUser getFOSUserByEmail(String email);
 }

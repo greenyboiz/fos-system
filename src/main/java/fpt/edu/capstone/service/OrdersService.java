@@ -92,7 +92,6 @@ public class OrdersService implements IOrdersService {
     @Override
     public Orders checkOrderExist(Orders orders) {
         return ordersRepository.findByCustomerIdAndQrCodeAndOrderStatus(orders.getCustomer().getContact(), orders.getQrCode().getQRCodeId());
-//        return orders1 == null ? false : true;
     }
 
     @Override

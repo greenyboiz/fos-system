@@ -93,7 +93,7 @@ public class OrdersController {
         else {
 //            Orders orders1 = iOrdersService.getOrderById(orders.getOrderId());
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Order is exist",true,orders1)
+                    new ResponseObject("ok", "Order is exist, you can order continue",true,orders1)
             );
         }
     }
