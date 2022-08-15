@@ -1,9 +1,8 @@
 package fpt.edu.capstone.controller;
 
-import fpt.edu.capstone.dto.BestSelerDishesDTO;
+import fpt.edu.capstone.dto.BestSellerDishesDTO;
 import fpt.edu.capstone.dto.DashboardDTO;
 import fpt.edu.capstone.implementService.IOrderItemService;
-import fpt.edu.capstone.implementService.IOrdersService;
 import fpt.edu.capstone.response.ResponseObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ public class DashboardController {
 
     @GetMapping("/dashboard/bestseller")
     public ResponseEntity<?> getDashboardBestseller(){
-        List<BestSelerDishesDTO> list = iOrderItemService.getListDashboardBestseller();
+        List<BestSellerDishesDTO> list = iOrderItemService.getListDashboardBestseller();
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "succsessfully",true, list)
         );

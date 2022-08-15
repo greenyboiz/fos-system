@@ -1,22 +1,20 @@
 package fpt.edu.capstone.service;
 
-import fpt.edu.capstone.dto.BestSelerDishesDTO;
+import fpt.edu.capstone.dto.BestSellerDishesDTO;
 import fpt.edu.capstone.dto.DashboardDTO;
 import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.entities.OrderItem;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.implementService.IOrderItemService;
+import fpt.edu.capstone.mapper.BestSellerDishRowMapper;
 import fpt.edu.capstone.mapper.DashboardRowMapper;
 import fpt.edu.capstone.repo.DishesRepository;
 import fpt.edu.capstone.repo.OrderItemRepository;
-import fpt.edu.capstone.repo.OrdersRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -109,8 +107,15 @@ public class OrderItemService implements IOrderItemService {
     }
 
     @Override
-    public List<BestSelerDishesDTO> getListDashboardBestseller() {
-        return null;
+    public List<BestSellerDishesDTO> getListDashboardBestseller() {
+        String query = "SELECT d.dishes_name, SUM(oi.quantity) as quantity\n" +
+                "FROM railway.orders o INNER JOIN railway.order_item oi\n" +
+                "ON o.order_id = oi.order_id INNER JOIN railway.dishes d ON d.dishes_id = oi.dishes_id\n" +
+                "group by d.dishes_name\n" +
+                "order by quantity desc\n" +
+                "LIMIT 5";
+        List<BestSellerDishesDTO> list = template.query(query, new BestSellerDishRowMapper());
+        return list;
     }
 
 }

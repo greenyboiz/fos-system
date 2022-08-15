@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class BestSelerDishesDTO {
+public class BestSellerDishesDTO {
     private String dishesName;
     private Integer quantity;
 }
