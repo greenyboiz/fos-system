@@ -1,5 +1,7 @@
 package fpt.edu.capstone.implementService;
 
+import fpt.edu.capstone.dto.BestSelerDishesDTO;
+import fpt.edu.capstone.dto.DashboardDTO;
 import fpt.edu.capstone.entities.OrderItem;
 import fpt.edu.capstone.entities.Orders;
 
@@ -23,4 +25,8 @@ public interface IOrderItemService {
     boolean deleteDishesInOrederItem(Long orderItemId);
 
     void deleteOrderItemByOrderId(Orders orders);
+
+    List<DashboardDTO> getListDashboard();
+
+    List<BestSelerDishesDTO> getListDashboardBestseller();
 }

@@ -1,14 +1,12 @@
 package fpt.edu.capstone.service;
 
+import fpt.edu.capstone.dto.DashboardDTO;
 import fpt.edu.capstone.dto.OrderDTO;
 import fpt.edu.capstone.entities.Customer;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.implementService.IOrdersService;
-import fpt.edu.capstone.repo.CustomerRepository;
-import fpt.edu.capstone.repo.OrderItemRepository;
-import fpt.edu.capstone.repo.OrdersRepository;
-import fpt.edu.capstone.repo.QRCodeRepository;
+import fpt.edu.capstone.repo.*;
 import fpt.edu.capstone.response.ResponseObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +28,15 @@ public class OrdersService implements IOrdersService {
 
     @Autowired
     private OrderItemRepository orderItemRepository;
+
     @Autowired
     private QRCodeRepository qrCodeRepository;
 
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private DishesRepository dishesRepository;
     @Override
     public Orders addOrder(Orders orders) {
         return ordersRepository.save(orders);

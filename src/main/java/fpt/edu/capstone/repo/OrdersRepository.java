@@ -1,10 +1,13 @@
 package fpt.edu.capstone.repo;
 
+import fpt.edu.capstone.dto.DashboardDTO;
 import fpt.edu.capstone.dto.OrderDTO;
 import fpt.edu.capstone.entities.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface OrdersRepository extends JpaRepository<Orders,Long> {
@@ -26,4 +29,5 @@ public interface OrdersRepository extends JpaRepository<Orders,Long> {
 
     @Query("select c from Orders c where c.orderId = ?1")
     Orders findOrdersById(Long id);
+
 }

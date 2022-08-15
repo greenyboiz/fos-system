@@ -1,5 +1,6 @@
 package fpt.edu.capstone.repo;
 
+import fpt.edu.capstone.dto.DashboardDTO;
 import fpt.edu.capstone.entities.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -31,6 +32,7 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     @Transactional
     @Query("delete from OrderItem o where o.orders.orderId = ?1")
     void deleteOrderItemByOrderId(Long orderId);
+
 
 //    @Query(
 //    value = "delete from OrderItem o where o.orders = ?1",

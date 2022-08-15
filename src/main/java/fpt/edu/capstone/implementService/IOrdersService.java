@@ -1,5 +1,6 @@
 package fpt.edu.capstone.implementService;
 
+import fpt.edu.capstone.dto.DashboardDTO;
 import fpt.edu.capstone.dto.OrderDTO;
 import fpt.edu.capstone.entities.Customer;
 import fpt.edu.capstone.entities.Orders;
@@ -28,4 +29,5 @@ public interface IOrdersService {
     Long getQRCodeIdByOrderId(Long orderId);
 
     Page<Orders> listOrders(int pageNum, int pageSize);
+
 }

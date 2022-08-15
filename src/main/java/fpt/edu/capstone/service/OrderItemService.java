@@ -1,13 +1,18 @@
 package fpt.edu.capstone.service;
 
+import fpt.edu.capstone.dto.BestSelerDishesDTO;
+import fpt.edu.capstone.dto.DashboardDTO;
 import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.entities.OrderItem;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.implementService.IOrderItemService;
+import fpt.edu.capstone.mapper.DashboardRowMapper;
 import fpt.edu.capstone.repo.DishesRepository;
 import fpt.edu.capstone.repo.OrderItemRepository;
 import fpt.edu.capstone.repo.OrdersRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,9 +23,11 @@ import java.util.List;
 public class OrderItemService implements IOrderItemService {
     @Autowired
     private OrderItemRepository orderItemRepository;
-
     @Autowired
     private DishesRepository dishesRepository;
+
+    @Autowired
+    private NamedParameterJdbcTemplate template;
 
     @Override
     public List<OrderItem> listOrderItems() {
@@ -84,6 +91,26 @@ public class OrderItemService implements IOrderItemService {
     @Override
     public void deleteOrderItemByOrderId(Orders orders) {
         orderItemRepository.deleteOrderItemByOrderId(orders.getOrderId());
+    }
+
+    @Override
+    public List<DashboardDTO> getListDashboard() {
+        String query = "WITH TEMP AS (SELECT o.order_id , MONTH(o.submit_time) AS month_order, YEAR(o.submit_time) AS year_order\n" +
+                ", SUM(d.cost_price * oi.quantity) AS total_cost, SUM(d.sale_price * oi.quantity) AS total_sale\n" +
+                "FROM railway.orders o INNER JOIN railway.order_item oi\n" +
+                "ON o.order_id = oi.order_id INNER JOIN railway.dishes d ON d.dishes_id = oi.dishes_id\n" +
+                "group by o.order_id)\n" +
+                "SELECT t.month_order, t.year_order, SUM(t.total_cost) as total_cost, SUM(t.total_sale) as total_sale, (SUM(t.total_sale) - SUM(t.total_cost)) as profit\n" +
+                "FROM TEMP t\n" +
+                "group by t.month_order, t.year_order\n" +
+                "order by t.month_order, t.year_order";
+        List<DashboardDTO> list = template.query(query, new DashboardRowMapper());
+        return list;
+    }
+
+    @Override
+    public List<BestSelerDishesDTO> getListDashboardBestseller() {
+        return null;
     }
 
 }
