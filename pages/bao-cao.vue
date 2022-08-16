@@ -1,14 +1,16 @@
 <template>
-  <div></div>
+  <div style="padding: 12px">
+    <Report />
+  </div>
 </template>
 
 <script>
-// import MenuManagement from '@/modules/menuManagement/layout/index.vue';
+import Report from '@/modules/report/index.vue';
 export default {
   name: 'BaoCao',
 
   components: {
-    // MenuManagement,
+    Report,
   },
 
   head() {

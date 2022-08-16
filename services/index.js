@@ -4,3 +4,4 @@ export * from './tableManagementService';
 export * from './orderService';
 export * from './employeeService';
 export * from  './authService';
+export * from './chartService';

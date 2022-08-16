@@ -1,0 +1,39 @@
+.change-pwd-container {
+  display: grid;
+  place-items: center;
+
+  &__btn {
+    width: 50%;
+    background-color: #219653;
+    border-radius: 6px;
+    color: #fff;
+    border: none;
+    padding: 4px 0;
+
+    &:disabled {
+      opacity: 0.3;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__label {
+    display: grid;
+    width: 100%;
+  }
+
+  &__input {
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #d3d3d3;
+    line-height: 2;
+  }
+}
+
+
+.center-items {
+  display: grid;
+  place-items: center;
+}

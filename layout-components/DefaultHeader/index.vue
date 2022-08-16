@@ -42,6 +42,9 @@
                     <span class="icon mr-2"><manage-account-icon :width="21" :height="21" /></span> Đầu bếp
                   </nuxt-link>
                 </div>
+                <div class="dropdown-menu__item" @click="openChangePasswordModal()">
+                  <i class="icon bi bi-box-arrow-in-left mr-2"></i><span>Đổi mật khẩu</span>
+                </div>
                 <div class="dropdown-menu__item" @click="logoutUser()">
                   <i class="icon bi bi-box-arrow-in-left mr-2"></i><span class="sign-out">Đăng xuất</span>
                 </div>
@@ -93,10 +96,12 @@
         </ul>
       </div>
     </nav>
+    <ChangePassModal ref="changePassModal" />
   </div>
 </template>
 
 <script>
+import ChangePassModal from '@/components/common/ChangePassModal/index.vue';
 import Vue from 'vue';
 import { mapGetters } from 'vuex';
 import vClickOutside from 'v-click-outside';
@@ -111,7 +116,8 @@ export default {
     MenuDashboardIcon,
     MenuOrder,
     MenuTable,
-    MenuMenu
+    MenuMenu,
+    ChangePassModal
   },
 
   data() {
@@ -131,6 +137,11 @@ export default {
 
     closeManageAccount() {
       this.isShowManagementAccount = false;
+    },
+
+    openChangePasswordModal() {
+      this.isShowManagementAccount = false;
+      this.$refs.changePassModal.show();
     },
 
     async logoutUser() {

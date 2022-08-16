@@ -99,13 +99,22 @@ export default {
       if (!this.validateEmail(this.forgetPwdEmail)) {
         this.$toast.error('Vui lòng điền đúng định dạng email!');
         this.forgetPwdEmail = '';
+        return;
       }
+
+      this.getNewPassword();
     },
 
-    getRegisterInfo() {
-    },
+    async getNewPassword() {
+      const reqParams = {
+        email: this.forgetPwdEmail,
+      };
 
-    async getRegisterStep() {
+      const res = await authService.getNewPassword(reqParams);
+
+      if (res.success) {
+        this.$toast.success('Vui lòng mở email để lấy mật khẩu mới');
+      }
     },
 
     async login() {
