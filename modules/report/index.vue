@@ -49,7 +49,14 @@
       <div class="mid-report"></div>
       <div class="bottom-report">
         <div class="donut-top">LỢI NHUẬN</div>
-        <VueApexchart :key="botkey" height="400" width="100%" :options="chartArea" :series="seriesArea"></VueApexchart>
+        <VueApexchart
+          :key="botkey"
+          type="area"
+          height="400"
+          width="100%"
+          :options="chartArea"
+          :series="seriesArea"
+        ></VueApexchart>
       </div>
     </div>
   </div>
@@ -98,7 +105,7 @@ export default {
         },
       },
       revenueKey: 0,
-      botkey: 12,
+      botkey: 0,
       costKey: 0,
       seriesC: [44, 55, 13, 43, 22],
       chartOptionsC: {
@@ -121,10 +128,6 @@ export default {
       ],
       chartArea: {
         chart: {
-          type: 'area',
-          zoom: {
-            enabled: false,
-          },
           toolbar: {
             show: false,
           },
@@ -140,32 +143,10 @@ export default {
           strokeDashArray: 6,
         },
         stroke: {
-          curve: 'straight',
+          curve: 'smooth',
           width: 1.5,
         },
-        xaxis: {
-          labels: {
-            show: true,
-            hideOverlappingLabels: true,
-            trim: true,
-            style: {
-              colors: '#7A7A7A',
-            },
-          },
-          tickPlacement: 'between',
-          axisTicks: {
-            show: false,
-          },
-        },
-        yaxis: {
-          opposite: false,
-          labels: {
-            show: true,
-            style: {
-              colors: '#7A7A7A',
-            },
-          },
-        },
+
         legend: {
           horizontalAlign: 'left',
         },
@@ -179,6 +160,7 @@ export default {
       handler() {
         this.revenueKey++;
         // this.getChartData();
+        this.botkey++;
       },
       deep: true,
     },
