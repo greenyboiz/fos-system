@@ -147,8 +147,13 @@ export default {
     }
   },
 
+  created() {
+    this.getOrderItemList();
+  },
+
   mounted() {
     this.orderIdLocal = localStorage.getItem('orderId');
+
     this.getOrderItemList();
   },
 
