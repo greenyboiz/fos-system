@@ -6,10 +6,10 @@
           Tổng order theo ngày: {{ totalOrderByDay }}
         </div>
         <div class="header-item bg-success">
-          Chi phí theo tháng: {{ costByMonth }}
+          Chi phí theo tháng: {{ currencyFormatter(costByMonth) }}đ
         </div>
         <div class="header-item bg-info">
-          Lợi nhuận theo tháng: {{ profitByMonth }}
+          Lợi nhuận theo tháng: {{ currencyFormatter(profitByMonth) }}đ
         </div>
       </div>
       <div class="top-report">
@@ -103,9 +103,9 @@
                   <th scope="row">{{ `B${ index + 1 }` }}</th>
                   <td>{{ item.month }}</td>
                   <td>{{ item.year }}</td>
-                  <td>{{ currencyFormatter(item.revenue) }}</td>
-                  <td>{{ currencyFormatter(item.cost) }}</td>
-                  <td>{{ currencyFormatter(item.profit) }}</td>
+                  <td>{{ currencyFormatter(item.revenue) }}đ</td>
+                  <td>{{ currencyFormatter(item.cost) }}đ</td>
+                  <td>{{ currencyFormatter(item.profit) }}đ</td>
                 </tr>
             </tbody>
           </table>
@@ -178,6 +178,15 @@ export default {
         },
         colors: ['#259062', '#EEBF5C', '#E9693D', '#D2494D', '#AAA1A1'],
         labels: [],
+        dataLabels: {
+          enabled: true,
+            formatter(val) {
+            if (val < 10) {
+              return '';
+            }
+            return `${Math.round(val * 100) / 100}%`;
+          },
+        }
       },
       labelsC: [],
 
