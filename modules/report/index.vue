@@ -1,6 +1,17 @@
 <template>
   <div class="report">
     <div class="report__wrapper container">
+      <div class="report__header">
+        <div class="header-item bg-danger">
+          Tổng order theo ngày: {{ totalOrderByDay }}
+        </div>
+        <div class="header-item bg-success">
+          Chi phí theo tháng: {{ costByMonth }}
+        </div>
+        <div class="header-item bg-info">
+          Lợi nhuận theo tháng: {{ profitByMonth }}
+        </div>
+      </div>
       <div class="top-report">
         <div class="column-chart">
           <div class="donut-top">DOANH THU</div>
@@ -105,8 +116,8 @@
 
 <script>
 import VueApexchart from 'vue-apexcharts';
-import { chartService } from '@/services';
-import { map, reduce } from 'lodash';
+import { chartService, orderService } from '@/services';
+import { map, reduce, filter } from 'lodash';
 import commonMixin from '@/plugins/commonMixin';
 
 export default {
@@ -122,6 +133,9 @@ export default {
     return {
       bestSellerList: [],
       dashBoardList: [],
+      totalOrderByDay: 0,
+      profitByMonth: 0,
+      costByMonth: 0,
       seriesRV: [
         {
           data: [],
@@ -218,6 +232,7 @@ export default {
   mounted() {
     this.getChartData();
     this.getBestSellerDish();
+    this.getListOrder();
   },
 
   methods: {
@@ -250,6 +265,14 @@ export default {
         this.labelsC = xasisData;
         this.seriesArea[0].data = seriesProfit;
         this.chartArea.xaxis.categories = xasisData;
+
+        this.profitByMonth = reduce(seriesProfit, (sum, n) => {
+          return sum + n;
+        });
+
+        this.costByMonth = reduce(seriesCost, (sum, n) => {
+          return sum + n;
+        });
 
         const listTotal = [
           {
@@ -306,6 +329,26 @@ export default {
         // this.seriesC = seriesData;
         // this.chartOptionsC.labels = xasisData;
         // this.labelsC = xasisData;
+      }
+    },
+
+    async getListOrder() {
+      const res = await orderService.getOrderList({
+        headers: {
+          Authorization: this.$auth.$storage._state['_token.local'],
+        },
+      });
+
+      if (res.success) {
+        const resData = res.data;
+        const filterData = filter(resData, (item) => {
+          const today = new Date();
+          const dateTest = new Date(item.submitTime);
+          if (today.getDate() === dateTest.getDate()) {
+            return item;
+          }
+        });
+        this.totalOrderByDay = filterData.length;
       }
     }
   },
