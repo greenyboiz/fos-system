@@ -1,5 +1,6 @@
 package fpt.edu.capstone.controller;
 
+import fpt.edu.capstone.dto.CategoryDTO;
 import fpt.edu.capstone.entities.Category;
 import fpt.edu.capstone.implementService.ICategoryService;
 import fpt.edu.capstone.response.ResponseObject;
@@ -21,7 +22,7 @@ public class CategoryController {
 
     @GetMapping("/category")
     public ResponseEntity<?> getAlllCategories(){
-        List<Category> categories = iCategoryService.getAllCategory();
+        List<CategoryDTO> categories = iCategoryService.getAllCategory();
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "successfull",true, categories)
         );

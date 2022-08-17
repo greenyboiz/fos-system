@@ -1,5 +1,6 @@
 package fpt.edu.capstone.service;
 
+import fpt.edu.capstone.dto.CategoryDTO;
 import fpt.edu.capstone.entities.Category;
 import fpt.edu.capstone.repo.CategoryRepository;
 import org.junit.Assert;
@@ -104,7 +105,7 @@ public class CategoryServiceTest {
         actual.add(new Category(1l,"lon")) ;
 
         Mockito.when(categoryRepository.findAll()).thenReturn(expect);
-        List<Category> results = categoryService.getAllCategory();
+        List<CategoryDTO> results = categoryService.getAllCategory();
         Assert.assertEquals(results,expect);
     }
 

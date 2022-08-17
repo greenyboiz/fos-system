@@ -78,7 +78,7 @@ public class OrdersService implements IOrdersService {
 
     @Override
     public List<Orders> getAllOrders() {
-        return ordersRepository.findAll();
+        return ordersRepository.getAllOrdersOrderByTime();
     }
 
     @Override

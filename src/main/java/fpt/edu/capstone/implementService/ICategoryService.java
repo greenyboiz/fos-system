@@ -1,5 +1,6 @@
 package fpt.edu.capstone.implementService;
 
+import fpt.edu.capstone.dto.CategoryDTO;
 import fpt.edu.capstone.entities.Category;
 import fpt.edu.capstone.response.ResponseObject;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public interface ICategoryService {
 
-    List<Category> getAllCategory();
+    List<CategoryDTO> getAllCategory();
     Category addCategory(Category category);
 
     Category updateCategory(Category category);

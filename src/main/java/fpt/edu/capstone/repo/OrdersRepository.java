@@ -30,4 +30,6 @@ public interface OrdersRepository extends JpaRepository<Orders,Long> {
     @Query("select c from Orders c where c.orderId = ?1")
     Orders findOrdersById(Long id);
 
+    @Query("select o from Orders o order by o.submitTime desc")
+    List<Orders> getAllOrdersOrderByTime();
 }

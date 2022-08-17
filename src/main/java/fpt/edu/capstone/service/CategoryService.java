@@ -2,10 +2,12 @@ package fpt.edu.capstone.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import fpt.edu.capstone.dto.CategoryDTO;
 import fpt.edu.capstone.entities.Category;
 import fpt.edu.capstone.implementService.ICategoryService;
 import fpt.edu.capstone.repo.CategoryRepository;
 import fpt.edu.capstone.response.ResponseObject;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,6 +25,9 @@ public class CategoryService implements ICategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     private Cloudinary cloudinary;
@@ -53,8 +59,9 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public List<Category> getAllCategory() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> getAllCategory() {
+        List<CategoryDTO> list = Arrays.asList(modelMapper.map(categoryRepository.findAll(), CategoryDTO[].class));
+        return list;
     }
 
     @Override
