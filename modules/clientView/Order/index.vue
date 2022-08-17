@@ -274,7 +274,8 @@ export default {
         console.log(orderIdTmp);
         // this.getOrderItemList(orderIdTmp);
         this.getTotalPayment(orderIdTmp);
-        this.$router.push(`/khach-hang/chi-tiet-order/${orderIdTmp}`);
+        this.orderIdLocal = orderIdTmp;
+        this.$router.push(`/khach-hang/chi-tiet-order/${this.orderIdLocal}`);
       }
     },
 
