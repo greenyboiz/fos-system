@@ -50,7 +50,7 @@ class MenuManagementService {
   }
 
   async addCategory(params, header) {
-    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/category/update', params, header);
+    const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/category/add', params, header);
 
     return res.data;
   }

@@ -76,7 +76,7 @@
         <div v-if="!isOrder" class="btn-order" @click="handleDoneOrder()">
           <button>ORDER</button>
         </div>
-        <div v-else class="btn-order" @click="handleOrderMore()">
+        <div v-else class="btn-order bg-info" @click="handleOrderMore()">
           <nuxt-link :to="`/khach-hang/order/${orderIdLocal}`">
             <button>Gọi thêm</button>
           </nuxt-link>

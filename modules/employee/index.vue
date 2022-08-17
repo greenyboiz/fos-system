@@ -136,7 +136,7 @@ export default {
       isChoice: true,
       spOrderId: null,
       totalPriceOrder: 0,
-      tableId: 1,
+      tableId: null,
       orderId: null,
       payment: [
         { id: 1, name: 'Thanh toán online', type: 'banking' },
@@ -155,7 +155,7 @@ export default {
   },
 
   mounted() {
-    this.getOrderByTableId();
+    // this.getOrderByTableId();
   },
 
   methods: {

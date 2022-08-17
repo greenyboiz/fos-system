@@ -26,7 +26,7 @@
     </div>
     <div v-if="formData.customer.contact" class="getDish" @click="handleGetOrder()">
       <!-- eslint-disable-next-line max-len -->
-      <nuxt-link :to="isValidate ? `/khach-hang/order/${formData.qrCode.qrcodeId}` : `/khach-hang/table/${formData.qrCode.qrcodeId}`">
+      <nuxt-link :to="isValidate ? `/khach-hang/order/${orderId}` : `/khach-hang/table/${formData.qrCode.qrcodeId}`">
         <button>Gọi món</button>
       </nuxt-link>
     </div>
@@ -84,6 +84,15 @@ export default {
     }),
   },
 
+  // watch: {
+  //   isValidate: {
+  //     handler() {
+  //       this.postOrder();
+  //     },
+  //     immediate: true,
+  //   }
+  // },
+
   // created() {
 
   // },
@@ -132,15 +141,16 @@ export default {
 
       if (res.success) {
         this.updateOrderId(res.data.orderId);
+        this.isValidate = true;
         localStorage.setItem('orderId', res.data.orderId);
         localStorage.setItem('createAt', res.data.submitTime);
         localStorage.setItem('customerName', res.data.customer.fullName);
         this.getListTable();
-        this.$router.push({
-          params: {
-            orderId: this.orderId,
-          }
-        });
+        // this.$router.push({
+        //   params: {
+        //     orderId: this.orderId,
+        //   }
+        // });
         // this.getOrder
       }
     },

@@ -12,12 +12,12 @@
     <div class="categoryWrapper">
       <div class="actionCate">
         <input v-model="formData.categoryName" type="text" placeholder="Tên danh mục">
-        <div v-if="!isEdit" class="addCategory" @click="handleSubmit()">
-          <button>Thêm mới</button>
+        <div class="addCategory" @click="handleSubmit()">
+          <button v-if="!isEdit">Thêm mới</button>
+          <button v-else>Cập nhật</button>
         </div>
-        <div v-else class="addCategory" @click="handleSubmit()">
-          <button>Cập nhật</button>
-        </div>
+        <!-- <div v-else class="addCategory" @click="handleSubmit()">
+        </div> -->
       </div>
       <div class="category">
         <div class="category__head">
@@ -100,6 +100,8 @@ export default {
     },
 
     handleHideModal() {
+      this.formData.categoryName = '';
+      this.isEdit = false;
       this.$refs.categoryRef.hide();
     },
 
@@ -135,9 +137,11 @@ export default {
         Vue.$toast.error('Tên danh mục không được chứa kí tự đặc biệt và có độ dài từ 2-40 kí tự');
         return false;
       }
+      return true;
     },
 
     handleSubmit() {
+      console.log(this.isEdit);
       if (!this.validator()) {
         return;
       }

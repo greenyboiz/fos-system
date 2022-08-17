@@ -91,6 +91,8 @@ export default {
     this.customerName = localStorage.getItem('customerName');
     this.createAt = moment(localStorage.getItem('createAt')).format('HH:mm DD/MM/YYYY');
     this.getOrderItemList();
+
+    window.onpopstate = function (e) { window.history.forward(1); };
   },
 
   methods: {

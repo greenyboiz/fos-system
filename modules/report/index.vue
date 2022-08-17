@@ -116,7 +116,7 @@
 
 <script>
 import VueApexchart from 'vue-apexcharts';
-import { chartService, orderService } from '@/services';
+import { chartService, orderService, menuManagementService } from '@/services';
 import { map, reduce, filter } from 'lodash';
 import commonMixin from '@/plugins/commonMixin';
 
@@ -133,6 +133,7 @@ export default {
     return {
       bestSellerList: [],
       dashBoardList: [],
+      cateList: [],
       totalOrderByDay: 0,
       profitByMonth: 0,
       costByMonth: 0,
@@ -359,7 +360,15 @@ export default {
         });
         this.totalOrderByDay = filterData.length;
       }
-    }
+    },
+
+    // async getListDish() {
+    //   const res = await menuManagementService.getListDish();
+
+    //   if (res.success) {
+    //     const
+    //   }
+    // }
   },
 };
 </script>

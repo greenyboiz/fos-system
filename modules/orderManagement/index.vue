@@ -47,9 +47,9 @@
                     >
                       Món ăn
                     </button>
-                    <button class="btn__delete" @click="removeOrder(item.orderId)">
+                    <!-- <button class="btn__delete" @click="removeOrder(item.orderId)">
                       <img src="@/assets/icons/delete.png" alt="" />
-                    </button>
+                    </button> -->
                   </div>
                 </div>
               </div>
