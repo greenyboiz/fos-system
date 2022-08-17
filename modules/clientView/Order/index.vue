@@ -272,13 +272,9 @@ export default {
       if (res.success) {
         this.updateOrderId(orderIdTmp);
         console.log(orderIdTmp);
-        this.getOrderItemList(orderIdTmp);
+        // this.getOrderItemList(orderIdTmp);
         this.getTotalPayment(orderIdTmp);
-        this.$router.push({
-          params: {
-            orderId: orderIdTmp,
-          }
-        });
+        this.$router.push(`/khach-hang/chi-tiet-order/${orderIdTmp}`);
       }
     },
 

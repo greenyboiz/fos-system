@@ -26,9 +26,9 @@
     </div>
     <div v-if="formData.customer.contact" class="getDish" @click="handleGetOrder()">
       <!-- eslint-disable-next-line max-len -->
-      <nuxt-link :to="isValidate ? `/khach-hang/order/${orderId}` : `/khach-hang/table/${formData.qrCode.qrcodeId}`">
+      <!-- <nuxt-link :to="isValidate ? `/khach-hang/order/${orderId}` : `/khach-hang/table/${formData.qrCode.qrcodeId}`"> -->
         <button>Gọi món</button>
-      </nuxt-link>
+      <!-- </nuxt-link> -->
     </div>
     <SupportModal ref="supportModalRef" />
   </div>
@@ -146,11 +146,7 @@ export default {
         localStorage.setItem('createAt', res.data.submitTime);
         localStorage.setItem('customerName', res.data.customer.fullName);
         this.getListTable();
-        // this.$router.push({
-        //   params: {
-        //     orderId: this.orderId,
-        //   }
-        // });
+        this.$router.push(`/khach-hang/order/${res.data.orderId}`);
         // this.getOrder
       }
     },
@@ -216,6 +212,7 @@ export default {
     handleGetOrder() {
       if (!this.validator()) {
         this.isValidate = false;
+        this.$router.push(`/khach-hang/table/${this.formData.qrCode.qrcodeId}`);
         return;
       }
       this.isValidate = true;

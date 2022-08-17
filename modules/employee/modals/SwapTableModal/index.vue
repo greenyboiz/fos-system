@@ -18,7 +18,7 @@
           <button
             :key="item.tableId"
             class="choice__btn"
-            :class="checkStatus(item.status)"
+            :class="{ had: !item.status, statue: item.status, active: selectedTable === item.tableId }"
             @click="onSelectTable(item.tableId)"
           >
             A{{ item.tableId }}
@@ -60,7 +60,8 @@ export default {
       listTable: [],
       moveTable: [],
       moveFrom: '',
-      moveTo: ''
+      moveTo: '',
+      selectedTable: null,
     };
   },
 
@@ -106,6 +107,7 @@ export default {
     },
 
     onSelectTable(tableId) {
+      this.selectedTable = tableId;
       if (this.moveTable.length === 2) {
         this.moveTable[1] = tableId;
         this.moveTo = this.moveTable[1];

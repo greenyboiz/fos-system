@@ -39,7 +39,7 @@
               :key="'cate' + i"
               class="category__item"
             >
-              <div class="category__row">L{{ item.categoryId }}</div>
+              <div class="category__row">L{{ i + 1 }}</div>
               <div class="category__row">{{ item.categoryName }}</div>
               <div class="category__row align-items-center">
                 <div class="btn-group align-top">
@@ -66,7 +66,7 @@
 
 <script>
 import { menuManagementService } from '@/services';
-import { map } from 'lodash';
+import { map, find } from 'lodash';
 import Loading from '@/components/common/Loading/index.vue';
 
 import Vue from 'vue';
@@ -84,6 +84,7 @@ export default {
   data() {
     return {
       listCategory: [],
+      lishDishes: [],
       isEdit: false,
       isLoad: false,
       formData: {
@@ -96,6 +97,7 @@ export default {
   methods: {
     show() {
       this.getListCategory();
+      this.getListDish();
       this.$refs.categoryRef.show();
     },
 
@@ -159,6 +161,11 @@ export default {
 
     removeCategory(val) {
       const catId = val;
+      const existDishByCate = find(this.lishDishes, (item) => item.category.categoryId === val);
+      if (existDishByCate) {
+        Vue.$toast.error('Không thể xóa danh mục này');
+        return;
+      }
       this.$confirmPopup.open({
         title: 'Xác nhận',
         message: 'Bạn có chắc muốn xóa loại này không?',
@@ -176,6 +183,14 @@ export default {
           }
         },
       });
+    },
+
+    async getListDish() {
+      const res = await menuManagementService.getListDish();
+
+      if (res.success) {
+        this.lishDishes = res.data;
+      }
     },
 
     async getListCategory() {
