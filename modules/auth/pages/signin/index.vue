@@ -129,7 +129,7 @@ export default {
         });
         const roleName = res.data.data.roleName;
         if (roleName === 'ROLE_ADMIN') {
-          this.$router.push('/don-hang');
+          this.$router.push('/bao-cao');
         } else if (roleName === 'ROLE_STAFF') {
           this.$router.push('/employee');
         } else if (roleName === 'ROLE_CHEF') {
