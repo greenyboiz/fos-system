@@ -31,4 +31,8 @@ public interface IDishesService {
      * @return
      */
     Page<Dishes> listDishes(int pageNum, int pageSize);
+
+    List<Dishes> getAllDishesForClient();
+
+    Dishes changeStatusOfDishesById(Dishes dishes);
 }

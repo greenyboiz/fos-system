@@ -112,4 +112,19 @@ public class DishesService implements IDishesService {
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         return dishesRepository.findAll(pageable);
     }
+
+    @Override
+    public List<Dishes> getAllDishesForClient() {
+        return dishesRepository.getAllDishesForClient();
+    }
+
+    @Override
+    public Dishes changeStatusOfDishesById(Dishes dishes) {
+        if(dishes.getStatus() == true){
+            dishes.setStatus(false);
+        } else {
+            dishes.setStatus(true);
+        }
+        return dishesRepository.save(dishes);
+    }
 }

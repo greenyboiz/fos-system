@@ -36,6 +36,14 @@ public class DishesController {
         );
     }
 
+    @GetMapping("/dishesClient")
+    public ResponseEntity<?> getAllDishesForClient(){
+        List<Dishes> dishes = iDishesService.getAllDishesForClient();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "successfull",true, dishes)
+        );
+    }
+
 //    @GetMapping("/dishes")
 //    public Page<Dishes> listAll(
 ////            PagingRequest pagingRequest
@@ -100,6 +108,21 @@ public class DishesController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponseObject("fail", "Can not find dishesId: "+id,false,"null")
+        );
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/dishes/changeStatus/{dishesId}")
+    public ResponseEntity<?> changeStatusOfDishesById(@PathVariable(name = "dishesId") Long dishesId){
+        Dishes dishes = iDishesService.getDishesById(dishesId);
+        if(dishes != null){
+            iDishesService.changeStatusOfDishesById(dishes);
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "succsessfully",true, dishes)
+            );
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                new ResponseObject("fail", "Can not find dishesId: "+ dishesId,false,"null")
         );
     }
 

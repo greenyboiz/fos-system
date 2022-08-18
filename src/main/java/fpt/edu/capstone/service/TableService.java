@@ -60,7 +60,7 @@ public class TableService implements ITablesService {
         if(table != null){
             tableRepository.delete(table);
             qrCodeRepository.delete(table.getQrCode());
-            return true;
+            return true;    
         }
         return false;
     }
