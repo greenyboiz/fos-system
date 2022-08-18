@@ -3,7 +3,6 @@ package fpt.edu.capstone.controller;
 import fpt.edu.capstone.entities.FOSUser;
 import fpt.edu.capstone.entities.FOSUserPrincipal;
 import fpt.edu.capstone.implementService.IFOSUserService;
-import fpt.edu.capstone.repo.FOSUserRepository;
 import fpt.edu.capstone.response.JwtResponse;
 import fpt.edu.capstone.response.ResponseObject;
 import fpt.edu.capstone.sercurity.JwtTokenUtil;
@@ -12,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,16 +19,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 @Slf4j
 public class AuthenticationController {
-
-    @Autowired
-    private FOSUserRepository fosUserRepository;
-
     @Autowired
     private IFOSUserService ifosUserService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -50,17 +42,14 @@ public class AuthenticationController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("fail", "Account exist",false, null)
         );
-//        return ResponseEntity.ok(jwtUserDetailsService.save(fosUser));
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody FOSUser fosUser){
-        Authentication authentication = new UsernamePasswordAuthenticationToken(fosUser.getUserName(),fosUser.getPassword());
-        FOSUser user = fosUserRepository.findByUserName(fosUser.getUserName());
+        FOSUser user = ifosUserService.getByUserName(fosUser.getUserName());
 
         if (user == null || !passwordEncoder.matches(fosUser.getPassword(), user.getPassword())
                 || !user.getUserName().equals(fosUser.getUserName())) {
-//            logger.error("username or pasword wrong!");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(ResponseObject.builder().status("401").message("sign in request: username or pasword wrong!")
                             .success(false).build());
@@ -84,9 +73,7 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseObject("fail", "Does not exist any account",true, null));
         }
-//        return ResponseEntity.ok(authenticationService.getCurrentUser());
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "successfull",true, jwtUserDetailsService.getCurrentUser()));
     }
-
 }
