@@ -119,6 +119,7 @@ public class TableController {
             table.getQrCode().setQRCodeLink(qrCodeLink.trim());
             iqrCodeService.addQRCode(table.getQrCode());
             table.setStatus(true);
+            table.setActive(true);
             iTablesService.addTable(table);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "successfull",true, iTablesService.addTable(table))

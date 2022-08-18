@@ -34,7 +34,6 @@ public class TableService implements ITablesService {
 
     @Override
     public Tables addTable(Tables table) {
-        table.setActive(true);
         return tableRepository.save(table);
     }
 
