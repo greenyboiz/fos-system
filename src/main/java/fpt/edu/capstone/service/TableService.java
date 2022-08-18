@@ -140,4 +140,13 @@ public class TableService implements ITablesService {
     public List<Tables> getAllTablesStaff() {
         return tableRepository.getAllTablesStaff();
     }
+
+    @Override
+    public Orders getOrderIdByQRCodeId(Long qrCodeId) {
+        Orders orders = ordersRepository.findOrderIdByQRCodeId(qrCodeId);
+        if(orders != null){
+            return orders;
+        }
+        return null;
+    }
 }

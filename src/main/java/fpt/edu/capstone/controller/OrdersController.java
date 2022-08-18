@@ -1,5 +1,6 @@
 package fpt.edu.capstone.controller;
 
+import fpt.edu.capstone.dto.OrderDTO;
 import fpt.edu.capstone.dto.PaymentUserDTO;
 import fpt.edu.capstone.entities.*;
 import fpt.edu.capstone.implementService.*;
@@ -41,9 +42,17 @@ public class OrdersController {
     @Autowired
     private IFOSUserService ifosUserService;
 
+//    @GetMapping("/orders")
+//    public ResponseEntity<?> getAllOrders(){
+//        List<Orders> orders = iOrdersService.getAllOrders();
+//        return ResponseEntity.status(HttpStatus.OK).body(
+//                new ResponseObject("ok", "succsessfully",true, orders)
+//        );
+//    }
+
     @GetMapping("/orders")
     public ResponseEntity<?> getAllOrders(){
-        List<Orders> orders = iOrdersService.getAllOrders();
+        List<OrderDTO> orders = iOrdersService.getAllListOrders();
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "succsessfully",true, orders)
         );

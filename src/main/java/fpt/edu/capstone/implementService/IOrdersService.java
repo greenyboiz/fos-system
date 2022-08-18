@@ -30,4 +30,5 @@ public interface IOrdersService {
 
     Page<Orders> listOrders(int pageNum, int pageSize);
 
+    List<OrderDTO> getAllListOrders();
 }

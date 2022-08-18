@@ -56,10 +56,7 @@ public class TableController {
     @GetMapping("/tableByOrder/{tableId}")
     public ResponseEntity<?> getTableByOrderId(@PathVariable("tableId") Long tableId){
         Long qrCodeId = iTablesService.getQRCodeIdByTableId(tableId);
-        Orders order = iOrdersService.getOrderIdByQRCodeId(qrCodeId);
-//        return ResponseEntity.status(HttpStatus.OK).body(
-//                new ResponseObject("ok", "successful",true, order)
-//        );
+        Orders order = iTablesService.getOrderIdByQRCodeId(qrCodeId);
         if(order != null){
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "successful",true, order)
@@ -68,8 +65,6 @@ public class TableController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ResponseObject("fail", "Order not exist at table: " + tableId ,false, null)
         );
-
-
     }
 
     @PutMapping("/changeTable/{tableIdOld}/{tableIdNew}")

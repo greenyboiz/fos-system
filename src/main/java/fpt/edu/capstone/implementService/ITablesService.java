@@ -1,5 +1,6 @@
 package fpt.edu.capstone.implementService;
 
+import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.Tables;
 
 
@@ -28,4 +29,6 @@ public interface ITablesService {
     Tables changeActiveTable(Long id);
 
     List<Tables> getAllTablesStaff();
+
+    Orders getOrderIdByQRCodeId(Long qrCodeId);
 }
