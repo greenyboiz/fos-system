@@ -35,9 +35,19 @@ public class TableController {
     @Autowired
     private IOrdersService iOrdersService;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @GetMapping("/tables")
     public ResponseEntity<?> getAllTables(){
         List<Tables> tables = iTablesService.getAllTables();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("ok", "successful",true, tables)
+        );
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
+    @GetMapping("/tablesStaff")
+    public ResponseEntity<?> getAllTablesStaff(){
+        List<Tables> tables = iTablesService.getAllTablesStaff();
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("ok", "successful",true, tables)
         );
@@ -193,6 +203,27 @@ public class TableController {
             iTablesService.deleteTable(id);
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "delete tableId "+ id + " successfull",true, null)
+            );
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "This tableId " + id + " not exist",true, null)
+            );
+        }
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/tables/changeActive/{id}")
+    public ResponseEntity<?> changeActiveTable(@PathVariable("id") Long id){
+        boolean checkTableExist = iTablesService.checkTableExist(id);
+        if(checkTableExist){
+            Tables tables = iTablesService.changeActiveTable(id);
+            if(tables != null){
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("ok", "Change status of active tableId "+ id + " successfull",true, tables)
+                );
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    new ResponseObject("fail", "This tableId " + id + " have people sitting, can't change the status ",true, tables)
             );
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(

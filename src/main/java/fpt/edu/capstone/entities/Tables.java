@@ -25,6 +25,9 @@ public class Tables {
     @Column(name = "status")
     private Boolean status;
 
+    @Column(name = "active")
+    private Boolean active;
+
     @OneToOne
     @JoinColumn(name = "QRCodeID", nullable = true)
     private QRCode qrCode;

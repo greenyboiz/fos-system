@@ -34,6 +34,7 @@ public class TableService implements ITablesService {
 
     @Override
     public Tables addTable(Tables table) {
+        table.setActive(true);
         return tableRepository.save(table);
     }
 
@@ -46,6 +47,7 @@ public class TableService implements ITablesService {
             if (table1 != null){
                 table1.setNumberOfSeats(table.getNumberOfSeats());
                 table1.setStatus(table.getStatus());
+                table1.setActive(table.getActive());
                 table1.setQrCode(qrCode);
 
                 return tableRepository.save(table1);
@@ -118,5 +120,25 @@ public class TableService implements ITablesService {
     public boolean checkTableIsEmpty(Long qrCodeIdNew) {
 
         return tableRepository.checkTableIsEmpty(qrCodeIdNew);
+    }
+
+    @Override
+    public Tables changeActiveTable(Long id) {
+        Tables tables = tableRepository.findTableById(id);
+        Orders orders = ordersRepository.findOrderIdByQRCodeId(tables.getQrCode().getQRCodeId());
+        if(orders == null){
+            if(tables.getActive()== true){
+                tables.setActive(false);
+            }else {
+                tables.setActive(true);
+            }
+            return tableRepository.save(tables);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Tables> getAllTablesStaff() {
+        return tableRepository.getAllTablesStaff();
     }
 }
