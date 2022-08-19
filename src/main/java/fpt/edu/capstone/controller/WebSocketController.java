@@ -2,6 +2,7 @@ package fpt.edu.capstone.controller;
 
 
 import fpt.edu.capstone.entities.Chat;
+import fpt.edu.capstone.entities.RequestType;
 import fpt.edu.capstone.entities.Tables;
 import lombok.Data;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -32,12 +33,41 @@ public class WebSocketController {
         return tableWs;
     }
 
-    @MessageMapping("/chat.sendSupport")
+//    @MessageMapping("/chat.sendSupport")
+//    @SendTo("/topic/staffRoom")
+//    public TableWs sendSupport(@Payload Tables tables) {
+//        TableWs tableWs = new TableWs();
+//        tableWs.setTableId(tables.getTableId());
+//        tableWs.setType("support");
+//        System.out.println("noi dung: " + tables.getTableId());
+//        return tableWs;
+//    }
+
+    @MessageMapping("/chat.sendSupportChangeTable")
     @SendTo("/topic/staffRoom")
-    public TableWs sendSupport(@Payload Tables tables) {
+    public TableWs sendSupportChangeTable(@Payload Tables tables) {
         TableWs tableWs = new TableWs();
         tableWs.setTableId(tables.getTableId());
-        tableWs.setType("support");
+        tableWs.setType("change_table");
+        System.out.println("noi dung: " + tables.getTableId());
+        return tableWs;
+    }
+    @MessageMapping("/chat.sendSupportTakeAway")
+    @SendTo("/topic/staffRoom")
+    public TableWs sendSupportTakeAway(@Payload Tables tables) {
+        TableWs tableWs = new TableWs();
+        tableWs.setTableId(tables.getTableId());
+        tableWs.setType("take_away");
+        System.out.println("noi dung: " + tables.getTableId());
+        return tableWs;
+    }
+
+    @MessageMapping("/chat.sendSupportCallOut")
+    @SendTo("/topic/staffRoom")
+    public TableWs sendSupportCallOut(@Payload Tables tables) {
+        TableWs tableWs = new TableWs();
+        tableWs.setTableId(tables.getTableId());
+        tableWs.setType("call_out");
         System.out.println("noi dung: " + tables.getTableId());
         return tableWs;
     }
