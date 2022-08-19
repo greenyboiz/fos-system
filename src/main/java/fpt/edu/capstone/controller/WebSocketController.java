@@ -3,6 +3,7 @@ package fpt.edu.capstone.controller;
 
 import fpt.edu.capstone.entities.Chat;
 import fpt.edu.capstone.entities.Tables;
+import lombok.Data;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -23,11 +24,16 @@ public class WebSocketController {
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/staffRoom")
-    public Tables sendMessage(@Payload Tables tables) {
+    public TableWs sendMessage(@Payload Tables tables) {
+        TableWs tableWs = new TableWs();
+        tableWs.setTableId(tables.getTableId());
         System.out.println("noi dung: " + tables.getTableId());
-        return tables;
+        return tableWs;
     }
-
+    @Data
+    class TableWs{
+        Long tableId;
+    }
 //    @MessageMapping("/chat.addUser")
 //    @SendTo("/topic/staffRoom")
 //    public Chat addUser(@Payload Chat chat, SimpMessageHeaderAccessor headerAccessor) {
