@@ -139,7 +139,7 @@
       </section>
     </div>
 
-    <AddUserModal ref="addUserModalRef" :userId="userId" @doneAdd="onAdded" @doneUpdate="onUpdated" />
+    <AddUserModal ref="addUserModalRef" :userId="userId" :listStaff="listStaff" @doneAdd="onAdded" @doneUpdate="onUpdated" />
   </div>
 </template>
 

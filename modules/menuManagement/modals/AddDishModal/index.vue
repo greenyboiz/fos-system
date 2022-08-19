@@ -48,7 +48,7 @@
             @input="handleSelectCat"
           />
         </div>
-        <div class="info-dish__item">
+        <!-- <div class="info-dish__item">
           <label for="status">Trạng thái:</label>
           <div class="d-flex" style="width: 100%">
             <div v-for="status in statusType" :key="status.id">
@@ -66,7 +66,7 @@
               </CustomCheckbox>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div style="padding: 10px">
@@ -96,7 +96,7 @@ export default {
 
   components: {
     ImageOrDefault,
-    CustomCheckbox,
+    // CustomCheckbox,
     MultiSelect,
   },
 
@@ -122,7 +122,7 @@ export default {
       modalTitle: '',
       avatar: '',
       isLoading: false,
-      statusSelected: '',
+      statusSelected: 1,
       statusType: [
         { id: 1, name: 'Còn hàng' },
         { id: 0, name: 'Hết hàng' },
@@ -146,6 +146,8 @@ export default {
       if (title) {
         this.modalTitle = title;
         this.getDishById();
+      } else  {
+        this.modalTitle = '';
       }
       this.getListCategory();
       this.$refs.addDish.show();
@@ -158,7 +160,6 @@ export default {
       this.formDish.costPrice = 0;
       this.formDish.discount = 0;
       this.selectedCategory = {};
-      this.statusSelected = '';
       this.avatar = '';
       this.formDish.dishImage = '';
       this.$refs.addDish.hide();
@@ -263,7 +264,7 @@ export default {
         this.formDish.dishesName.trim();
         this.formDish.description.trim();
         this.selectedCategory = dish.category;
-        this.statusSelected = dish.status ? 1 : 0;
+        // this.statusSelected = dish.status ? 1 : 0;
         this.avatar = dish.dishImage;
       }
     },

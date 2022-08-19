@@ -116,6 +116,8 @@ import StarFill from '@/components/CustomIcon/star-fill.vue';
 import { map, filter, reduce } from 'lodash';
 import SupportModal from '@/components/common/SupportModal/index.vue';
 import commonMixin from '@/plugins/commonMixin';
+import SockJs from 'sockjs-client';
+import StompClient from 'webstomp-client';
 export default {
   name: 'Page',
 
@@ -182,6 +184,7 @@ export default {
 
   mounted() {
     this.orderIdLocal = localStorage.getItem('orderId');
+    this.connect();
     this.getListCategory();
     this.getListDish();
   },
@@ -193,6 +196,25 @@ export default {
       updateTotalPriceOrder: 'updateTotalPriceOrder',
       updateOrderItemList: 'updateOrderItemList',
     }),
+
+    connect() {
+      this.socket = new SockJs('https://project-for-fos-mld.herokuapp.com/ws');
+      this.stompClient = StompClient.over(this.socket);
+      this.stompClient.connect({}, this.onConnected);
+    },
+
+    onConnected() {
+      this.stompClient.subscribe('/topic/staffRoom', this.onMessageReceived);
+    },
+
+    onMessageReceived(payload) {
+      const message = JSON.parse(payload.body);
+
+      if(message.type === 'CHAT') {
+          const element = document.getElementById(message.content);
+          element.style.backgroundColor = '#00FF00';
+      }
+    },
 
     removeKeyword() {
       this.searchText = '';

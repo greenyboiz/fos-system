@@ -30,6 +30,7 @@
         <button>Gọi món</button>
       <!-- </nuxt-link> -->
     </div>
+    <!-- <div><button @click="sendMessage(1)">test socket</button></div> -->
     <SupportModal ref="supportModalRef" />
   </div>
 </template>
@@ -40,6 +41,8 @@ import VueSlickCarousel from 'vue-slick-carousel';
 import { orderService, tableManagementService } from '@/services';
 import { isEmpty } from 'lodash';
 import SupportModal from '@/components/common/SupportModal/index.vue';
+import SockJs from 'sockjs-client';
+import StompClient from 'webstomp-client';
 
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
@@ -84,19 +87,6 @@ export default {
     }),
   },
 
-  // watch: {
-  //   isValidate: {
-  //     handler() {
-  //       this.postOrder();
-  //     },
-  //     immediate: true,
-  //   }
-  // },
-
-  // created() {
-
-  // },
-
   mounted() {
     const path = window.location.toString();
     this.formData.qrCode.qrcodeId = parseInt(path.substr(path.length - 1));
@@ -106,12 +96,41 @@ export default {
         qrcodeId: this.formData.qrCode.qrcodeId,
       }
     });
+    this.connect();
   },
 
   methods: {
     ...mapMutations('clientView', {
       updateOrderId: 'updateOrderId'
     }),
+
+    connect() {
+      this.socket = new SockJs('https://project-for-fos-mld.herokuapp.com/ws');
+      this.stompClient = StompClient.over(this.socket);
+      this.stompClient.connect({}, this.onConnected);
+    },
+
+    onConnected() {
+      this.stompClient.subscribe('/topic/staffRoom', this.onMessageReceived);
+    },
+
+    sendMessage(id) {
+      if (this.stompClient) {
+        const tables = {
+          tableId: id,
+        };
+        this.stompClient.send('/app/chat.sendMessage', JSON.stringify(tables), {});
+      }
+    },
+
+    onMessageReceived(payload) {
+      const message = JSON.parse(payload.body);
+
+      if(message.type === 'CHAT') {
+          const element = document.getElementById(message.content);
+          element.style.backgroundColor = '#00FF00';
+      }
+    },
 
     getQrCodeId() {
       const path = window.location.toString();
@@ -140,8 +159,10 @@ export default {
       const res = await orderService.postOrder(requestParam);
 
       if (res.success) {
+        this.sendMessage(this.formData.qrCode.qrcodeId);
         this.updateOrderId(res.data.orderId);
         this.isValidate = true;
+        localStorage.setItem('tableId', this.formData.qrCode.qrcodeId);
         localStorage.setItem('orderId', res.data.orderId);
         localStorage.setItem('createAt', res.data.submitTime);
         localStorage.setItem('customerName', res.data.customer.fullName);

@@ -17,7 +17,6 @@
           <MultiSelect
             v-model.number="formTable.numberOfSeats"
             placeholder="Chọn số ghế"
-            label="number"
             :options="listSeat"
             :multiple="false"
           />
@@ -87,14 +86,7 @@ export default {
         { id: 0, name: 'Đã đầy' },
         { id: 1, name: 'Còn trống' },
       ],
-      listSeat: [
-        { id: 1, number: 2 },
-        { id: 2, number: 4 },
-        { id: 3, number: 6 },
-        { id: 4, number: 8 },
-        { id: 5, number: 10 },
-        { id: 6, number: 12 }
-      ]
+      listSeat: [2, 4, 6, 8, 10, 12]
     };
   },
 
@@ -106,10 +98,11 @@ export default {
 
   methods: {
     show(title) {
-      this.modalTitle = title;
-
-      if (this.modalTitle === 'update') {
+      if (title) {
+        this.modalTitle = title;
         this.getDetailTable();
+      } else {
+        this.modalTitle = '';
       }
       this.$refs.addTable.show();
     },
@@ -145,15 +138,15 @@ export default {
 
     validator() {
       if (!this.formTable.numberOfSeats) {
-        Vue.$toast.error('Vui lòng nhập số ghế');
-        document.getElementById('numOfSeat').focus();
+        Vue.$toast.error('Vui lòng chọn số ghế');
+        // document.getElementById('numOfSeat').focus();
         return false;
       }
 
       if (this.formTable.numberOfSeats <= 0) {
         Vue.$toast.error('Số ghế phải lớn hơn 0');
         this.formTable.numberOfSeats = '';
-        document.getElementById('numOfSeat').focus();
+        // document.getElementById('numOfSeat').focus();
         return false;
       }
 
@@ -162,7 +155,7 @@ export default {
       if (!regexNumSeat.test(this.formTable.numberOfSeats)) {
         Vue.$toast.error('Số ghế phải là số tự nhiên');
         this.formTable.numberOfSeats = '';
-        document.getElementById('numOfSeat').focus();
+        // document.getElementById('numOfSeat').focus();
         return false;
       }
 

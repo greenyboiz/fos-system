@@ -124,7 +124,7 @@
 import ImageOrDefault from '@/components/common/ImageOrDefault/index.vue';
 import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import { staffManagementService } from '@/services';
-import { toNumber } from 'lodash';
+import { toNumber, find } from 'lodash';
 
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
@@ -144,6 +144,11 @@ export default {
       type: Number,
       default: 0,
     },
+
+    listStaff: {
+      type: Array,
+      default: () => []
+    }
   },
 
   data() {
@@ -212,6 +217,8 @@ export default {
       if (title) {
         this.modalTitle = title;
         this.getUserById();
+      } else {
+        this.modalTitle = '';
       }
       this.$refs.addUser.show();
     },
@@ -282,6 +289,14 @@ export default {
         return;
       }
 
+      const existUsername = find(this.listStaff, (item) => item.userName === this.formUser.userName);
+      if (existUsername) {
+        Vue.$toast.error('Tên tài khoản đã tồn tại');
+        this.formUser.userName = '';
+        document.getElementById('username').focus();
+        return;
+      }
+
       if (!this.formUser.contact) {
         Vue.$toast.error('Bạn chưa nhập Số điện thoại');
         document.getElementById('phone').focus();
@@ -296,6 +311,14 @@ export default {
         return false;
       }
 
+      const existContact = find(this.listStaff, (item) => item.contact === this.formUser.contact);
+      if (existContact) {
+        Vue.$toast.error('Số điện thoại đã tồn tại');
+        this.formUser.contact = '';
+        document.getElementById('phone').focus();
+        return false;
+      }
+
       if (!this.formUser.email) {
         Vue.$toast.error('Bạn chưa nhập Email');
         document.getElementById('email').focus();
@@ -305,6 +328,14 @@ export default {
       const regexEmail = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
       if (!regexEmail.test(this.formUser.email)) {
+        Vue.$toast.error('Bạn chưa nhập đúng định dạng email');
+        this.formUser.email = '';
+        document.getElementById('email').focus();
+        return false;
+      }
+
+      const existEmail = find(this.listStaff, (item) => item.email === this.formUser.email);
+      if (existEmail) {
         Vue.$toast.error('Bạn chưa nhập đúng định dạng email');
         this.formUser.email = '';
         document.getElementById('email').focus();
