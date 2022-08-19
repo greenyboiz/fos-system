@@ -24,10 +24,21 @@ public class WebSocketController {
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/staffRoom")
-    public TableWs sendMessage(@Payload TableWs tableWs) {
-//        TableWs tableWs = new TableWs();
-//        tableWs.setTableId(tables.getTableId());
-        System.out.println("noi dung: " + tableWs.getTableId());
+    public TableWs sendMessage(@Payload Tables tables) {
+        TableWs tableWs = new TableWs();
+        tableWs.setTableId(tables.getTableId());
+        tableWs.setType("order");
+        System.out.println("noi dung: " + tables.getTableId());
+        return tableWs;
+    }
+
+    @MessageMapping("/chat.sendSupport")
+    @SendTo("/topic/staffRoom")
+    public TableWs sendSupport(@Payload Tables tables) {
+        TableWs tableWs = new TableWs();
+        tableWs.setTableId(tables.getTableId());
+        tableWs.setType("support");
+        System.out.println("noi dung: " + tables.getTableId());
         return tableWs;
     }
     @Data
@@ -35,6 +46,7 @@ public class WebSocketController {
         Long tableId;
         String type;
     }
+
 //    @MessageMapping("/chat.addUser")
 //    @SendTo("/topic/staffRoom")
 //    public Chat addUser(@Payload Chat chat, SimpMessageHeaderAccessor headerAccessor) {
