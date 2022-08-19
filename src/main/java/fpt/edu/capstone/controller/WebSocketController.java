@@ -24,15 +24,16 @@ public class WebSocketController {
 
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/staffRoom")
-    public TableWs sendMessage(@Payload Tables tables) {
-        TableWs tableWs = new TableWs();
-        tableWs.setTableId(tables.getTableId());
-        System.out.println("noi dung: " + tables.getTableId());
+    public TableWs sendMessage(@Payload TableWs tableWs) {
+//        TableWs tableWs = new TableWs();
+//        tableWs.setTableId(tables.getTableId());
+        System.out.println("noi dung: " + tableWs.getTableId());
         return tableWs;
     }
     @Data
     class TableWs{
         Long tableId;
+        String type;
     }
 //    @MessageMapping("/chat.addUser")
 //    @SendTo("/topic/staffRoom")
