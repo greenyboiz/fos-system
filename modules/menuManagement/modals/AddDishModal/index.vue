@@ -17,12 +17,12 @@
       <input ref="avatarRef" style="display: none" type="file" accept="image/*" @change="handleAddAvatar($event)" />
       <div class="info-dish__detail">
         <div class="info-dish__item">
-          <label for="name">Tên món ăn:</label>
-          <input id="name" v-model="formDish.dishesName" type="text" placeholder="Nhập tên món ăn" />
+          <label for="dishesName">Tên món ăn:</label>
+          <input id="dishesName" v-model="formDish.dishesName" type="text" placeholder="Nhập tên món ăn" />
         </div>
         <div class="info-dish__item">
-          <label for="username">Mô tả:</label>
-          <input id="username" v-model="formDish.description" type="text" placeholder="Nhập mô tả" />
+          <label for="description">Mô tả:</label>
+          <input id="description" v-model="formDish.description" type="text" placeholder="Nhập mô tả" />
         </div>
         <div class="info-dish__item">
           <label for="salePrice">Giá bán:</label>
@@ -84,7 +84,7 @@ import ImageOrDefault from '@/components/common/ImageOrDefault/index.vue';
 import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import { menuManagementService } from '@/services';
 import MultiSelect from 'vue-multiselect';
-import { size } from 'lodash';
+import { size, find } from 'lodash';
 
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
@@ -105,6 +105,10 @@ export default {
       type: Number,
       default: 0,
     },
+    lishDishes: {
+      type: Array,
+      default: () => []
+    }
   },
 
   data() {
@@ -299,6 +303,7 @@ export default {
     validator() {
       if (!this.formDish.dishesName) {
         Vue.$toast.error('Vui lòng nhập tên Món ăn');
+        document.getElementById('dishesName').focus();
         return false;
       }
 
@@ -306,11 +311,22 @@ export default {
 
       if (!regexDishname.test(this.removeAscent(this.formDish.dishesName))) {
         Vue.$toast.error('Tên món ăn không được chứa kí tự đặc biệt và có độ dài từ 2-40 kí tự');
+        this.formDish.dishesName = '';
+        document.getElementById('dishesName').focus();
+        return false;
+      }
+
+      const existDishName = find(this.lishDishes, (item) => item.dishesName === this.formDish.dishesName);
+      if (existDishName) {
+        Vue.$toast.error('Tên món ăn đã tồn tại');
+        this.formDish.dishesName = '';
+        document.getElementById('dishesName').focus();
         return false;
       }
 
       if (!this.formDish.description) {
         Vue.$toast.error('Vui lòng mô tả món ăn');
+        document.getElementById('description').focus();
         return false;
       }
 

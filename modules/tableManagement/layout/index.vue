@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <AddTableModal ref="addTableModalRef" :tableId="tableId" @complete="complete" />
+    <AddTableModal ref="addTableModalRef" :tableId="tableId" :listTable="listTable" @complete="complete" />
   </div>
 </template>
 

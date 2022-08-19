@@ -46,7 +46,7 @@
 import { tableManagementService } from '@/services';
 import QrCode from 'vue-qrcode-component';
 import MultiSelect from 'vue-multiselect';
-import { toNumber } from 'lodash';
+import { toNumber, find } from 'lodash';
 
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
@@ -67,6 +67,10 @@ export default {
       type: Number,
       default: 1,
     },
+    listTable: {
+      type: Array,
+      default: () => []
+    }
   },
 
   data() {
@@ -161,6 +165,13 @@ export default {
 
       if (!this.formTable.qrCode.qrcodeLink) {
         Vue.$toast.error('Vui lòng nhập link của mã QR');
+        document.getElementById('qrlink').focus();
+        return false;
+      }
+
+      const existQrcode = find(this.listTable, (item) => item.qrCode.qrcodeLink === this.formTable.qrCode.qrcodeLink);
+      if (existQrcode) {
+        Vue.$toast.error('Mã QR đã tồn tại');
         document.getElementById('qrlink').focus();
         return false;
       }

@@ -11,7 +11,7 @@
   >
     <div class="categoryWrapper">
       <div class="actionCate">
-        <input v-model="formData.categoryName" type="text" placeholder="Tên danh mục">
+        <input id="cateName" v-model="formData.categoryName" type="text" placeholder="Tên danh mục">
         <div class="addCategory" @click="handleSubmit()">
           <button v-if="!isEdit">Thêm mới</button>
           <button v-else>Cập nhật</button>
@@ -130,6 +130,7 @@ export default {
     validator() {
       if (!this.formData.categoryName) {
         Vue.$toast.error('Vui lòng nhập tên danh mục');
+        document.getElementById('cateName').focus();
         return false;
       }
 
@@ -137,6 +138,16 @@ export default {
 
       if (!regexDishname.test(this.removeAscent(this.formData.categoryName))) {
         Vue.$toast.error('Tên danh mục không được chứa kí tự đặc biệt và có độ dài từ 2-40 kí tự');
+        this.formData.categoryName = '';
+        document.getElementById('cateName').focus();
+        return false;
+      }
+
+      const existCate = find(this.listCategory, (item) => item.categoryName === this.formData.categoryName);
+      if (existCate) {
+        Vue.$toast.error('Tên danh mục đã tồn tại');
+        this.formData.categoryName = '';
+        document.getElementById('cateName').focus();
         return false;
       }
       return true;
