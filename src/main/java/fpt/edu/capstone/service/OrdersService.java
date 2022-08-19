@@ -133,7 +133,7 @@ public class OrdersService implements IOrdersService {
 
     @Override
     public List<OrderDTO> getAllListOrders() {
-        String query = "SELECT o.order_id, c.full_name , o.submit_time, (SUM(d.sale_price*oi.quantity) + SUM(d.sale_price*oi.quantity)/10) AS total_money_of_order\n" +
+        String query = "SELECT o.order_id, c.full_name ,c.contact, o.submit_time, (SUM(d.sale_price*oi.quantity) + SUM(d.sale_price*oi.quantity)/10) AS total_money_of_order\n" +
                 "\tFROM railway.customer c INNER JOIN railway.orders o \n" +
                 "    ON o.customer_id = c.customer_id INNER JOIN railway.order_item oi\n" +
                 "\tON o.order_id = oi.order_id INNER JOIN railway.dishes d ON d.dishes_id = oi.dishes_id\n" +

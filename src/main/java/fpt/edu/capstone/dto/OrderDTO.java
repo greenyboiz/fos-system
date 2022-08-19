@@ -17,6 +17,8 @@ public class OrderDTO {
     private Long orderId;
     private String fullName;
 //    private QRCode qrCode;
+    private String contact;
     private Date submitTime;
+    private Date submitDate;
     private BigDecimal totalMoneyOfOrder;
 }
