@@ -41,6 +41,10 @@
       width: 100%;
     }
   }
+
+  .multiselect__option::after {
+    display: none;
+  }
 }
 
 .info-table {
@@ -123,7 +127,7 @@
     input {
       height: 36px;
       margin-right: 10px;
-      border: 1px solid #d6d6d6;
+      border: 1px solid #e8e8e8;
       border-radius: 4px;
       padding-left: 10px;
     }

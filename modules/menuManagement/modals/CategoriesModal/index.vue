@@ -143,7 +143,6 @@ export default {
     },
 
     handleSubmit() {
-      console.log(this.isEdit);
       if (!this.validator()) {
         return;
       }
@@ -224,6 +223,7 @@ export default {
       if (res.success) {
         Vue.$toast.success('Thêm mới thành công');
         this.getListCategory();
+        this.formData.categoryName = '';
       }
     },
 

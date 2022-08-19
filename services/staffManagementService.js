@@ -1,4 +1,9 @@
 import axios from 'axios';
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+Vue.use(VueToast, { position: 'top' });
 
 class StaffManagementService {
   async getListUser(params) {

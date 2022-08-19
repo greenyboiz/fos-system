@@ -25,6 +25,12 @@ class TableManagementService {
     return res.data;
   }
 
+  async changeActiveTable(tableId, params, header) {
+    const res = await axios.put(`https://project-for-fos-mld.herokuapp.com/api/tables/changeActive/${tableId}`, params, header);
+
+    return res.data;
+  }
+
   async getTableById(tableId, header) {
     const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/tables/${tableId}`, header);
 

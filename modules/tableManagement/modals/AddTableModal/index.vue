@@ -13,34 +13,20 @@
       <div class="info-table__detail">
         <div class="info-table__item">
           <label for="numOfSeat">Số lượng ghế:</label>
-          <input id="numOfSeat" v-model.number="formTable.numberOfSeats" type="number" placeholder="Nhập số ghế" min="0" />
+          <!-- <input id="numOfSeat" v-model.number="formTable.numberOfSeats" type="number" placeholder="Nhập số ghế" min="0" /> -->
+          <MultiSelect
+            v-model.number="formTable.numberOfSeats"
+            placeholder="Chọn số ghế"
+            label="number"
+            :options="listSeat"
+            :multiple="false"
+          />
         </div>
 
         <div class="info-table__item">
           <label for="qrlink">QR Code Link:</label>
           <input id="qrlink" v-model="formTable.qrCode.qrcodeLink" type="text" placeholder="Nhập link QR" />
         </div>
-
-        <!-- <div class="info-table__item a">
-          <div class="b">Trạng thái:</div>
-          <div class="d-flex tw-justify-around" style="width: 100%">
-            <template v-for="status in statusType">
-              <CustomCheckbox
-                :key="status.id"
-                v-model="statusSelected"
-                class="mr-2"
-                shape="circle"
-                type="radio"
-                styleCheck="dot"
-                :keyValue="`${status.id}s`"
-                :inputValue="status.id"
-                :customLabel="true"
-              >
-                <template slot="custom-label"> {{ status.name }} </template>
-              </CustomCheckbox>
-            </template>
-          </div>
-        </div> -->
       </div>
 
       <div class="info-table__qr">
@@ -58,10 +44,9 @@
 </template>
 
 <script>
-// import ImageOrDefault from '@/components/common/ImageOrDefault/index.vue';
-import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import { tableManagementService } from '@/services';
 import QrCode from 'vue-qrcode-component';
+import MultiSelect from 'vue-multiselect';
 import { toNumber } from 'lodash';
 
 import Vue from 'vue';
@@ -74,9 +59,8 @@ export default {
   name: 'AddUserModal',
 
   components: {
-    // ImageOrDefault,
-    // CustomCheckbox,
     QrCode,
+    MultiSelect
   },
 
   props: {
@@ -98,11 +82,19 @@ export default {
       modalTitle: '',
       isLoading: false,
       isDone: false,
-      statusSelected: null,
+      statusSelected: 2,
       statusType: [
         { id: 0, name: 'Đã đầy' },
         { id: 1, name: 'Còn trống' },
       ],
+      listSeat: [
+        { id: 1, number: 2 },
+        { id: 2, number: 4 },
+        { id: 3, number: 6 },
+        { id: 4, number: 8 },
+        { id: 5, number: 10 },
+        { id: 6, number: 12 }
+      ]
     };
   },
 

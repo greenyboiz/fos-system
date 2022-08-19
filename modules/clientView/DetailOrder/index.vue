@@ -45,11 +45,12 @@
               </div>
               <div class="spec-qua">
                 <div class="spec-quantity">
-                  <div class="changeNum">
+                  SL: {{ spec.quantity }}
+                  <!-- <div class="changeNum">
                     <span class="downNumber" @click="decreaseDish(spec)"><i class="bi bi-dash-circle"></i></span>
                     <span>{{ spec.quantity }}</span>
                     <span class="upNumber" @click="increaseDish(spec)"><i class="bi bi-plus-circle"></i></span>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -73,10 +74,10 @@
         </div>
       </div>
       <div class="action-btn">
-        <div v-if="!isOrder" class="btn-order" @click="handleDoneOrder()">
+        <!-- <div v-if="!isOrder" class="btn-order" @click="handleDoneOrder()">
           <button>ORDER</button>
-        </div>
-        <div v-else class="btn-order bg-info" @click="handleOrderMore()">
+        </div> -->
+        <div class="btn-order" @click="handleOrderMore()">
           <nuxt-link :to="`/khach-hang/order/${orderIdLocal}`">
             <button>Gọi thêm</button>
           </nuxt-link>
@@ -94,7 +95,6 @@
 
 <script>
 import Trash from '@/components/CustomIcon/trash.vue';
-import { mapState } from 'vuex';
 import SupportModal from '@/components/common/SupportModal/index.vue';
 import Loading from '@/components/common/Loading/index.vue';
 import commonMixin from '@/plugins/commonMixin';
@@ -133,11 +133,6 @@ export default {
   },
 
   computed: {
-    ...mapState('clientView', {
-      orderId: (state) => state.orderId,
-      orderItemList: (state) => state.orderItemList,
-    }),
-
     totalPriceOrder() {
       let total = 0;
       map(this.orderList, (item) => {
@@ -147,14 +142,17 @@ export default {
     }
   },
 
-  created() {
-    this.getOrderItemList();
+  watch: {
+    orderList(newVal) {
+      this.orderList = newVal;
+    }
   },
 
   mounted() {
     this.orderIdLocal = localStorage.getItem('orderId');
-
-    this.getOrderItemList();
+    // this.orderList = JSON.parse(localStorage.getItem('listOrderItem'));
+    // clearTimeout(timeout);
+    this.getOrderItemList(this.orderIdLocal);
   },
 
   methods: {
@@ -177,10 +175,10 @@ export default {
       val.quantity++;
     },
 
-    async getOrderItemList() {
+    async getOrderItemList(orderId) {
       this.isLoading = true;
-      const orderIdTmp = localStorage.getItem('orderId');
-      const res = await orderService.getOrderItem(orderIdTmp).finally(() => {
+      // const orderIdTmp = localStorage.getItem('orderId');
+      const res = await orderService.getOrderItem(orderId).finally(() => {
         this.isLoading = false;
       });
 

@@ -21,6 +21,8 @@
             <div class="table__col">Mã ĐH</div>
             <div class="table__col">Tên khách hàng</div>
             <div class="table__col">Số điện thoại</div>
+            <div class="table__col">Thời gian tạo đơn</div>
+            <div class="table__col">Tổng tiền (đ)</div>
             <div class="table__col">Thao tác</div>
           </div>
 
@@ -32,10 +34,12 @@
             </template>
 
             <template v-else>
-              <div v-for="(item, index) in listOrder" :key="item.id" class="table__body">
+              <div v-for="(item, index) in listOrder" :key="item.orderId" class="table__body">
                 <div class="table__row">{{ `O${ index + 1 }` }}</div>
-                <div class="table__row">{{ item.customer.fullName }}</div>
-                <div class="table__row">{{ item.customer.contact }}</div>
+                <div class="table__row">{{ item.fullName }}</div>
+                <div class="table__row">{{ item.contact }}</div>
+                <div class="table__row">{{ item.submitTime }} {{ item.submitDate }}</div>
+                <div class="table__row">{{ currencyFormatter(item.totalMoneyOfOrder) }}</div>
 
                 <div class="table__row align-items-center">
                   <div class="btn-group align-top">
@@ -78,6 +82,7 @@ import { size } from 'lodash';
 import { orderService } from '@/services';
 import Loading from '@/components/common/Loading/index.vue';
 import OrderModal from './modals/OrderModal/index.vue';
+import commonMixin from '@/plugins/commonMixin';
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
@@ -91,6 +96,8 @@ export default {
     Loading,
     OrderModal,
   },
+
+  mixins: [commonMixin],
 
   data() {
     return {
@@ -108,26 +115,6 @@ export default {
     size,
     editClick(id) {
       this.$refs.detailOrder.show(id);
-    },
-
-    remove(val) {
-      this.deleteDish(val);
-    },
-
-    handleShowAddDishesModal() {
-      this.$refs.addDishModalRef.show();
-    },
-
-    addedDish(val) {
-      if (val) {
-        this.getListDish();
-      }
-    },
-
-    updatedDish(val) {
-      if (val) {
-        this.getListDish();
-      }
     },
 
     async getOrderList() {

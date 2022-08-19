@@ -22,7 +22,7 @@ class OrderService {
   async postOrderItem(params, header) {
     const res = await axios.post('https://project-for-fos-mld.herokuapp.com/api/orderItem', params, header);
 
-    return res.data;
+    return res;
   }
 
   async getTotalPayment(orderId, header) {

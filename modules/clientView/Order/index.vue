@@ -99,10 +99,10 @@
         </div>
       </div>
     </div>
-    <div class="totalOrder" @click="handleOpenOrderList()">
-      <nuxt-link :to="`/khach-hang/chi-tiet-order/${orderIdLocal}`">
+    <div v-if="totalOrder > 0" class="totalOrder" @click="handleOpenOrderList()">
+      <!-- <nuxt-link :to="`/khach-hang/chi-tiet-order/${orderIdLocal}`"> -->
         <button>Bạn đã order ({{ totalOrder }})</button>
-      </nuxt-link>
+      <!-- </nuxt-link> -->
     </div>
     <SupportModal ref="supportModalRef" />
   </div>
@@ -111,7 +111,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import VueSlickCarousel from 'vue-slick-carousel';
-import { menuManagementService, orderService } from '@/services';
+import { menuManagementService, orderService, clientService } from '@/services';
 import StarFill from '@/components/CustomIcon/star-fill.vue';
 import { map, filter, reduce } from 'lodash';
 import SupportModal from '@/components/common/SupportModal/index.vue';
@@ -226,7 +226,7 @@ export default {
     },
 
     async getListDish() {
-      const res = await menuManagementService.getListDish();
+      const res = await clientService.getListDish();
 
       const dishesList = res.data;
 
@@ -267,15 +267,15 @@ export default {
         'list': test
       };
 
-      const res = await orderService.postOrderItem(requestParam);
-
-      if (res.success) {
-        this.updateOrderId(orderIdTmp);
-        console.log(orderIdTmp);
-        // this.getOrderItemList(orderIdTmp);
-        this.getTotalPayment(orderIdTmp);
-        this.orderIdLocal = orderIdTmp;
+      const res = await orderService.postOrderItem(requestParam).finally(() => {
         this.$router.push(`/khach-hang/chi-tiet-order/${this.orderIdLocal}`);
+      });
+
+      if (res.status === 200) {
+        // this.updateOrderId(orderIdTmp);
+        // this.getOrderItemList(orderIdTmp);
+        // this.getTotalPayment(orderIdTmp);
+        this.orderIdLocal = orderIdTmp;
       }
     },
 
@@ -287,8 +287,10 @@ export default {
       const res = await orderService.getOrderItem(orderId);
 
       if (res.success) {
-        const orderList = res.data;
-        this.updateOrderItemList(orderList);
+        // const orderList = res.data;
+        const orderList = JSON.stringify(res.data);
+        localStorage.setItem('listOrderItem', orderList);
+        // this.updateOrderItemList(orderList);
       }
     },
 

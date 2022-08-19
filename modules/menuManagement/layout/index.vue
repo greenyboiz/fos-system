@@ -68,7 +68,8 @@
                       Edit
                     </button>
                     <button class="btn__delete" @click="remove(item.dishesId)">
-                      <img src="@/assets/icons/delete.png" alt="" />
+                      <!-- <img src="@/assets/icons/delete.png" alt="" /> -->
+                      Chuyển trạng thái
                     </button>
                   </div>
                 </div>
@@ -98,6 +99,7 @@ import AddDishModal from '../modals/AddDishModal/index.vue';
 import CategoriesModal from '../modals/CategoriesModal/index.vue';
 import Loading from '@/components/common/Loading/index.vue';
 import commonMixin from '@/plugins/commonMixin';
+import { find } from 'lodash';
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
@@ -160,7 +162,7 @@ export default {
     },
 
     remove(val) {
-      this.deleteDish(val);
+      this.changeStatus(val);
     },
 
     handleShowAddDishesModal() {
@@ -203,14 +205,17 @@ export default {
 
     },
 
-    deleteDish(dishId) {
+    changeStatus(dishId) {
+      // const findDish = find(this.listDishes, (item) => item.dishesId === dishId);
+      // console.log(findDish);
+      // if (findDish.status)
       this.$confirmPopup.open({
         title: 'Xác nhận',
-        message: 'Bạn có chắc muốn xóa món ăn này không?',
-        confirmText: 'Xóa',
+        message: 'Bạn có chắc muốn đổi trạng thái món ăn này không?',
+        confirmText: 'Chuyển trạng thái',
 
         confirmed: async () => {
-          const res = await menuManagementService.deleteDish(dishId, {
+          const res = await menuManagementService.changeStatusDish(dishId, {}, {
             headers: {
               Authorization: this.$auth.$storage._state['_token.local'],
             },
@@ -218,7 +223,7 @@ export default {
 
           if (res.success) {
             this.getListDish();
-            Vue.$toast.success('Xóa món ăn thành công');
+            Vue.$toast.success('Đổi trạng thái món ăn thành công');
           }
         },
       });

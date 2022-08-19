@@ -273,7 +273,6 @@ export default {
       if (res.success) {
         const resData = res.data;
         filter(resData, (item) => item.role.roleName === 'ROLE_ADMIN');
-        console.log(resData);
         this.listStaff = resData;
       }
     },

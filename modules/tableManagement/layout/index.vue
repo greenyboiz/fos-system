@@ -49,8 +49,9 @@
                       >
                         Edit
                       </button>
-                      <button class="btn__delete" @click="remove(item.tableId)">
-                        <img src="@/assets/icons/delete.png" alt="" />
+                      <button class="btn__delete" @click="changeActiveTable(item.tableId)">
+                        <!-- <img src="@/assets/icons/delete.png" alt="" /> -->
+                        Vô hiệu hóa
                       </button>
                     </div>
                   </td>
@@ -60,26 +61,6 @@
           </table>
         </div>
       </div>
-
-      <!--  -->
-      <!-- <div v-if="isOpenQRCode" class="tableManagement__qr">
-        <div class="qr">
-          <div class="qr__title title">Bàn số {{ selectedTable.id }}</div>
-          <div class="qr__link">
-            URL link: <input v-model="selectedTable.qr_url" placeholder="Vui lòng nhập link qr" type="text" />
-          </div>
-
-          <div class="add-button">
-            <button class="btn__add" @click="handleSave()">
-              <a href=""></a>
-            </button>
-          </div>
-        </div>
-
-        <div class="qr__img">
-          <QrCode id="specificQrCode" class="qr__code" :size="400" :text="selectedTable.qr_url"></QrCode>
-        </div>
-      </div> -->
     </div>
 
     <AddTableModal ref="addTableModalRef" :tableId="tableId" @complete="complete" />
@@ -91,7 +72,7 @@ import Loading from '@/components/common/Loading/index.vue';
 
 import { tableManagementService } from '@/services';
 import AddTableModal from '../modals/AddTableModal/index.vue';
-import { size, forEach } from 'lodash';
+import { size, find } from 'lodash';
 import QrCode from 'vue-qrcode-component';
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
@@ -149,8 +130,8 @@ export default {
       this.$refs.addTableModalRef.show('update');
     },
 
-    remove(val) {
-      this.deleteTable(val);
+    changeActiveTable(val) {
+      this.inActiveTable(val);
     },
 
     handleShowAddTablesModal() {
@@ -180,14 +161,19 @@ export default {
       this.listTable = res.data;
     },
 
-    deleteTable(dishId) {
+    inActiveTable(tableId) {
+      const hadTable = find(this.listTable, (item) => item.tableId === tableId);
+      if (!hadTable.status) {
+        Vue.$toast.error('Bàn đã có người, không thể vô hiệu hóa');
+        return;
+      }
       this.$confirmPopup.open({
         title: 'Xác nhận',
-        message: 'Bạn có chắc muốn xóa bàn này không?',
-        confirmText: 'Xóa',
+        message: 'Bạn có chắc muốn vô hiệu hóa bàn này không?',
+        confirmText: 'Vô hiệu hóa',
 
         confirmed: async () => {
-          const res = await tableManagementService.deleteTable(dishId, {
+          const res = await tableManagementService.changeActiveTable(tableId, {}, {
             headers: {
               Authorization: this.$auth.$storage._state['_token.local'],
             },
@@ -195,7 +181,7 @@ export default {
 
           if (res.success) {
             this.getListTable();
-            Vue.$toast.success('Xóa bàn thành công');
+            Vue.$toast.success('Vô hiệu hóa thành công');
           }
         },
       });

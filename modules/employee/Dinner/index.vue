@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { tableManagementService } from '@/services';
+import { clientService } from '@/services';
 
 export default {
   name: 'Dinner',
@@ -41,7 +41,7 @@ export default {
 
   methods: {
     async getListTable() {
-      const res = await tableManagementService.getListTable({
+      const res = await clientService.getListTableStaff({
         headers: {
           Authorization: this.$auth.$storage._state['_token.local'],
         },
