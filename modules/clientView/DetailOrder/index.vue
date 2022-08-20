@@ -157,10 +157,6 @@ export default {
   },
 
   methods: {
-    handleShowSupportModal() {
-      this.$refs.supportModalRef.show();
-    },
-
     connect() {
       this.socket = new SockJs('https://project-for-fos-mld.herokuapp.com/ws');
       this.stompClient = StompClient.over(this.socket);
@@ -169,15 +165,32 @@ export default {
 
     onConnected() {
       this.stompClient.subscribe('/topic/staffRoom', this.onMessageReceived);
+      const tableIdTmp = localStorage.getItem('tableId');
+
+      this.sendMessage(tableIdTmp);
+    },
+
+    sendMessage(id) {
+      if (this.stompClient) {
+        const tables = {
+          tableId: id,
+        };
+        this.stompClient.send('/app/chat.sendMessage', JSON.stringify(tables), {});
+      }
     },
 
     onMessageReceived(payload) {
       const message = JSON.parse(payload.body);
+      console.log(message);
 
       if(message.type === 'CHAT') {
           const element = document.getElementById(message.content);
           element.style.backgroundColor = '#00FF00';
       }
+    },
+
+    handleShowSupportModal() {
+      this.$refs.supportModalRef.show();
     },
 
     removeKeyword() {

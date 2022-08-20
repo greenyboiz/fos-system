@@ -112,6 +112,8 @@ import Order from '../../modules/employee/Order/index.vue';
 import Dinner from '../../modules/employee/Dinner/index.vue';
 import SwapTableModal from './modals/SwapTableModal/index.vue';
 import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
+import SockJs from 'sockjs-client';
+import StompClient from 'webstomp-client';
 
 
 import Vue from 'vue';
@@ -156,30 +158,55 @@ export default {
 
   mounted() {
     // this.getOrderByTableId();
+    this.connect();
   },
 
   methods: {
+    connect() {
+      this.socket = new SockJs('https://project-for-fos-mld.herokuapp.com/ws');
+      this.stompClient = StompClient.over(this.socket);
+      this.stompClient.connect({}, this.onConnected);
+    },
+
+    onConnected() {
+      this.stompClient.subscribe('/topic/staffRoom', this.onMessageReceived);
+    },
+
+    onMessageReceived(payload) {
+      const message = JSON.parse(payload.body);
+      console.log('mndt');
+      this.tableId = message.tableId;
+      this.getOrderByTableId(message.tableId);
+
+      if(message.type === 'CHAT') {
+          const element = document.getElementById(message.content);
+          element.style.backgroundColor = '#00FF00';
+      }
+    },
+
     tableHaveOrder(val) {
       if (val === true) {
         this.listDishes = [];
         return;
       }
       this.tableId = val;
-      this.getOrderByTableId();
+      this.getOrderByTableId(val);
     },
 
     handleOpenSwapTableModal() {
       this.$refs.swapTableRef.show();
     },
 
-    async getOrderByTableId() {
-      const res = await employeeService.getOrderByTableId(this.tableId, {
+    async getOrderByTableId(tableId) {
+      const res = await employeeService.getOrderByTableId(tableId, {
         headers: {
           Authorization: this.$auth.$storage._state['_token.local'],
         },
       });
 
       if (res.success) {
+      console.log('manhnd');
+
         this.getOrderItemList(res.data.orderId);
         this.getTotalPayment(res.data.orderId);
         this.orderId = res.data.orderId;

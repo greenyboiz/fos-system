@@ -29,15 +29,15 @@
         </div>
         <div class="info-staff__item">
           <label for="username">Tên tài khoản:</label>
-          <input id="username" v-model="formUser.userName" type="text" placeholder="Nhập tên tài khoản" />
+          <input id="username" v-model="formUser.userName" :disabled="modalTitle" type="text" placeholder="Nhập tên tài khoản" />
         </div>
         <div class="info-staff__item">
           <label for="phone">SĐT:</label>
-          <input id="phone" v-model="formUser.contact" type="text" placeholder="Nhập SĐT" />
+          <input id="phone" v-model="formUser.contact" :disabled="modalTitle" type="text" placeholder="Nhập SĐT" />
         </div>
         <div class="info-staff__item">
           <label for="email">Email:</label>
-          <input id="email" v-model="formUser.email" type="text" placeholder="Nhập email" />
+          <input id="email" v-model="formUser.email" :disabled="modalTitle" type="text" placeholder="Nhập email" />
         </div>
         <div v-if="!modalTitle" class="info-staff__item">
           <label for="pass">Mật khẩu:</label>
@@ -290,7 +290,7 @@ export default {
       }
 
       const existUsername = find(this.listStaff, (item) => item.userName === this.formUser.userName);
-      if (existUsername) {
+      if (existUsername && !this.modalTitle) {
         Vue.$toast.error('Tên tài khoản đã tồn tại');
         this.formUser.userName = '';
         document.getElementById('username').focus();
@@ -312,7 +312,7 @@ export default {
       }
 
       const existContact = find(this.listStaff, (item) => item.contact === this.formUser.contact);
-      if (existContact) {
+      if (existContact && !this.modalTitle) {
         Vue.$toast.error('Số điện thoại đã tồn tại');
         this.formUser.contact = '';
         document.getElementById('phone').focus();
@@ -335,7 +335,7 @@ export default {
       }
 
       const existEmail = find(this.listStaff, (item) => item.email === this.formUser.email);
-      if (existEmail) {
+      if (existEmail && !this.modalTitle) {
         Vue.$toast.error('Bạn chưa nhập đúng định dạng email');
         this.formUser.email = '';
         document.getElementById('email').focus();

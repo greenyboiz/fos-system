@@ -11,9 +11,16 @@
     @hidden="handleHideModal"
   >
     <div class="supportList">
-      <div v-for="sp in listSupport" :key="sp.key" class="support_item" @click="handleConfirm(sp.key)">
-        {{ sp.name }}
-      </div>
+      <template v-if="isLoading">
+        <div class="loading">
+          <Loading />
+        </div>
+      </template>
+      <template v-else>
+        <div v-for="sp in listSupport" :key="sp.key" class="support_item" @click="handleConfirm(sp.key)">
+          {{ sp.name }}
+        </div>
+      </template>
     </div>
     <ConfirmSpModal ref="confirmSpModalRef" />
   </b-modal>
@@ -23,11 +30,13 @@
 import ConfirmSpModal from '../ConfirmSpModal/index.vue';
 import SockJs from 'sockjs-client';
 import StompClient from 'webstomp-client';
+import Loading from '@/components/common/Loading/index.vue';
 export default {
   name: 'SupportModal',
 
   components: {
-    ConfirmSpModal
+    ConfirmSpModal,
+    Loading,
   },
 
   data() {
@@ -39,12 +48,17 @@ export default {
         { id: 4, name: 'Yêu cầu khác', key: 'call_out' }
       ],
       supportKey: '',
+      isLoading: false,
     };
   },
 
   methods: {
     show() {
-      this.connect();
+      this.isLoading = true;
+      setTimeout(() => {
+        this.connect();
+      }, 1500);
+      // this.connect();
       this.$refs.supportClient.show();
     },
 
@@ -75,6 +89,7 @@ export default {
       this.socket = new SockJs('https://project-for-fos-mld.herokuapp.com/ws');
       this.stompClient = StompClient.over(this.socket);
       this.stompClient.connect({}, this.onConnected);
+      this.isLoading = false;
     },
 
     onConnected() {

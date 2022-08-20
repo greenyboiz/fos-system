@@ -317,7 +317,7 @@ export default {
       }
 
       const existDishName = find(this.lishDishes, (item) => item.dishesName === this.formDish.dishesName);
-      if (existDishName) {
+      if (existDishName && !this.modalTitle) {
         Vue.$toast.error('Tên món ăn đã tồn tại');
         this.formDish.dishesName = '';
         document.getElementById('dishesName').focus();

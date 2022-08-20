@@ -124,12 +124,12 @@ export default {
     },
 
     onMessageReceived(payload) {
-      const message = JSON.parse(payload.body);
+      // const message = JSON.parse(payload.body);
 
-      if(message.type === 'CHAT') {
-          const element = document.getElementById(message.content);
-          element.style.backgroundColor = '#00FF00';
-      }
+      // if(message.type === 'CHAT') {
+      //     const element = document.getElementById(message.content);
+      //     element.style.backgroundColor = '#00FF00';
+      // }
     },
 
     getQrCodeId() {

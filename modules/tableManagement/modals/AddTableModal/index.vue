@@ -170,7 +170,7 @@ export default {
       }
 
       const existQrcode = find(this.listTable, (item) => item.qrCode.qrcodeLink === this.formTable.qrCode.qrcodeLink);
-      if (existQrcode) {
+      if (existQrcode && !this.modalTitle) {
         Vue.$toast.error('Mã QR đã tồn tại');
         document.getElementById('qrlink').focus();
         return false;

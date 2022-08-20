@@ -71,13 +71,14 @@ export default {
         } else if (message.type === 'call_out') {
           this.clientSp = 'Khác';
         }
-      if (message.type) {
+      if (message.type === 'change_table' || message.type === 'take_away' || message.type === 'call_out') {
         const data = {
           tableId: message.tableId,
           rqType: this.clientSp,
         };
         this.handleDisplayClientRq(data);
       }
+      this.selectedTable = message.tableId;
 
       const element = document.getElementById(`${message.tableId}`);
       element.style.backgroundColor = '#FF0000';
@@ -112,6 +113,9 @@ export default {
 
     onSelectTable(tableId, statusTable) {
       this.selectedTable = tableId;
+      if (this.selectedTable) {
+        statusTable = false;
+      }
       if (statusTable) {
         this.$root.$emit('valueTable', statusTable);
         return;

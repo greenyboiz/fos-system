@@ -144,7 +144,7 @@ export default {
       }
 
       const existCate = find(this.listCategory, (item) => item.categoryName === this.formData.categoryName);
-      if (existCate) {
+      if (existCate && !this.isEdit) {
         Vue.$toast.error('Tên danh mục đã tồn tại');
         this.formData.categoryName = '';
         document.getElementById('cateName').focus();

@@ -18,9 +18,8 @@ class EmployeeService {
   }
 
   async getOrderByTableId(tableId, header) {
-    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/tableByOrder/${tableId}`, header).catch(() => {
-      Vue.$toast.error('Bàn đang trống, chưa có order');
-    });
+    const res = await axios.get(`https://project-for-fos-mld.herokuapp.com/api/tableByOrder/${tableId}`, header);
+
     return res.data;
   }
 
