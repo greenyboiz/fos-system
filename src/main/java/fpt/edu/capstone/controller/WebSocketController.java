@@ -1,9 +1,7 @@
 package fpt.edu.capstone.controller;
 
 
-import fpt.edu.capstone.entities.Chat;
-import fpt.edu.capstone.entities.RequestType;
-import fpt.edu.capstone.entities.Tables;
+import fpt.edu.capstone.entities.*;
 import lombok.Data;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -11,6 +9,9 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -75,6 +76,24 @@ public class WebSocketController {
     class TableWs{
         Long tableId;
         String type;
+    }
+
+    @MessageMapping("/chat.sendOrder")
+    @SendTo("/topic/staffRoom")
+    public DishesWs sendOrder(@Payload List<OrderItem> orderItemList) {
+        DishesWs dishesWs = new DishesWs();
+        List<Long> dishesIdList = new ArrayList<>();
+        for (OrderItem orderItem: orderItemList
+             ) {
+            dishesIdList.add(orderItem.getDishes().getDishesId());
+        }
+        dishesWs.setList(dishesIdList);
+//        System.out.println("noi dung: " + orderItem.getDishes().getDishesId());
+        return dishesWs;
+    }
+    @Data
+    class DishesWs{
+        List<Long> list;
     }
 
 //    @MessageMapping("/chat.addUser")
