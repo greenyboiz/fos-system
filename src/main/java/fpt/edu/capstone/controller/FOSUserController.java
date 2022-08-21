@@ -62,26 +62,6 @@ public class FOSUserController {
         }
     }
 
-
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @PutMapping("/users/update")
-//    public ResponseEntity<?> updateFOSUser(@RequestBody FOSUser fosUser){
-//        try {
-//            ResponseEntity<?> responseEntity = validateFOSUser.validateUpdateFOSUser(fosUser);
-//            if(responseEntity.getStatusCode() == HttpStatus.OK){
-//                ifosUserService.updateFOSUser(fosUser);
-//                return ResponseEntity.status(HttpStatus.OK).body(
-//                        new ResponseObject("ok", "Update FOSUser succsessfully",true, ifosUserService.updateFOSUser(fosUser))
-//                );
-//            }
-//            return responseEntity;
-//        }catch (Exception e){
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("fail", e.getMessage(),false, null)
-//            );
-//        }
-//    }
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/users/update")
     public ResponseEntity<?> updateFOSUser(@RequestBody FOSUser fosUser){
@@ -189,5 +169,4 @@ public class FOSUserController {
             );
         }
     }
-
 }

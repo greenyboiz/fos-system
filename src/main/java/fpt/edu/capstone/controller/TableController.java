@@ -1,9 +1,5 @@
 package fpt.edu.capstone.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fpt.edu.capstone.dto.OrderDTO;
-import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.entities.Orders;
 import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.entities.Tables;
@@ -11,14 +7,11 @@ import fpt.edu.capstone.implementService.IOrdersService;
 import fpt.edu.capstone.implementService.IQRCodeService;
 import fpt.edu.capstone.implementService.ITablesService;
 import fpt.edu.capstone.response.ResponseObject;
-import fpt.edu.capstone.response.ResponseOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -125,35 +118,6 @@ public class TableController {
         );
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
-//    @PutMapping("/tables/update")
-//    public ResponseEntity<?> updateTable(@RequestBody Tables table){
-//        Tables tables = iTablesService.updateTable(table);
-//        if(tables != null){
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "Update tableId "+ table.getTableId() + " successfull",true, tables)
-//            );
-//        }
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//                new ResponseObject("fail", "This tableId " + table.getTableId() + " not exist",true, null)
-//        );
-//    }
-
-//    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
-//    @PutMapping("/tables/update")
-//    public ResponseEntity<?> updateTable(@RequestBody Tables table){
-//
-//        Tables tables = iTablesService.updateTable(table);
-//        if(tables != null){
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "Update tableId "+ table.getTableId() + " successfull",true, tables)
-//            );
-//        }
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//                new ResponseObject("fail", "This tableId " + table.getTableId() + " not exist",true, null)
-//        );
-//    }
-
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_STAFF')")
     @PutMapping("/tables/update")
     public ResponseEntity<?> updateTable(@RequestBody Tables table){
@@ -241,28 +205,5 @@ public class TableController {
             );
         }
     }
-
-    //    @PostMapping( value = "/tables", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-//    private ResponseEntity<?> addTable(@RequestParam("file") MultipartFile file, @RequestPart("table") String table){
-//        if(file.getSize() == 0){
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("fail", "file null",false, null)
-//            );
-//        }else {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            Tables tables = new Tables();
-//            try {
-//                tables = objectMapper.readValue(table, Tables.class);
-//            } catch (JsonProcessingException e) {
-//                throw new RuntimeException(e);
-//            }
-//            iqrCodeService.addQRCode(tables.getQrCode());
-//            Tables tables1 = iTablesService.addTableAndQRcodeImage(file,tables);
-//
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "successfull",true, tables1)
-//            );
-//        }
-//    }
 
 }

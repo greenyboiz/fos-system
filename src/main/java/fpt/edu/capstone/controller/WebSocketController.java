@@ -6,7 +6,6 @@ import lombok.Data;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,13 +16,6 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class WebSocketController {
 
-//    @MessageMapping("/chat.sendMessage")
-//    @SendTo("/topic/staffRoom")
-//    public Chat sendMessage(@Payload Chat chat) {
-//        System.out.println("noi dung: " + chat.getContent());
-//        return chat;
-//    }
-
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/staffRoom")
     public TableWs sendMessage(@Payload Tables tables) {
@@ -33,16 +25,6 @@ public class WebSocketController {
         System.out.println("noi dung: " + tables.getTableId());
         return tableWs;
     }
-
-//    @MessageMapping("/chat.sendSupport")
-//    @SendTo("/topic/staffRoom")
-//    public TableWs sendSupport(@Payload Tables tables) {
-//        TableWs tableWs = new TableWs();
-//        tableWs.setTableId(tables.getTableId());
-//        tableWs.setType("support");
-//        System.out.println("noi dung: " + tables.getTableId());
-//        return tableWs;
-//    }
 
     @MessageMapping("/chat.sendSupportChangeTable")
     @SendTo("/topic/staffRoom")
@@ -88,20 +70,11 @@ public class WebSocketController {
             dishesIdList.add(orderItem.getDishes().getDishesId());
         }
         dishesWs.setList(dishesIdList);
-//        System.out.println("noi dung: " + orderItem.getDishes().getDishesId());
         return dishesWs;
     }
     @Data
     class DishesWs{
         List<Long> list;
     }
-
-//    @MessageMapping("/chat.addUser")
-//    @SendTo("/topic/staffRoom")
-//    public Chat addUser(@Payload Chat chat, SimpMessageHeaderAccessor headerAccessor) {
-//        // Add username in web socket session
-//        headerAccessor.getSessionAttributes().put("username", chat.getSender());
-//        return chat;
-//    }
 
 }

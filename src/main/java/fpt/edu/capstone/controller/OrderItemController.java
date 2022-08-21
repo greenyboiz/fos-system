@@ -1,7 +1,6 @@
 package fpt.edu.capstone.controller;
 
 import fpt.edu.capstone.dto.ListDto;
-import fpt.edu.capstone.entities.Dishes;
 import fpt.edu.capstone.entities.OrderItem;
 import fpt.edu.capstone.implementService.IOrderItemService;
 import fpt.edu.capstone.response.ResponseObject;

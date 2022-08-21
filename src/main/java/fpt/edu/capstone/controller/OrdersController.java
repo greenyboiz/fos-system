@@ -7,7 +7,6 @@ import fpt.edu.capstone.implementService.*;
 import fpt.edu.capstone.response.ResponseObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,14 +41,6 @@ public class OrdersController {
     @Autowired
     private IFOSUserService ifosUserService;
 
-//    @GetMapping("/orders")
-//    public ResponseEntity<?> getAllOrders(){
-//        List<Orders> orders = iOrdersService.getAllOrders();
-//        return ResponseEntity.status(HttpStatus.OK).body(
-//                new ResponseObject("ok", "succsessfully",true, orders)
-//        );
-//    }
-
     @GetMapping("/orders")
     public ResponseEntity<?> getAllOrders(){
         List<OrderDTO> orders = iOrdersService.getAllListOrders();
@@ -58,21 +49,8 @@ public class OrdersController {
         );
     }
 
-//    @GetMapping("/orders")
-//    public Page<Orders> listAllOrders(
-////            PagingRequest pagingRequest
-//            @RequestParam(name = "pageNum", required = false, defaultValue = "1") int pageNum,
-//            @RequestParam(name = "pageSize", required = false, defaultValue = "10") int pageSize
-//    ){
-//        log.info("(listAll)pageNum: {}, pageSize: {}", pageNum, pageSize);
-//        return iOrdersService.listOrders(pageNum, pageSize);
-//    }
-
     @PostMapping("/orders")
     public ResponseEntity<?> saveOrders(@RequestBody Orders orders){
-//        boolean checkOrderExist = iOrdersService.checkOrderExist(orders);
-//        boolean checkCustomerExistInOrder = iOrdersService.checkCustomerExistInOrder(orders);
-//        boolean checkCustomerExist = iCustomerService.checkCustomerExist(orders.getCustomer());
         Orders orders1 = iOrdersService.checkOrderExist(orders);
         if (orders1 == null){
             Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
@@ -105,7 +83,6 @@ public class OrdersController {
             );
         }
         else {
-//            Orders orders1 = iOrdersService.getOrderById(orders.getOrderId());
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "Order is exist, you can order continue",true,orders1)
             );
@@ -201,29 +178,5 @@ public class OrdersController {
         }
 
     }
-
-    //    @PutMapping("/orders/confirm/{orderId}")
-//    public ResponseEntity<?> confirmOrders(@PathVariable("orderId") Long orderId){
-//        try {
-//            Orders orders = iOrdersService.getOrderById(orderId);
-//            if (orders == null){
-//                throw new Exception();
-//            }
-//            //set order bill paid
-//            orders.setStatus(1);
-//            iOrdersService.addOrder(orders);
-//            //set table is Empty
-//            Tables tables = iTablesService.getTableByQRCodeId(orders.getQrCode().getQRCodeId());
-//            tables.setStatus("1");
-//            iTablesService.addTable(tables);
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "Order " + orderId + " bill paid",true, orders)
-//            );
-//        }catch (Exception e){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//                    new ResponseObject("fail", e.getMessage(),false, null)
-//            );
-//        }
-//    }
 
 }

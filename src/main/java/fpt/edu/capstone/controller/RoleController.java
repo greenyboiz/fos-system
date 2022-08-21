@@ -1,6 +1,5 @@
 package fpt.edu.capstone.controller;
 
-import fpt.edu.capstone.entities.Category;
 import fpt.edu.capstone.entities.Role;
 import fpt.edu.capstone.implementService.IRoleService;
 import fpt.edu.capstone.response.ResponseObject;

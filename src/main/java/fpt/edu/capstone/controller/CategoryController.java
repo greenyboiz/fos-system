@@ -84,41 +84,4 @@ public class CategoryController {
         }
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @PostMapping( value = "/category/add", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-//    private ResponseEntity<?> addCategory(@RequestParam("file") MultipartFile file, @RequestPart("category") String category){
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        Category category1 = new Category();
-//        try {
-//            category1 = objectMapper.readValue(category, Category.class);
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//        if(file.getSize() == 0){
-//            iCategoryService.addCategory(category1);
-//            return ResponseEntity.status(HttpStatus.OK).body(
-//                    new ResponseObject("ok", "file image null",true, iCategoryService.addCategory(category1))
-//            );
-//        }
-//        iCategoryService.uploadImageCategory(file,category1);
-//        return ResponseEntity.status(HttpStatus.OK).body(
-//                new ResponseObject("ok", "successfull",true, iCategoryService.uploadImageCategory(file,category1))
-//        );
-//    }
-
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @PutMapping(value = "/category/update1", consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE })
-//    private Category updateCategory(@RequestParam("file") MultipartFile file, @RequestPart("category") String category){
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        Category category1 = new Category();
-//        try {
-//            category1 = objectMapper.readValue(category, Category.class);
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return iCategoryService.uploadUpdateCategory(file,category1);
-//    }
-
-
-
 }
