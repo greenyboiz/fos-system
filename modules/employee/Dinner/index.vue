@@ -39,6 +39,7 @@ export default {
       listTable: [],
       selectedTable: null,
       clientSp: '',
+      statusTable: false,
     };
   },
 
@@ -113,6 +114,7 @@ export default {
 
     onSelectTable(tableId, statusTable) {
       this.selectedTable = tableId;
+      // console.log(this.selectedTable);
       if (this.selectedTable) {
         statusTable = false;
       }

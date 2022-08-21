@@ -29,15 +29,15 @@
         </div>
         <div class="info-staff__item">
           <label for="username">Tên tài khoản:</label>
-          <input id="username" v-model="formUser.userName" :disabled="modalTitle" type="text" placeholder="Nhập tên tài khoản" />
+          <input id="username" v-model="formUser.userName" type="text" placeholder="Nhập tên tài khoản" />
         </div>
         <div class="info-staff__item">
           <label for="phone">SĐT:</label>
-          <input id="phone" v-model="formUser.contact" :disabled="modalTitle" type="text" placeholder="Nhập SĐT" />
+          <input id="phone" v-model="formUser.contact" type="text" placeholder="Nhập SĐT" />
         </div>
         <div class="info-staff__item">
           <label for="email">Email:</label>
-          <input id="email" v-model="formUser.email" :disabled="modalTitle" type="text" placeholder="Nhập email" />
+          <input id="email" v-model="formUser.email" type="text" placeholder="Nhập email" />
         </div>
         <div v-if="!modalTitle" class="info-staff__item">
           <label for="pass">Mật khẩu:</label>
