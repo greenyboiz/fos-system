@@ -1,7 +1,5 @@
 package fpt.edu.capstone.service;
 
-import fpt.edu.capstone.dto.CategoryDTO;
-import fpt.edu.capstone.dto.DashboardDTO;
 import fpt.edu.capstone.dto.OrderDTO;
 import fpt.edu.capstone.entities.Customer;
 import fpt.edu.capstone.entities.Orders;
@@ -9,21 +7,16 @@ import fpt.edu.capstone.entities.QRCode;
 import fpt.edu.capstone.implementService.IOrdersService;
 import fpt.edu.capstone.mapper.OrderRowMapper;
 import fpt.edu.capstone.repo.*;
-import fpt.edu.capstone.response.ResponseObject;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j

@@ -1,6 +1,5 @@
 package fpt.edu.capstone.service;
 
-import fpt.edu.capstone.dto.CategoryDTO;
 import fpt.edu.capstone.entities.Category;
 import fpt.edu.capstone.repo.CategoryRepository;
 import org.junit.Assert;
@@ -13,7 +12,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +44,9 @@ public class CategoryServiceTest {
         Category actual = new Category(2l,"lon");
 
         Mockito.when(categoryRepository.save(actual)).thenThrow(new NullPointerException(""));
-        NullPointerException nullPointerException = assertThrows(NullPointerException.class, () -> categoryService.addCategory(actual));
+        NullPointerException result = assertThrows(NullPointerException.class, () -> categoryService.addCategory(actual));
 
-        Assert.assertEquals("",nullPointerException.getMessage());
+        Assert.assertEquals("",result.getMessage());
     }
 
     @Test
@@ -105,7 +103,7 @@ public class CategoryServiceTest {
         actual.add(new Category(1l,"lon")) ;
 
         Mockito.when(categoryRepository.findAll()).thenReturn(expect);
-        List<CategoryDTO> results = categoryService.getAllCategory();
+        List<Category> results = categoryService.getAllCategory();
         Assert.assertEquals(results,expect);
     }
 
