@@ -118,6 +118,7 @@ export default {
       if (this.selectedTable) {
         statusTable = false;
       }
+
       if (statusTable) {
         this.$root.$emit('valueTable', statusTable);
         return;

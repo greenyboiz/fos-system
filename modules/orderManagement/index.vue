@@ -16,60 +16,63 @@
 
     <div class="main">
       <div class="table">
-        <table class="table__wrapper">
-          <div class="table__head">
-            <div class="table__col">Mã ĐH</div>
-            <div class="table__col">Tên khách hàng</div>
-            <div class="table__col">Số điện thoại</div>
-            <div class="table__col">Thời gian tạo đơn</div>
-            <div class="table__col">Tổng tiền (đ)</div>
-            <div class="table__col">Thao tác</div>
-          </div>
-
-          <div class="table__bot">
-            <template v-if="isLoading">
+        <div class="table__wrapper">
+          <template v-if="isLoading">
+            <div class="text-center text-danger my-2">
               <div class="loading">
                 <Loading />
               </div>
-            </template>
-
-            <template v-else>
-              <div v-for="(item, index) in listOrder" :key="item.orderId" class="table__body">
-                <div class="table__row">{{ `O${ index + 1 }` }}</div>
-                <div class="table__row">{{ item.fullName }}</div>
-                <div class="table__row">{{ item.contact }}</div>
-                <div class="table__row">{{ item.submitTime }} {{ item.submitDate }}</div>
-                <div class="table__row">{{ currencyFormatter(item.totalMoneyOfOrder) }}</div>
-
+            </div>
+          </template>
+          <template v-else>
+            <b-table
+              id="my-table"
+              :items="listOrder"
+              :per-page="10"
+              :current-page="currentPage"
+              :fields="fields"
+              bordered
+              responsive
+            >
+              <template #cell(orderId)="data">
+                <div v-if="currentPage > 1">
+                  O{{
+                    data.index + 1 === 10
+                      ? `${currentPage}0`
+                      : `${currentPage - 1}${data.index + 1}`
+                  }}
+                </div>
+                <div v-else>O{{ data.index + 1 }}</div>
+              </template>
+              <template #cell(totalMoneyOfOrder)="data">
+                {{ currencyFormatter(data.item.totalMoneyOfOrder) }}
+              </template>
+              <template #cell(submitTime)="data">
+                {{ data.item.submitTime }} {{ data.item.submitDate }}
+              </template>
+              <template #cell(action)="data">
                 <div class="table__row align-items-center">
                   <div class="btn-group align-top">
-                    <button
-                      class="btn__edit"
-                      data-toggle="modal"
-                      data-target="#myModal"
-                      @click="editClick(item.orderId)"
-                    >
+                    <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(data.item)">
                       Món ăn
                     </button>
-                    <!-- <button class="btn__delete" @click="removeOrder(item.orderId)">
-                      <img src="@/assets/icons/delete.png" alt="" />
-                    </button> -->
                   </div>
                 </div>
+              </template>
+            </b-table>
+            <!-- Paging -->
+            <section class="pagination__wrap">
+              <div class="pagination__list">
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="totalOrder"
+                  :per-page="10"
+                  aria-controls="my-table"
+                ></b-pagination>
               </div>
-            </template>
-          </div>
-        </table>
-      </div>
-
-      <!-- Paging -->
-      <div class="pagination">
-        <section class="pagination__wrap">
-          <div class="pagination__list">
-            <button class="pagination__button active">1</button>
-            <button class="pagination__button">2</button>
-          </div>
-        </section>
+            </section>
+          </template>
+        </div>
       </div>
     </div>
 
@@ -104,7 +107,22 @@ export default {
       searchText: '',
       listOrder: [],
       isLoading: false,
+      currentPage: 1,
+      fields: [
+        { key: 'orderId', label: 'STT' },
+        { key: 'fullName', label: 'Tên khách hàng' },
+        { key: 'contact', label: 'Số điện thoại' },
+        { key: 'submitTime', label: 'Thời gian tạo đơn' },
+        { key: 'totalMoneyOfOrder', label: 'Tổng tiền (đ)' },
+        { key: 'action', label: 'Action' },
+      ],
     };
+  },
+
+  computed: {
+    totalOrder() {
+      return this.listOrder.length;
+    },
   },
 
   mounted() {
@@ -159,4 +177,3 @@ export default {
 </script>
 
 <style lang="scss" src="./styles.scss" scoped></style>
->

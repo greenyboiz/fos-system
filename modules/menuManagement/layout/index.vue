@@ -32,59 +32,72 @@
     <div class="main">
       <div class="table">
         <div class="table__wrapper">
-          <div class="table__head">
-            <div class="tableCol">STT</div>
-            <div class="tableCol">Tên món ăn</div>
-            <div class="tableCol">Mô tả</div>
-            <div class="tableCol">Phân loại</div>
-            <div class="tableCol">Giá mua (đ)</div>
-            <div class="tableCol">Giá bán (đ)</div>
-            <div class="tableCol">Trạng thái</div>
-            <div class="tableCol">Action</div>
-          </div>
+          <template v-if="isLoading">
+            <div class="loading">
+              <Loading />
+            </div>
+          </template>
 
-          <div class="table__bot">
-            <template v-if="isLoading">
-              <div class="loading">
-                <Loading />
-              </div>
-            </template>
-
-            <template v-else>
-              <div v-for="(item, index) in listDishSearch" :key="item.id" class="table__body">
-                <div class="tableRow">{{ `D${index + 1}` }}</div>
-                <div class="tableRow">{{ item.dishesName }}</div>
-                <div class="tableRow">{{ item.description }}</div>
-                <div class="tableRow">{{ item.category.categoryName }}</div>
-                <div class="tableRow">{{ currencyFormatter(item.costPrice) }}</div>
-                <div class="tableRow">{{ currencyFormatter(item.salePrice) }}</div>
-                <div class="tableRow">
-                  <span v-if="item.status" class="status had">Còn hàng</span>
-                  <span v-else class="status sold">Hết hàng</span>
+          <template v-else>
+            <b-table
+              id="my-table"
+              :items="listDishSearch"
+              :per-page="10"
+              :current-page="currentPage"
+              :fields="fields"
+              bordered
+              responsive
+            >
+              <template #cell(dishesId)="data">
+                <div v-if="currentPage > 1">
+                  {{ data.index + 1 === 10 ? `${currentPage}0` : `${currentPage - 1}${data.index + 1}` }}
                 </div>
-                <div class="tableRow align-items-center">
+                <div v-else>
+                  {{ data.index + 1 }}
+                </div>
+              </template>
+              <template #cell(gender)="data">
+                {{ data.item.gender ? 'Nam' : 'Nữ' }}
+              </template>
+              <template #cell(salePrice)="data">
+                {{ currencyFormatter(data.item.salePrice) }}
+              </template>
+              <template #cell(costPrice)="data">
+                {{ currencyFormatter(data.item.costPrice) }}
+              </template>
+              <template #cell(category[categoryName])="data">
+                {{ data.item.category.categoryName }}
+              </template>
+              <template #cell(status)="data">
+                <div v-if="data.item.status" class="status had">Còn hàng</div>
+                <div v-else class="status sold">Hết hàng</div>
+              </template>
+              <template #cell(action)="data">
+                <div class="table__row align-items-center">
                   <div class="btn-group align-top">
-                    <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(item)">
+                    <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(data.item)">
                       Edit
                     </button>
-                    <button class="btn__delete" @click="remove(item.dishesId)">
-                      <!-- <img src="@/assets/icons/delete.png" alt="" /> -->
+                    <button class="btn__delete" @click="remove(data.item.dishesId)">
                       Chuyển trạng thái
                     </button>
                   </div>
                 </div>
+              </template>
+            </b-table>
+            <!-- Paging -->
+            <section class="pagination__wrap">
+              <div class="pagination__list">
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="totalDish"
+                  :per-page="10"
+                  aria-controls="my-table"
+                ></b-pagination>
               </div>
-            </template>
-          </div>
+            </section>
+          </template>
         </div>
-      </div>
-
-      <!-- Paging -->
-      <div class="pagination">
-        <section class="pagination__wrap">
-          <div class="pagination__list">
-          </div>
-        </section>
       </div>
     </div>
 
@@ -125,6 +138,16 @@ export default {
       isLoading: false,
       pageCount: 0,
       currentPage: 1,
+      fields: [
+        { key: 'dishesId', label: 'STT' },
+        { key: 'dishesName', label: 'Tên món ăn' },
+        { key: 'description', label: 'Mô tả' },
+        { key: 'category[categoryName]', label: 'Phân loại' },
+        { key: 'costPrice', label: 'Giá mua (đ)' },
+        { key: 'salePrice', label: 'Giá bán (đ)' },
+        { key: 'status', label: 'Trạng thái' },
+        { key: 'action', label: 'Action' }
+      ]
     };
   },
 

@@ -37,7 +37,7 @@
         </div>
 
         <div class="donut-chart">
-          <div class="donut-top">CHI PHÍ</div>
+          <div class="donut-top">CHI PHÍ <span class="ml-1" style="font-size: 14px"> (5 tháng gần nhất)</span></div>
           <div class="donut-bot">
             <div>
               <VueApexchart
@@ -264,15 +264,24 @@ export default {
         const seriesCost = map(res.data, (item) => {
           return item.cost;
         });
-
         const seriesProfit = map(res.data, (item) => {
           return item.profit;
         });
+
         this.seriesRV[0].data = seriesData;
         this.chartOptionsRV.xaxis.categories = xasisData;
-        this.seriesC = seriesCost;
+
+        if (seriesCost.length > 5) {
+          this.seriesC = seriesCost.slice(seriesCost.length - 5);
+        } else {
+          this.seriesC = seriesCost;
+        }
+        if (xasisData.length > 5) {
+          this.labelsC = xasisData.slice(xasisData.length - 5);
+        } else {
+          this.labelsC = xasisData;
+        }
         this.chartOptionsC.labels = xasisData;
-        this.labelsC = xasisData;
         this.seriesArea[0].data = seriesProfit;
         this.chartArea.xaxis.categories = xasisData;
 

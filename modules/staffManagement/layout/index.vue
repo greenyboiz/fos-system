@@ -30,62 +30,22 @@
 
     <div class="main">
       <div class="table__wrapper">
-        <!-- <table class="table__wrapper">
-          <div class="table__head">
-            <div class="table__col">ID</div>
-            <div class="table__col">Họ và tên</div>
-            <div class="table__col">Tên tài khoản</div>
-            <div class="table__col">Giới tính</div>
-            <div class="table__col">SĐT</div>
-            <div class="table__col">Email</div>
-            <div class="table__col">Role</div>
-            <div class="table__col">Trạng thái</div>
-            <div class="table__col">Action</div>
-          </div>
-
-          <tbody class="table__bot">
-            <template v-if="isLoading">
+        <template v-if="isLoading">
+            <div class="text-center text-danger my-2">
               <div class="loading">
                 <Loading />
               </div>
-            </template>
-
-            <template v-else>
-              <div v-for="(item, index) in pageOfItems" :key="'staff' + item.userId" class="table__body">
-                <div class="table__row">{{ index + 1 }}</div>
-                <div class="table__row">{{ item.fullName }}</div>
-                <div class="table__row">{{ item.userName }}</div>
-                <div class="table__row">{{ item.gender ? 'Nam' : 'Nữ' }}</div>
-                <div class="table__row">{{ item.contact }}</div>
-                <div class="table__row">
-                  <span>{{ item.email }}</span>
-                </div>
-                <div class="table__row">{{ handleSplitRole(item.role.roleName) }}</div>
-                <div class="table__row">
-                  <span>{{ item.status ? 'Đang hoạt động' : 'Đã nghỉ việc' }}</span>
-                </div>
-
-                <div class="table__row align-items-center">
-                  <div class="btn-group align-top">
-                    <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(item)">
-                      Edit
-                    </button>
-                    <button class="btn__delete" @click="remove(item.userId)">
-                      Chuyển trạng thái
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </tbody>
-        </table> -->
+            </div>
+        </template>
         <b-table
+          v-else
           id="my-table"
           :items="listStaffSearch"
           :per-page="10"
           :current-page="currentPage"
           :fields="fields"
-          small
+          bordered
+          responsive
         >
           <template #cell(userId)="data">
             <div v-if="currentPage > 1">
@@ -145,7 +105,7 @@
 
 <script>
 import { staffManagementService } from '@/services';
-import { filter } from 'lodash';
+import { filter, find } from 'lodash';
 import AddUserModal from '../modals/AddUserModal/index.vue';
 import Loading from '@/components/common/Loading/index.vue';
 // import { mapState, mapMutations } from 'vue'
@@ -284,6 +244,11 @@ export default {
       //   console.log('success');
       //   this.getListUser();
       // }
+      const sameRole = find(this.listStaff, (item) => item.userId === userId);
+      if (sameRole.role.roleName === 'ROLE_ADMIN') {
+        Vue.$toast.error('Không thể chuyển trạng thái của admin khác');
+        return;
+      }
       this.$confirmPopup.open({
         title: 'Xác nhận',
         message: 'Bạn có chắc muốn đổi trạng thái tài khoản này không?',

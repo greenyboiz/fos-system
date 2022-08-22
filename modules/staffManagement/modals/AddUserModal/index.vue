@@ -29,15 +29,15 @@
         </div>
         <div class="info-staff__item">
           <label for="username">Tên tài khoản:</label>
-          <input id="username" v-model="formUser.userName" type="text" placeholder="Nhập tên tài khoản" />
+          <input id="username" v-model="formUser.userName" :disabled="modalTitle ? true : false" type="text" placeholder="Nhập tên tài khoản" />
         </div>
         <div class="info-staff__item">
           <label for="phone">SĐT:</label>
-          <input id="phone" v-model="formUser.contact" type="text" placeholder="Nhập SĐT" />
+          <input id="phone" v-model="formUser.contact" :disabled="modalTitle ? true : false" type="text" placeholder="Nhập SĐT" />
         </div>
         <div class="info-staff__item">
           <label for="email">Email:</label>
-          <input id="email" v-model="formUser.email" type="text" placeholder="Nhập email" />
+          <input id="email" v-model="formUser.email" :disabled="modalTitle ? true : false" type="text" placeholder="Nhập email" />
         </div>
         <div v-if="!modalTitle" class="info-staff__item">
           <label for="pass">Mật khẩu:</label>
@@ -349,7 +349,7 @@ export default {
       }
 
       const regexPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
-      if (!regexPass.test(this.formUser.password)) {
+      if (!regexPass.test(this.formUser.password) && !this.modalTitle) {
         Vue.$toast.error('Mật khẩu phải chứa ít nhất 8 kí tự bao gồm 1 kí tự số, 1 chữ in hoa và 1 chữ in thường');
         this.formUser.password = '';
         document.getElementById('pass').focus();
