@@ -1,5 +1,6 @@
 <template>
   <div class="client-view">
+    <b-container>
     <div class="headline">
       <div class="headline__title">MLD Restaurent</div>
       <div class="headline__support" @click="handleShowSupportModal()">Support</div>
@@ -41,10 +42,10 @@
         </div>
       </div>
       <div class="menu__list">
-        <div v-for="(val) in listDishSearch" :key="val.dishesId" class="menu-item" @click="handleOpenDetailDish(val)">
+        <b-col v-for="(val) in listDishSearch" :key="val.dishesId" cols="6" class="menu-item" @click="handleOpenDetailDish(val)">
           <nuxt-link to="/khach-hang/chi-tiet-mon">
             <div class="dishes-image">
-              <img :src="val.dishImage" alt="" width="165px" height="165px">
+              <img :src="val.dishImage" class="img-thumbnail rounded mx-auto d-block" alt="">
             </div>
             <div class="dishes-name">
               {{ val.dishesName }}
@@ -61,13 +62,13 @@
                 <span class="upNumber ml-1" @click="increaseDish(val)"><i class="bi bi-plus-circle"></i></span>
               </div>
             </div>
-        </div>
+        </b-col>
       </div>
-      <div class="menu__paging">
+      <!-- <div class="menu__paging">
         <i class="bi bi-chevron-left"></i>
         <span>1</span>
         <i class="bi bi-chevron-right"></i>
-      </div>
+      </div> -->
     </div>
     <div class="special">
       <div class="special__head">
@@ -105,6 +106,7 @@
       <!-- </nuxt-link> -->
     </div>
     <SupportModal ref="supportModalRef" />
+    </b-container>
   </div>
 </template>
 

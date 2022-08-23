@@ -1,5 +1,6 @@
 <template>
   <div class="client-view">
+    <b-container>
     <div class="headline">
       <div class="headline__title">MLD Restaurent</div>
       <div class="headline__support" @click="handleShowSupportModal()">Support</div>
@@ -30,7 +31,7 @@
         </div>
       </template>
       <template v-else>
-        <div class="special__list">
+        <div class="special__list" :style="orderHeight">
           <div v-for="spec in orderList" :key="spec.id" class="special-item">
             <div class="spec-image">
               <img :src="spec.dishes.dishImage" style="border-radius: 8px" alt="" width="96px" height="96px">
@@ -58,7 +59,7 @@
         </div>
       </template>
     </div>
-    <div class="totalOrder">
+    <div ref="priceOrder" class="totalOrder">
       <div class="payment-info">
         <div class="info-item">
           <div class="info-item_title">Giá:</div>
@@ -90,6 +91,7 @@
       </div>
     </div>
     <SupportModal ref="supportModalRef" />
+    </b-container>
   </div>
 </template>
 
@@ -125,6 +127,7 @@ export default {
       isOrder: false,
       isLoading: false,
       orderIdLocal: null,
+      orderHeight: {},
     };
   },
 
@@ -150,6 +153,10 @@ export default {
     }
   },
 
+  beforeUpdate() {
+    this.matchHeight();
+  },
+
   mounted() {
     this.orderIdLocal = localStorage.getItem('orderId');
     this.connect();
@@ -157,6 +164,11 @@ export default {
   },
 
   methods: {
+    matchHeight() {
+      const infoHeight = this.$refs.priceOrder.clientHeight;
+      this.$set(this.orderHeight, 'max-height', `calc(100% - ${infoHeight}px)`);
+    },
+
     connect() {
       this.socket = new SockJs('https://project-for-fos-mld.herokuapp.com/ws');
       this.stompClient = StompClient.over(this.socket);

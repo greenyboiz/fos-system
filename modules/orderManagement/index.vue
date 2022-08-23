@@ -113,7 +113,7 @@ export default {
         { key: 'fullName', label: 'Tên khách hàng' },
         { key: 'contact', label: 'Số điện thoại' },
         { key: 'submitTime', label: 'Thời gian tạo đơn' },
-        { key: 'totalMoneyOfOrder', label: 'Tổng tiền (đ)' },
+        { key: 'totalMoneyOfOrder', label: 'Tổng tiền (đã bao gồm VAT)' },
         { key: 'action', label: 'Action' },
       ],
     };
