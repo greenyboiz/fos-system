@@ -7,7 +7,6 @@
     content-class="modal__content"
     scrollable
     hide-footer
-    hide-header-close
     @hidden="handleHideModal"
   >
     <div class="supportType">

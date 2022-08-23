@@ -1,9 +1,12 @@
 ::v-deep {
   .table__wrapper {
     font-family: Roboto;
-    border-bottom: 1px solid #dee2e6;
     #my-table {
       text-align: center;
+
+      td {
+        vertical-align: middle;
+      }
 
       thead {
         background-color: #00904a;

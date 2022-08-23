@@ -4,6 +4,10 @@
     #my-table {
       text-align: center;
 
+      td {
+        vertical-align: middle;
+      }
+
       thead {
         background-color: #00904a;
         color: #fff;
@@ -191,8 +195,6 @@
     border-bottom: 1px solid #dee2e6;
     height: 40px;
     display: flex;
-    align-items: center;
-    justify-content: center;
 
     &:first-child {
       width: 100px;
@@ -319,8 +321,8 @@
   border: 1px solid #00904a;
   color: #00904a;
   border-radius: 5px;
-  margin-right: 5px;
   transition: 0.2s all ease-in-out;
+  width: max-content;
 
   &:hover {
     background: #00904a;

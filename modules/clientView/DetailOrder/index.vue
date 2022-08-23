@@ -231,7 +231,8 @@ export default {
       });
 
       if (res.success) {
-        this.getOrderItemList();
+        this.connect();
+        this.getOrderItemList(this.orderIdLocal);
       }
     },
 

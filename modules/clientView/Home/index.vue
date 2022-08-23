@@ -89,7 +89,8 @@ export default {
 
   mounted() {
     const path = window.location.toString();
-    this.formData.qrCode.qrcodeId = parseInt(path.substr(path.length - 1));
+    const qrCodeId = path.split('table/');
+    this.formData.qrCode.qrcodeId = parseInt(qrCodeId[1]);
     this.$router.push({
       name: 'specific_table',
       params: {

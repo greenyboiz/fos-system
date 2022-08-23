@@ -11,15 +11,23 @@
 
       <div class="test">
         <!--  -->
-        <div class="test__content">
-          <div v-for="item in listDishes" :key="'test' + item.orderItemId" class="table__row">
-            <td>{{ item.dishes.dishesName }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ currencyFormatter(item.dishes.salePrice) }}</td>
-            <td>{{ currencyFormatter(item.dishes.salePrice * item.quantity) }}</td>
+        <template v-if="isLoading">
+          <div class="loading text-center text-danger my-2">
+            <!-- <div class="loading"> -->
+              <Loading />
+            <!-- </div> -->
           </div>
-        </div>
-
+        </template>
+        <template v-else>
+          <div class="test__content">
+            <div v-for="item in listDishes" :key="'test' + item.orderItemId" class="table__row">
+              <td>{{ item.dishes.dishesName }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ currencyFormatter(item.dishes.salePrice) }}</td>
+              <td>{{ currencyFormatter(item.dishes.salePrice * item.quantity) }}</td>
+            </div>
+          </div>
+        </template>
         <!--  -->
         <div class="test__footer">
           <div class="payment__select">
@@ -114,6 +122,7 @@ import SwapTableModal from './modals/SwapTableModal/index.vue';
 import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import SockJs from 'sockjs-client';
 import StompClient from 'webstomp-client';
+import Loading from '@/components/common/Loading/index.vue';
 
 
 import Vue from 'vue';
@@ -130,6 +139,7 @@ export default {
     Dinner,
     SwapTableModal,
     CustomCheckbox,
+    Loading,
   },
 
   data() {
@@ -145,6 +155,7 @@ export default {
         { id: 2, name: 'Thanh toán bằng tiền mặt', type: 'cash' },
       ],
       selectedPayment: '',
+      isLoading: false,
     };
   },
 
@@ -185,12 +196,18 @@ export default {
     },
 
     tableHaveOrder(val) {
-      if (val === true) {
+      if (val.status) {
         this.listDishes = [];
+        // this.isLoading = false;
         return;
       }
-      this.tableId = val;
-      this.getOrderByTableId(val);
+      // if (val === true) {
+      //   this.listDishes = [];
+      //   return;
+      // }
+      // this.isLoading = true;
+      this.tableId = val.tableId;
+      this.getOrderByTableId(val.tableId);
     },
 
     handleOpenSwapTableModal() {
@@ -198,15 +215,17 @@ export default {
     },
 
     async getOrderByTableId(tableId) {
+      this.isLoading = true;
+
       const res = await employeeService.getOrderByTableId(tableId, {
         headers: {
           Authorization: this.$auth.$storage._state['_token.local'],
         },
+      }).finally(() => {
+        this.isLoading = false;
       });
 
       if (res.success) {
-      console.log('manhnd');
-
         this.getOrderItemList(res.data.orderId);
         this.getTotalPayment(res.data.orderId);
         this.orderId = res.data.orderId;

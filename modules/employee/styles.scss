@@ -337,3 +337,12 @@
   border-radius: 10px;
   background-color: #c5c5c5;
 }
+
+.loading {
+  height: calc(100% - 70px);
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

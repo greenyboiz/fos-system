@@ -115,15 +115,19 @@ export default {
     onSelectTable(tableId, statusTable) {
       this.selectedTable = tableId;
       // console.log(this.selectedTable);
-      if (this.selectedTable) {
-        statusTable = false;
-      }
+      // if (this.selectedTable) {
+      //   statusTable = false;
+      // }
+      const valueTable = {
+        tableId: tableId,
+        status: statusTable,
+      };
 
-      if (statusTable) {
-        this.$root.$emit('valueTable', statusTable);
-        return;
-      }
-      this.$root.$emit('valueTable', tableId);
+      // if (statusTable) {
+      //   this.$root.$emit('valueTable', valueTable);
+      //   return;
+      // }
+      this.$root.$emit('valueTable', valueTable);
     },
   },
 };

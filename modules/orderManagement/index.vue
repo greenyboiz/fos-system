@@ -52,8 +52,8 @@
               </template>
               <template #cell(action)="data">
                 <div class="table__row align-items-center">
-                  <div class="btn-group align-top">
-                    <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(data.item)">
+                  <div class="">
+                    <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(data.item.orderId)">
                       Món ăn
                     </button>
                   </div>
