@@ -25,7 +25,7 @@
     </div>
     <div class="dishDetail">
       <div class="dish-image">
-        <img src="@/assets/images/cocktail.png" alt="" width="100%" />
+        <img :src="dishDetail.dishImage" alt="" width="100%" />
       </div>
       <div class="dish-name">
         {{ dishDetail.dishesName }}
@@ -35,9 +35,6 @@
       </div>
       <div class="dish-price">{{ currencyFormatter(dishDetail.salePrice) }}</div>
       <div class="dish-desc">{{ dishDetail.description }}</div>
-    </div>
-    <div class="totalOrder">
-      <button>ORDER</button>
     </div>
   </div>
 </template>

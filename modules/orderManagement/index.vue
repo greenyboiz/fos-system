@@ -48,7 +48,7 @@
                 {{ currencyFormatter(data.item.totalMoneyOfOrder) }}
               </template>
               <template #cell(submitTime)="data">
-                {{ data.item.submitTime }} {{ data.item.submitDate }}
+                {{ convertTime(data.item.submitDate) }}
               </template>
               <template #cell(action)="data">
                 <div class="table__row align-items-center">
@@ -89,6 +89,7 @@ import commonMixin from '@/plugins/commonMixin';
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+import moment from 'moment';
 
 Vue.use(VueToast, { position: 'top' });
 
@@ -171,6 +172,13 @@ export default {
           }
         },
       });
+    },
+
+    convertTime(time) {
+      if (time) {
+        return moment(time).format('HH:mm DD/MM/YYYY');
+      }
+      return '';
     },
   },
 };

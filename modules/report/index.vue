@@ -37,7 +37,12 @@
         </div>
 
         <div class="donut-chart">
-          <div class="donut-top">CHI PHÍ <span class="ml-1" style="font-size: 14px"> (5 tháng gần nhất)</span></div>
+          <div class="donut-top">
+            CHI PHÍ
+            <span class="ml-1" style="font-size: 14px">
+              (5 tháng gần nhất)</span
+            >
+          </div>
           <div class="donut-bot">
             <div>
               <VueApexchart
@@ -49,7 +54,11 @@
               ></VueApexchart>
             </div>
             <div class="legend">
-              <div v-for="item in labelsC" :key="'box' + item" class="legend__item">
+              <div
+                v-for="item in labelsC"
+                :key="'box' + item"
+                class="legend__item"
+              >
                 <div class="legend__box"></div>
                 {{ item }}
               </div>
@@ -64,12 +73,18 @@
             <div class="bestSeller__quantity">Lượng bán</div>
           </div>
           <div class="bestSeller__content">
-            <div v-for="(bs, bsIndex) in bestSellerList" :key="bsIndex" class="content-item">
+            <div
+              v-for="(bs, bsIndex) in bestSellerList"
+              :key="bsIndex"
+              class="content-item"
+            >
               <div class="content-name">
                 <span class="content-index">{{ bsIndex + 1 }}</span>
                 <span>{{ bs.dishesName }}</span>
               </div>
-              <div class="content-quantity" style="padding-right: 20px">{{ bs.quantity }}</div>
+              <div class="content-quantity" style="padding-right: 20px">
+                {{ bs.quantity }}
+              </div>
             </div>
           </div>
         </div>
@@ -86,29 +101,53 @@
         ></VueApexchart>
       </div>
       <div class="total-report">
-        <div class="donut-top">Báo cáo</div>
-        <table class="table table-bordered table-hover">
-            <thead class="text-center">
-              <tr>
-                <th scope="col">STT</th>
-                <th scope="col">Tháng</th>
-                <th scope="col">Năm</th>
-                <th scope="col">Doanh thu</th>
-                <th scope="col">Chi phí</th>
-                <th scope="col">Lợi nhuận</th>
-              </tr>
-            </thead>
-            <tbody class="text-center">
-                <tr v-for="(item, index) in dashBoardList" :key="index" class="tw-cursor-pointer">
-                  <th scope="row">{{ `B${ index + 1 }` }}</th>
-                  <td>{{ item.month }}</td>
-                  <td>{{ item.year }}</td>
-                  <td>{{ currencyFormatter(item.revenue) }}đ</td>
-                  <td>{{ currencyFormatter(item.cost) }}đ</td>
-                  <td>{{ currencyFormatter(item.profit) }}đ</td>
-                </tr>
-            </tbody>
-          </table>
+        <div class="donut-top">
+          <div class="top-label">
+            Báo cáo
+          </div>
+          <div class="filterYear">
+            <MultipleSelect
+              v-model.number="selectedYear"
+              placeholder="Chọn năm"
+              :options="listYear"
+              :multiple="false"
+              @input="handleSelectYear"
+            />
+          </div>
+        </div>
+        <b-table
+          id="my-table"
+          :items="filterDashboard"
+          :per-page="10"
+          :current-page="currentPage"
+          :fields="fields"
+          bordered
+          responsive
+        >
+          <template #cell(stt)="data">
+            B{{ data.index + 1 }}
+          </template>
+          <template #cell(revenue)="data">
+            {{ currencyFormatter(data.item.revenue) }}
+          </template>
+          <template #cell(cost)="data">
+            {{ currencyFormatter(data.item.cost) }}
+          </template>
+          <template #cell(profit)="data">
+            {{ currencyFormatter(data.item.profit) }}
+          </template>
+        </b-table>
+        <!-- Paging -->
+        <section class="pagination__wrap">
+          <div class="pagination__list">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalOrderLength"
+              :per-page="10"
+              aria-controls="my-table"
+            ></b-pagination>
+          </div>
+        </section>
       </div>
     </div>
   </div>
@@ -116,8 +155,9 @@
 
 <script>
 import VueApexchart from 'vue-apexcharts';
+import MultipleSelect from 'vue-multiselect';
 import { chartService, orderService, menuManagementService } from '@/services';
-import { map, reduce, filter } from 'lodash';
+import { map, reduce, filter, reverse } from 'lodash';
 import commonMixin from '@/plugins/commonMixin';
 
 export default {
@@ -125,6 +165,7 @@ export default {
 
   components: {
     VueApexchart,
+    MultipleSelect
   },
 
   mixins: [commonMixin],
@@ -133,10 +174,23 @@ export default {
     return {
       bestSellerList: [],
       dashBoardList: [],
+      filterDashboard: [],
       cateList: [],
-      totalOrderByDay: 0,
+      orderByDay: [],
+      totalOrder: [],
+      currentPage: 1,
       profitByMonth: 0,
       costByMonth: 0,
+      selectedYear: 2022,
+      listYear: [2022, 2023, 2024, 2025, 2026, 2027],
+      fields: [
+        { key: 'stt', label: 'STT' },
+        { key: 'month', label: 'Tháng' },
+        { key: 'year', label: 'Năm' },
+        { key: 'revenue', label: 'Doanh thu' },
+        { key: 'cost', label: 'Chi phí' },
+        { key: 'profit', label: 'Lợi nhuận' },
+      ],
       seriesRV: [
         {
           data: [],
@@ -181,13 +235,13 @@ export default {
         labels: [],
         dataLabels: {
           enabled: true,
-            formatter(val) {
+          formatter(val) {
             if (val < 10) {
               return '';
             }
             return `${Math.round(val * 100) / 100}%`;
           },
-        }
+        },
       },
       labelsC: [],
 
@@ -228,6 +282,16 @@ export default {
     };
   },
 
+  computed: {
+    totalOrderByDay() {
+      return this.orderByDay.length;
+    },
+
+    totalOrderLength() {
+      return this.dashBoardList.length;
+    },
+  },
+
   watch: {
     seriesRV: {
       handler() {
@@ -255,6 +319,7 @@ export default {
 
       if (res.success) {
         this.dashBoardList = res.data;
+        this.filterDashboard = this.dashBoardList;
         const seriesData = map(res.data, (item) => {
           return item.revenue;
         });
@@ -339,15 +404,6 @@ export default {
 
       if (res.success) {
         this.bestSellerList = res.data;
-        // const seriesData = map(res.data, (item) => {
-        //   return item.quantity;
-        // });
-        // const xasisData = map(res.data, (item) => {
-        //   return item.dishesName;
-        // });
-        // this.seriesC = seriesData;
-        // this.chartOptionsC.labels = xasisData;
-        // this.labelsC = xasisData;
       }
     },
 
@@ -362,14 +418,23 @@ export default {
         const resData = res.data;
         const filterData = filter(resData, (item) => {
           const today = new Date();
-          const dateTest = new Date(item.submitTime);
+          const dateTest = new Date(item.submitDate);
           if (today.getDate() === dateTest.getDate()) {
             return item;
           }
         });
-        this.totalOrderByDay = filterData.length;
+        this.orderByDay = filterData;
       }
     },
+
+    handleSelectYear(val) {
+      if (!val) {
+        this.filterDashboard = this.dashBoardList;
+        return;
+      }
+      const reverseArr = reverse(this.dashBoardList);
+      this.filterDashboard = filter(reverseArr, (item) => item.year === val);
+    }
 
     // async getListDish() {
     //   const res = await menuManagementService.getListDish();

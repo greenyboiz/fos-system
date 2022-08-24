@@ -23,6 +23,7 @@
 
 <script>
 import { clientService } from '@/services';
+import { findIndex } from 'lodash';
 import SockJs from 'sockjs-client';
 import StompClient from 'webstomp-client';
 import DisplayClientRequest from '@/components/common/DisplayClientRequest/index.vue';
@@ -40,6 +41,7 @@ export default {
       selectedTable: null,
       clientSp: '',
       statusTable: false,
+      socketTable: null,
     };
   },
 
@@ -80,6 +82,9 @@ export default {
         this.handleDisplayClientRq(data);
       }
       this.selectedTable = message.tableId;
+      // this.statusTable = false;
+      const socketTableIndex = findIndex(this.listTable, (item) => item.tableId === message.tableId);
+      this.listTable[socketTableIndex].status = false;
 
       const element = document.getElementById(`${message.tableId}`);
       element.style.backgroundColor = '#FF0000';
@@ -114,19 +119,11 @@ export default {
 
     onSelectTable(tableId, statusTable) {
       this.selectedTable = tableId;
-      // console.log(this.selectedTable);
-      // if (this.selectedTable) {
-      //   statusTable = false;
-      // }
       const valueTable = {
         tableId: tableId,
         status: statusTable,
       };
 
-      // if (statusTable) {
-      //   this.$root.$emit('valueTable', valueTable);
-      //   return;
-      // }
       this.$root.$emit('valueTable', valueTable);
     },
   },

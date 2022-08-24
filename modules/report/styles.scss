@@ -55,12 +55,13 @@
 .donut-top {
   background: #efefef;
   color: #259062;
-  height: 30px;
-  padding: 0 20px;
+  height: 40px;
+  padding: 5px 20px;
   font-size: 1.1rem;
   font-weight: 500;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .donut-bot {
@@ -86,15 +87,19 @@
     &:first-child .legend__box {
       background: #259062;
     }
+
     &:nth-child(2) .legend__box {
       background: #eebf5c;
     }
+
     &:nth-child(3) .legend__box {
       background-color: #e9693d;
     }
+
     &:nth-child(4) .legend__box {
       background: #d2494d;
     }
+
     &:nth-child(5) .legend__box {
       background: #aaa1a1;
     }
@@ -178,4 +183,72 @@
 
 .bottom-report {
   margin-bottom: 40px;
+}
+
+::v-deep {
+  #my-table {
+    font-family: Roboto;
+    text-align: center;
+
+    td {
+      vertical-align: middle;
+    }
+
+    thead {
+      background-color: #00904a;
+      color: #fff;
+
+      tr {
+        height: 40px;
+
+        th {
+          align-items: center;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        height: 40px;
+      }
+    }
+  }
+
+  .pagination__list {
+    text-align: right;
+    ul {
+      margin-bottom: 0;
+    }
+  }
+
+  .pagination {
+    justify-content: flex-end;
+    .page-item.active .page-link {
+      background-color: #00904a;
+      border-color: #00904a;
+      color: #fff;
+    }
+
+    .page-link {
+      color: #00904a;
+    }
+  }
+
+  .multiselect {
+    min-height: 32px;
+
+    &__tags {
+      min-height: 32px;
+      height: 32px;
+      padding: 4px 40px 4px 8px;
+    }
+
+    &__select {
+      height: 32px;
+    }
+
+    &__placeholder {
+      padding-top: 0;
+    }
+  }
 }

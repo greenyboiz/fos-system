@@ -101,7 +101,7 @@
       </div>
     </div>
 
-    <AddDishModal ref="addDishModalRef" :dishesId="dishesId" :lishDishes="lishDishes" @doneAdd="addedDish" @doneUpdate="updatedDish" />
+    <AddDishModal ref="addDishModalRef" :dishesId="dishesId" :listDishes="listDishes" @doneAdd="addedDish" @doneUpdate="updatedDish" />
     <CategoriesModal ref="categoriesModalRef" />
   </div>
 </template>

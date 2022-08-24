@@ -50,7 +50,7 @@
           </div>
           <div class="intoMoney">
             Tổng:
-            <span> {{ currencyFormatter(totalPriceOrder) }} đ </span>
+            <span> {{ currencyFormatter(totalPriceOrder + (totalPriceOrder * 10) / 100) }} đ </span>
           </div>
 
           <div class="test__manipulation">
@@ -96,15 +96,11 @@
         <div v-if="isChoice" class="common">
           <div class="note">
             <div class="note__box a"></div>
-            <div class="note__name">Đã có</div>
+            <div class="note__name">Đã có khách</div>
           </div>
-          <!-- <div class="note">
-            <div class="note__box b"></div>
-            <div class="note__name">Đang chọn</div>
-          </div> -->
           <div class="note">
             <div class="note__box c"></div>
-            <div class="note__name">Trống</div>
+            <div class="note__name">Còn trống</div>
           </div>
         </div>
       </div>
@@ -185,7 +181,6 @@ export default {
 
     onMessageReceived(payload) {
       const message = JSON.parse(payload.body);
-      console.log('mndt');
       this.tableId = message.tableId;
       this.getOrderByTableId(message.tableId);
 
@@ -198,14 +193,8 @@ export default {
     tableHaveOrder(val) {
       if (val.status) {
         this.listDishes = [];
-        // this.isLoading = false;
         return;
       }
-      // if (val === true) {
-      //   this.listDishes = [];
-      //   return;
-      // }
-      // this.isLoading = true;
       this.tableId = val.tableId;
       this.getOrderByTableId(val.tableId);
     },

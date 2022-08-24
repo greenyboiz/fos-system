@@ -119,6 +119,7 @@ export default {
       if (this.stompClient) {
         const tables = {
           tableId: id,
+          statusTable: false,
         };
         this.stompClient.send('/app/chat.sendMessage', JSON.stringify(tables), {});
       }
@@ -167,21 +168,8 @@ export default {
         localStorage.setItem('orderId', res.data.orderId);
         localStorage.setItem('createAt', res.data.submitTime);
         localStorage.setItem('customerName', res.data.customer.fullName);
-        this.getListTable();
         this.$router.push(`/khach-hang/order/${res.data.orderId}`);
         // this.getOrder
-      }
-    },
-
-    async getListTable() {
-      const res = await tableManagementService.getListTable({
-        headers: {
-          Authorization: this.$auth.$storage._state['_token.local'],
-        }
-      });
-
-      if (res.success) {
-        this.listTable = res.data;
       }
     },
 
