@@ -94,14 +94,15 @@ public class OrderItemService implements IOrderItemService {
     @Override
     public List<DashboardDTO> getListDashboard() {
         String query = "WITH TEMP AS (SELECT o.order_id , MONTH(o.submit_time) AS month_order, YEAR(o.submit_time) AS year_order\n" +
-                ", SUM(d.cost_price * oi.quantity) AS total_cost, SUM(d.sale_price * oi.quantity) AS total_sale\n" +
-                "FROM railway.orders o INNER JOIN railway.order_item oi\n" +
-                "ON o.order_id = oi.order_id INNER JOIN railway.dishes d ON d.dishes_id = oi.dishes_id\n" +
-                "group by o.order_id)\n" +
-                "SELECT t.month_order, t.year_order, SUM(t.total_cost) as total_cost, SUM(t.total_sale) as total_sale, (SUM(t.total_sale) - SUM(t.total_cost)) as profit\n" +
-                "FROM TEMP t\n" +
-                "group by t.month_order, t.year_order\n" +
-                "order by t.month_order, t.year_order";
+                "                , SUM(d.cost_price * oi.quantity) AS total_cost, SUM(d.sale_price * oi.quantity) AS total_sale\n" +
+                "                FROM railway.orders o INNER JOIN railway.order_item oi\n" +
+                "                ON o.order_id = oi.order_id INNER JOIN railway.dishes d ON d.dishes_id = oi.dishes_id\n" +
+                "                where o.status = 1\n" +
+                "                group by o.order_id)\n" +
+                "                SELECT t.month_order, t.year_order, SUM(t.total_cost) as total_cost, SUM(t.total_sale) as total_sale, (SUM(t.total_sale) - SUM(t.total_cost)) as profit\n" +
+                "                FROM TEMP t\n" +
+                "                group by t.month_order, t.year_order\n" +
+                "                order by t.month_order, t.year_order;";
         List<DashboardDTO> list = template.query(query, new DashboardRowMapper());
         return list;
     }

@@ -127,11 +127,12 @@ public class OrdersService implements IOrdersService {
     @Override
     public List<OrderDTO> getAllListOrders() {
         String query = "SELECT o.order_id, c.full_name ,c.contact, o.submit_time, (SUM(d.sale_price*oi.quantity) + SUM(d.sale_price*oi.quantity)/10) AS total_money_of_order\n" +
-                "\tFROM railway.customer c INNER JOIN railway.orders o \n" +
-                "    ON o.customer_id = c.customer_id INNER JOIN railway.order_item oi\n" +
-                "\tON o.order_id = oi.order_id INNER JOIN railway.dishes d ON d.dishes_id = oi.dishes_id\n" +
-                "    group by o.order_id\n" +
-                "    order by o.submit_time desc";
+                "                FROM railway.customer c INNER JOIN railway.orders o\n" +
+                "                ON o.customer_id = c.customer_id INNER JOIN railway.order_item oi\n" +
+                "                ON o.order_id = oi.order_id INNER JOIN railway.dishes d ON d.dishes_id = oi.dishes_id\n" +
+                "                where o.status = 1\n" +
+                "                group by o.order_id\n" +
+                "                order by o.submit_time desc;";
         List<OrderDTO> list = template.query(query, new OrderRowMapper());
         return list;
     }
