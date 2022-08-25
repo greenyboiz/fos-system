@@ -50,6 +50,9 @@
               <template #cell(submitTime)="data">
                 {{ convertTime(data.item.submitDate) }}
               </template>
+              <template #cell(paymentTypeName)="data">
+                {{ data.item.paymentTypeName === 'cash' ? 'Tiền mặt' : 'Chuyển khoản' }}
+              </template>
               <template #cell(action)="data">
                 <div class="table__row align-items-center">
                   <div class="">
@@ -114,6 +117,8 @@ export default {
         { key: 'fullName', label: 'Tên khách hàng' },
         { key: 'contact', label: 'Số điện thoại' },
         { key: 'submitTime', label: 'Thời gian tạo đơn' },
+        { key: 'paymentTypeName', label: 'Phương thức thanh toán' },
+        { key: 'employee', label: 'Nhân viên thanh toán' },
         { key: 'totalMoneyOfOrder', label: 'Tổng tiền (đã bao gồm VAT)' },
         { key: 'action', label: 'Action' },
       ],

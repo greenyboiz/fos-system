@@ -14,7 +14,20 @@
       </div>
       <div class="top-report">
         <div class="column-chart">
-          <div class="donut-top">DOANH THU</div>
+          <div class="donut-top">
+            <div class="top-label">
+              DOANH THU
+            </div>
+            <div class="filterYear">
+              <MultipleSelect
+                v-model.number="yearRevenue"
+                placeholder="Chọn năm"
+                :options="listYearChart"
+                :multiple="false"
+                @input="handleSelectYearRevenue"
+              />
+            </div>
+          </div>
           <div class="column-bot">
             <div class="column-left">
               <VueApexchart
@@ -90,7 +103,20 @@
         </div>
       </div>
       <div class="bottom-report">
-        <div class="donut-top">LỢI NHUẬN</div>
+        <div class="donut-top">
+          <div class="top-label">
+            LỢI NHUẬN
+          </div>
+          <div class="filterYear">
+            <MultipleSelect
+              v-model.number="yearProfit"
+              placeholder="Chọn năm"
+              :options="listYearChart"
+              :multiple="false"
+              @input="handleSelectYearProfit"
+            />
+          </div>
+        </div>
         <VueApexchart
           :key="botkey"
           type="area"
@@ -111,7 +137,7 @@
               placeholder="Chọn năm"
               :options="listYear"
               :multiple="false"
-              @change="handleSelectYear"
+              @input="handleSelectYear"
             />
           </div>
         </div>
@@ -182,7 +208,10 @@ export default {
       profitByMonth: 0,
       costByMonth: 0,
       selectedYear: 'Tất cả',
+      yearRevenue: new Date().getFullYear(),
+      yearProfit: new Date().getFullYear(),
       listYear: ['Tất cả', 2022, 2023, 2024, 2025, 2026, 2027],
+      listYearChart: [2022, 2023, 2024, 2025, 2026, 2027],
       fields: [
         { key: 'stt', label: 'STT' },
         { key: 'month', label: 'Tháng' },
@@ -278,7 +307,6 @@ export default {
           horizontalAlign: 'left',
         },
       },
-      listTotal: [],
     };
   },
 
@@ -296,11 +324,15 @@ export default {
     seriesRV: {
       handler() {
         this.revenueKey++;
-        // this.getChartData();
-        this.botkey++;
       },
       deep: true,
     },
+    seriesArea: {
+      handler() {
+        this.botkey++;
+      },
+      deep: true,
+    }
   },
 
   mounted() {
@@ -320,21 +352,17 @@ export default {
       if (res.success) {
         this.dashBoardList = res.data;
         this.filterDashboard = res.data;
-        const seriesData = map(res.data, (item) => {
-          return item.revenue;
-        });
+        const seriesData = filter(res.data, (item) => item.year === this.yearRevenue);
         const xasisData = map(res.data, (item) => {
           return `${item.month}/${item.year}`;
         });
+
+        this.seriesRV[0].data = map(seriesData, (item) => item.revenue);
+        this.chartOptionsRV.xaxis.categories = map(seriesData, (item) => `${item.month}/${item.year}`);
+
         const seriesCost = map(res.data, (item) => {
           return item.cost;
         });
-        const seriesProfit = map(res.data, (item) => {
-          return item.profit;
-        });
-
-        this.seriesRV[0].data = seriesData;
-        this.chartOptionsRV.xaxis.categories = xasisData;
 
         if (seriesCost.length > 5) {
           this.seriesC = seriesCost.slice(seriesCost.length - 5);
@@ -347,51 +375,20 @@ export default {
           this.labelsC = xasisData;
         }
         this.chartOptionsC.labels = xasisData;
-        this.seriesArea[0].data = seriesProfit;
-        this.chartArea.xaxis.categories = xasisData;
-
-        this.profitByMonth = reduce(seriesProfit, (sum, n) => {
-          return sum + n;
-        });
-
         this.costByMonth = reduce(seriesCost, (sum, n) => {
           return sum + n;
         });
 
-        const listTotal = [
-          {
-            data: reduce(
-              seriesData,
-              (sum, n) => {
-                return sum + n;
-              },
-              0
-            ),
-            name: 'Doanh thu',
-          },
-          {
-            data: reduce(
-              seriesCost,
-              (sum, n) => {
-                return sum + n;
-              },
-              0
-            ),
-            name: 'Chi phí',
-          },
-          {
-            data: reduce(
-              seriesProfit,
-              (sum, n) => {
-                return sum + n;
-              },
-              0
-            ),
-            name: 'Lợi nhuận',
-          },
-        ];
+        const seriesProfit = map(res.data, (item) => {
+          return item.profit;
+        });
+        const chartAreaData = filter(res.data, (item) => item.year === this.yearProfit);
+        this.seriesArea[0].data = map(chartAreaData, (item) => item.profit);
+        this.chartArea.xaxis.categories = map(chartAreaData, (item) => `${item.month}/${item.year}`);
 
-        this.listTotal = listTotal;
+        this.profitByMonth = reduce(seriesProfit, (sum, n) => {
+          return sum + n;
+        });
       }
     },
 
@@ -434,6 +431,18 @@ export default {
         return;
       }
       this.filterDashboard = filter(reverseArr, (item) => item.year === val);
+    },
+
+    handleSelectYearRevenue(val) {
+      const seriesRV = filter(this.dashBoardList, (item) => item.year === val);
+      this.seriesRV[0].data = map(seriesRV, (item) => item.revenue);
+      this.chartOptionsRV.xaxis.categories = map(seriesRV, (item) => `${item.month}/${item.year}`);
+    },
+
+    handleSelectYearProfit(val) {
+      const chartAreaData = filter(this.dashBoardList, (item) => item.year === val);
+      this.seriesArea[0].data = map(chartAreaData, (item) => item.profit);
+      this.chartArea.xaxis.categories = map(chartAreaData, (item) => `${item.month}/${item.year}`);
     }
 
     // async getListDish() {
