@@ -102,7 +102,7 @@ public class OrderItemService implements IOrderItemService {
                 "                SELECT t.month_order, t.year_order, SUM(t.total_cost) as total_cost, (SUM(t.total_sale)*1.1) as total_sale, (SUM(t.total_sale)*1.1 - SUM(t.total_cost)) as profit\n" +
                 "                FROM TEMP t\n" +
                 "                group by t.month_order, t.year_order\n" +
-                "                order by t.month_order, t.year_order";
+                "                order by t.year_order, t.month_order";
         List<DashboardDTO> list = template.query(query, new DashboardRowMapper());
         return list;
     }
