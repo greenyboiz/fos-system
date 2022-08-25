@@ -27,26 +27,30 @@
                 </div>
               </div>
               <div v-if="isShowManagementAccount" class="account-management__dropdown-menu text-left py-1">
-                <div v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'" class="dropdown-menu__item">
+                <div v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'" class="dropdown-menu__item" @click="closeManageAccount()">
                   <nuxt-link class="w-100 h-100 d-flex align-items-center text-nowrap" to="/quan-ly-tai-khoan">
-                    <span class="icon mr-2"><manage-account-icon :width="21" :height="21" /></span> Quản lý tài khoản
+                    <span class="icon mr-2"><i class="bi bi-people"></i></span> Quản lý tài khoản
                   </nuxt-link>
                 </div>
-                <div v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'" class="dropdown-menu__item">
+                <div v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'" class="dropdown-menu__item" @click="closeManageAccount()">
                   <nuxt-link class="w-100 h-100 d-flex align-items-center text-nowrap" to="/employee">
-                    <span class="icon mr-2"><manage-account-icon :width="21" :height="21" /></span> Nhân viên
+                    <span class="icon mr-2"><i class="bi bi-person"></i></span> Nhân viên
                   </nuxt-link>
                 </div>
-                <div v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'" class="dropdown-menu__item">
-                  <nuxt-link class="w-100 h-100 d-flex align-items-center text-nowrap" to="/chef">
-                    <span class="icon mr-2"><manage-account-icon :width="21" :height="21" /></span> Đầu bếp
-                  </nuxt-link>
+                <div v-if="loggedInUser.user.roleName === 'ROLE_ADMIN'" class="dropdown-menu__item" @click="closeManageAccount()">
+                  <span class="w-100 h-100 d-flex align-items-center text-nowrap" to="/chef">
+                    <span class="icon mr-2"><i class="bi bi-egg-fried"></i></span> Đầu bếp
+                  </span>
                 </div>
                 <div class="dropdown-menu__item" @click="openChangePasswordModal()">
-                  <i class="icon bi bi-box-arrow-in-left mr-2"></i><span>Đổi mật khẩu</span>
+                  <span class="w-100 h-100 d-flex align-items-center text-nowrap">
+                  <span class="icon mr-2"><i class="bi bi-arrow-left-right"></i></span><span>Đổi mật khẩu</span>
+                  </span>
                 </div>
                 <div class="dropdown-menu__item" @click="logoutUser()">
-                  <i class="icon bi bi-box-arrow-in-left mr-2"></i><span class="sign-out">Đăng xuất</span>
+                  <span class="w-100 h-100 d-flex align-items-center text-nowrap">
+                  <span class="icon mr-2"><i class="bi bi-box-arrow-in-left"></i></span><span>Đăng xuất</span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -112,7 +116,7 @@ export default {
 
   components: {
     ArrowDown,
-    ManageAccountIcon,
+    // ManageAccountIcon,
     MenuDashboardIcon,
     MenuOrder,
     MenuTable,

@@ -5,20 +5,36 @@
       <div class="receipt__order">Hóa đơn #{{ orderNo }} của {{ customerName }}</div>
       <div class="receipt__time">{{ createAt }}</div>
       <div class="receipt__detail">
-        <div class="table__header">
-          <div class="table__col">STT</div>
-          <div class="table__col">Tên món</div>
-          <div class="table__col">Số lượng</div>
-          <div class="table__col">Đơn giá</div>
+        <b-table
+          id="my-table"
+          :items="orderItemList"
+          :fields="fields"
+          responsive
+        >
+          <template #cell(stt)="data">
+            {{ data.index + 1 }}
+          </template>
+          <template #cell(dishes[dishesName])="data">
+            {{ data.item.dishes.dishesName }}
+          </template>
+          <template #cell(price)="data">
+            {{ currencyFormatter(data.item.price) }}
+          </template>
+        </b-table>
+        <!-- <div class="table__header">
+          <div class="table__col col-1">STT</div>
+          <div class="table__col col-4">Tên món</div>
+          <div class="table__col col-2">Số lượng</div>
+          <div class="table__col col-5">Đơn giá</div>
         </div>
         <div class="table__body">
           <div v-for="(item, index) in orderItemList" :key="index" class="table__item">
-            <div class="table__row">{{ index + 1 }}</div>
-            <div class="table__row">{{ item.dishes.dishesName }}</div>
-            <div class="table__row">{{ item.quantity }}</div>
-            <div class="table__row">{{ currencyFormatter(item.dishes.salePrice) }}</div>
+            <div class="table__row col-1">{{ index + 1 }}</div>
+            <div class="table__row col-4">{{ item.dishes.dishesName }}</div>
+            <div class="table__row col-2">{{ item.quantity }}</div>
+            <div class="table__row col-5">{{ currencyFormatter(item.dishes.salePrice) }}</div>
           </div>
-        </div>
+        </div> -->
         <div class="total__dishes">
           <div class="label">Tổng sổ món: </div>
           <div class="quantity">{{ dishCount }}</div>
@@ -74,6 +90,12 @@ export default {
       orderNo: 0,
       createAt: '',
       customerName: '',
+      fields: [
+        { key: 'stt', label: 'STT' },
+        { key: 'dishes[dishesName]', label: 'Tên món' },
+        { key: 'quantity', label: 'Số lượng' },
+        { key: 'price', label: 'Đơn giá' },
+      ],
     };
   },
 

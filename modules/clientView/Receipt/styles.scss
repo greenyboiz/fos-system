@@ -144,4 +144,38 @@
   }
 }
 
+::v-deep {
+  #my-table {
+    text-align: center;
+    border-collapse: 0;
+    border-top: 1px dashed #000;
+    border-bottom: 1px dashed #000;
+
+    td {
+      vertical-align: middle;
+      border-top: none;
+    }
+
+    thead {
+      color: #000;
+      font-family: "receipt", "Courier New", Courier, monospace;
+
+      tr {
+        height: 40px;
+
+        th {
+          vertical-align: middle;
+          border-top: none;
+          border-bottom: 1px dashed #000;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        height: 40px;
+      }
+    }
+  }
+}
 

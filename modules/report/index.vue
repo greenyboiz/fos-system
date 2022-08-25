@@ -111,7 +111,7 @@
               placeholder="Chọn năm"
               :options="listYear"
               :multiple="false"
-              @input="handleSelectYear"
+              @change="handleSelectYear"
             />
           </div>
         </div>
@@ -181,8 +181,8 @@ export default {
       currentPage: 1,
       profitByMonth: 0,
       costByMonth: 0,
-      selectedYear: 2022,
-      listYear: [2022, 2023, 2024, 2025, 2026, 2027],
+      selectedYear: 'Tất cả',
+      listYear: ['Tất cả', 2022, 2023, 2024, 2025, 2026, 2027],
       fields: [
         { key: 'stt', label: 'STT' },
         { key: 'month', label: 'Tháng' },
@@ -319,7 +319,7 @@ export default {
 
       if (res.success) {
         this.dashBoardList = res.data;
-        this.filterDashboard = this.dashBoardList;
+        this.filterDashboard = res.data;
         const seriesData = map(res.data, (item) => {
           return item.revenue;
         });
@@ -428,11 +428,11 @@ export default {
     },
 
     handleSelectYear(val) {
-      if (!val) {
-        this.filterDashboard = this.dashBoardList;
+      const reverseArr = reverse(this.dashBoardList);
+      if (val === 'Tất cả') {
+        this.filterDashboard = reverseArr;
         return;
       }
-      const reverseArr = reverse(this.dashBoardList);
       this.filterDashboard = filter(reverseArr, (item) => item.year === val);
     }
 

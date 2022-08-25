@@ -119,7 +119,6 @@ export default {
       if (this.stompClient) {
         const tables = {
           tableId: id,
-          statusTable: false,
         };
         this.stompClient.send('/app/chat.sendMessage', JSON.stringify(tables), {});
       }
