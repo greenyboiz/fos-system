@@ -31,9 +31,13 @@
         {{ dishDetail.dishesName }}
       </div>
       <div class="dish-review">
-        <StarFill /> 5
+        <StarFill :currentColor="'#FFD700'" />
+        <StarFill :currentColor="'#FFD700'" />
+        <StarFill :currentColor="'#FFD700'" />
+        <StarFill :currentColor="'#FFD700'" />
+        <StarFill :currentColor="'#FFD700'" />
       </div>
-      <div class="dish-price">{{ currencyFormatter(dishDetail.salePrice) }}</div>
+      <div class="dish-price">{{ currencyFormatter(dishDetail.salePrice) }} VNĐ</div>
       <div class="dish-desc">{{ dishDetail.description }}</div>
     </div>
   </div>
