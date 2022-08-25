@@ -15,6 +15,8 @@ public class OrderRowMapper implements RowMapper<OrderDTO> {
                 .fullName(rs.getString("full_name"))
                 .contact(rs.getString("contact"))
                 .submitDate(rs.getTimestamp("submit_time"))
+                .employee(rs.getString("employee"))
+                .paymentTypeName(rs.getString("payment_type_name"))
                 .totalMoneyOfOrder(rs.getBigDecimal("total_money_of_order"))
                 .build();
     }

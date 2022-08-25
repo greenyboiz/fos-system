@@ -126,13 +126,19 @@ public class OrdersService implements IOrdersService {
 
     @Override
     public List<OrderDTO> getAllListOrders() {
-        String query = "SELECT o.order_id, c.full_name ,c.contact, o.submit_time, (SUM(d.sale_price*oi.quantity)*1.1) AS total_money_of_order\n" +
-                "                FROM railway.customer c INNER JOIN railway.orders o\n" +
+        String query = "WITH TEMP AS (SELECT o.order_id, c.full_name ,c.contact, o.submit_time, (SUM(d.sale_price*oi.quantity)*1.1) AS total_money_of_order\n" +
+                "\t\tFROM railway.customer c INNER JOIN railway.orders o\n" +
                 "                ON o.customer_id = c.customer_id INNER JOIN railway.order_item oi\n" +
-                "                ON o.order_id = oi.order_id INNER JOIN railway.dishes d ON d.dishes_id = oi.dishes_id\n" +
+                "                ON o.order_id = oi.order_id INNER JOIN railway.dishes d \n" +
+                "                ON d.dishes_id = oi.dishes_id \n" +
                 "                where o.status = 1\n" +
-                "                group by o.order_id\n" +
-                "                order by o.submit_time desc;";
+                "                group by o.order_id)\n" +
+                "SELECT t.order_id, t.full_name ,t.contact, t.submit_time, fu.full_name as employee, pt.payment_type_name ,t.total_money_of_order\n" +
+                "      FROM TEMP t INNER JOIN railway.payment p \n" +
+                "      ON t.order_id = p.order_id INNER JOIN railway.payment_type pt\n" +
+                "                ON p.payment_type_id = pt.payment_type_id INNER JOIN railway.fosuser fu\n" +
+                "                ON p.user_id = fu.user_id\n" +
+                "                order by t.submit_time desc;";
         List<OrderDTO> list = template.query(query, new OrderRowMapper());
         return list;
     }

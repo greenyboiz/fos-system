@@ -124,7 +124,7 @@ public class OrdersController {
 
             //--------------------
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("ok", "Order " + orderId + " bill paid",true, orders)
+                    new ResponseObject("ok", "Order " + orderId + " bill paid",true, payment)
             );
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(

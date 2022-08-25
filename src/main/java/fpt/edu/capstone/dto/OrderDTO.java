@@ -13,5 +13,7 @@ public class OrderDTO {
     private String fullName;
     private String contact;
     private Date submitDate;
+    private String employee;
+    private String paymentTypeName;
     private BigDecimal totalMoneyOfOrder;
 }
