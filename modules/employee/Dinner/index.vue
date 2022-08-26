@@ -9,7 +9,7 @@
           :class="{ had: !item.status, statue: item.status, active: selectedTable === item.tableId }"
           @click="onSelectTable(item.tableId, item.status)"
         >
-          A{{ item.tableId }}
+          B{{ item.tableId }}
 
           <!-- <div class="choice__status">
                 <img src="@/assets/images/done.png" />

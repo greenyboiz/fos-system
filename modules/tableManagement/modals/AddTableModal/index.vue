@@ -224,6 +224,7 @@ export default {
         requestParams.tableId = this.tableId;
         this.updateTable(requestParams);
       } else {
+        requestParams.active = true;
         this.addTable(requestParams);
       }
       this.handleHideModal();

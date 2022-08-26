@@ -24,6 +24,7 @@
                 <th scope="col">Bàn số</th>
                 <th scope="col">Số ghế</th>
                 <th scope="col">Link QR</th>
+                <th scope="col">Trạng thái</th>
                 <th scope="col">Thao tác</th>
               </tr>
             </thead>
@@ -39,6 +40,7 @@
                   <th scope="row">{{ `B${ item.tableId }` }}</th>
                   <td>{{ item.numberOfSeats }}</td>
                   <td>{{ item.qrCode.qrcodeLink }}</td>
+                  <td>{{ item.active ? 'Khả dụng' : 'Không khả dụng' }}</td>
                   <td class="align-items-center">
                     <div class="btn-group align-top">
                       <button
