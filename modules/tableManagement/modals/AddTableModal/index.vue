@@ -29,7 +29,7 @@
       </div>
 
       <div class="info-table__qr">
-        <qr-code class="info-table__code" :size="250" :text="formTable.qrCode.qrcodeLink"></qr-code>
+        <qr-code class="info-table__code" :size="250" :text="formTable.qrCode.qrcodeLink" color="#069255"></qr-code>
       </div>
     </div>
     <div style="padding: 10px">

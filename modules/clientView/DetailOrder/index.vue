@@ -1,11 +1,11 @@
 <template>
   <div class="client-view">
     <b-container>
-    <div class="headline">
+    <div ref="headline" class="headline">
       <div class="headline__title">MLD Restaurent</div>
       <div class="headline__support" @click="handleShowSupportModal()">Support</div>
     </div>
-    <div class="searchArea">
+    <div ref="searchArea" class="searchArea">
       <div class="searchBox d-flex align-items-center">
         <img
           class="searchBox__icon"
@@ -24,14 +24,14 @@
         </div>
       </div>
     </div>
-    <div class="special">
+    <div class="special" :style="orderHeight">
       <template v-if="isLoading">
         <div class="loading">
           <Loading />
         </div>
       </template>
       <template v-else>
-        <div class="special__list" :style="orderHeight">
+        <div class="special__list">
           <div v-for="spec in orderList" :key="spec.id" class="special-item">
             <div class="spec-image">
               <img :src="spec.dishes.dishImage" style="border-radius: 8px" alt="" width="96px" height="96px">
@@ -166,7 +166,11 @@ export default {
   methods: {
     matchHeight() {
       const infoHeight = this.$refs.priceOrder.clientHeight;
-      this.$set(this.orderHeight, 'max-height', `calc(100% - ${infoHeight}px)`);
+      const headlineHeight = this.$refs.headline.clientHeight;
+      const searchArea = this.$refs.searchArea.clientHeight;
+      console.log(infoHeight, headlineHeight, searchArea);
+      this.$set(this.orderHeight, 'max-height', `calc(100% - ${headlineHeight}px - ${searchArea}px - 2.2rem - ${infoHeight}px)`);
+      console.log(this.orderHeight);
     },
 
     connect() {

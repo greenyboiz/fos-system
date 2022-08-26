@@ -49,8 +49,10 @@
 
 .info-table {
   display: flex;
-  justify-content: space-between;
-  border-bottom: 4px solid #e5e5e5;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 5px solid #e5e5e5;
   padding: 15px;
 
   &__img {
@@ -95,7 +97,7 @@
   }
 
   &__detail {
-    width: 50%;
+    width: 75%;
 
     input {
       width: 100%;
@@ -126,7 +128,6 @@
 
     input {
       height: 36px;
-      margin-right: 10px;
       border: 1px solid #e8e8e8;
       border-radius: 4px;
       padding-left: 10px;

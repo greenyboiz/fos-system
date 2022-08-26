@@ -37,66 +37,66 @@
               </div>
             </div>
         </template>
-        <b-table
-          v-else
-          id="my-table"
-          :items="listStaffSearch"
-          :per-page="10"
-          :current-page="currentPage"
-          :fields="fields"
-          bordered
-          responsive
-        >
-          <template #cell(userId)="data">
-            <div v-if="currentPage > 1">
-              {{ data.index + 1 === 10 ? `${currentPage}0` : `${currentPage - 1}${data.index + 1}` }}
-            </div>
-            <div v-else>
-              {{ data.index + 1 }}
-            </div>
-          </template>
-          <template #cell(gender)="data">
-            {{ data.item.gender ? 'Nam' : 'Nữ' }}
-          </template>
-          <template #cell(role[roleName])="data">
-            {{ handleSplitRole(data.item.role.roleName) }}
-          </template>
-          <template #cell(status)="data">
-            {{ data.item.status ? 'Đang làm việc' : 'Đã nghỉ việc' }}
-          </template>
-          <template #cell(action)="data">
-            <div class="table__row align-items-center">
-              <div class="btn-group align-top">
-                <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(data.item)">
-                  Edit
-                </button>
-                <button class="btn__delete" @click="remove(data.item.userId)">
-                  Chuyển trạng thái
-                </button>
-              </div>
-            </div>
-          </template>
-          <template v-if="isLoading" #table-busy>
-            <div class="text-center text-danger my-2">
-              <div class="loading">
-                <Loading />
-              </div>
-            </div>
-          </template>
-        </b-table>
-      </div>
-
-      <!-- Paging -->
-      <section class="pagination__wrap">
-        <div class="pagination__list">
-          <b-pagination
-            v-model="currentPage"
-            :total-rows="totalStaff"
+        <template v-else>
+          <b-table
+            id="my-table"
+            :items="listStaffSearch"
             :per-page="10"
-            aria-controls="my-table"
-          ></b-pagination>
-        </div>
-      </section>
+            :current-page="currentPage"
+            :fields="fields"
+            bordered
+            responsive
+          >
+            <template #cell(userId)="data">
+              <div v-if="currentPage > 1">
+                {{ data.index + 1 === 10 ? `${currentPage}0` : `${currentPage - 1}${data.index + 1}` }}
+              </div>
+              <div v-else>
+                {{ data.index + 1 }}
+              </div>
+            </template>
+            <template #cell(gender)="data">
+              {{ data.item.gender ? 'Nam' : 'Nữ' }}
+            </template>
+            <template #cell(role[roleName])="data">
+              {{ handleSplitRole(data.item.role.roleName) }}
+            </template>
+            <template #cell(status)="data">
+              {{ data.item.status ? 'Đang làm việc' : 'Đã nghỉ việc' }}
+            </template>
+            <template #cell(action)="data">
+              <div class="table__row align-items-center">
+                <div class="btn-group align-top">
+                  <button class="btn__edit" data-toggle="modal" data-target="#myModal" @click="editClick(data.item)">
+                    Edit
+                  </button>
+                  <button class="btn__delete" @click="remove(data.item.userId)">
+                    Chuyển trạng thái
+                  </button>
+                </div>
+              </div>
+            </template>
+            <template v-if="isLoading" #table-busy>
+              <div class="text-center text-danger my-2">
+                <div class="loading">
+                  <Loading />
+                </div>
+              </div>
+            </template>
+          </b-table>
+          <!-- Paging -->
+          <section class="pagination__wrap">
+            <div class="pagination__list">
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="totalStaff"
+                :per-page="10"
+                aria-controls="my-table"
+              ></b-pagination>
+            </div>
+          </section>
+        </template>
+      </div>
     </div>
 
     <AddUserModal ref="addUserModalRef" :userId="userId" :listStaff="listStaff" @doneAdd="onAdded" @doneUpdate="onUpdated" />

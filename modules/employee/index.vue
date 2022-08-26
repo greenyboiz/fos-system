@@ -243,6 +243,7 @@ export default {
 
     async confirmPayment() {
       if (!this.orderId) {
+        Vue.$toast.error('Vui lòng chọn bàn cần thanh toán');
         return;
       }
 

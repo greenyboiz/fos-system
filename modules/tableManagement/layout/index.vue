@@ -39,7 +39,7 @@
                 <tr v-for="(item) in listTable" :key="item.tableId" class="tw-cursor-pointer" @click="handleQRCode(item)">
                   <th scope="row">{{ `B${ item.tableId }` }}</th>
                   <td>{{ item.numberOfSeats }}</td>
-                  <td>{{ item.qrCode.qrcodeLink }}</td>
+                  <td><span>{{ item.qrCode.qrcodeLink }}</span></td>
                   <td>{{ item.active ? 'Khả dụng' : 'Không khả dụng' }}</td>
                   <td class="align-items-center">
                     <div class="btn-group align-top">
