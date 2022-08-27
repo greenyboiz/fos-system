@@ -165,7 +165,7 @@ public class FOSUserController {
             );
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail", e.getMessage(),false,"null")
+                    new ResponseObject("fail","Your mail incorrect",false,"null")
             );
         }
     }
