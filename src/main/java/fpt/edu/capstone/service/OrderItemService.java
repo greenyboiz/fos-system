@@ -109,12 +109,13 @@ public class OrderItemService implements IOrderItemService {
 
     @Override
     public List<BestSellerDishesDTO> getListDashboardBestseller() {
-        String query = "SELECT d.dishes_name, SUM(oi.quantity) as quantity\n" +
+        String query = "WITH TEMP AS (SELECT d.dishes_id, d.dishes_name,d.dish_image, SUM(oi.quantity) as quantity, d.sale_price\n" +
                 "FROM railway.orders o INNER JOIN railway.order_item oi\n" +
-                "ON o.order_id = oi.order_id INNER JOIN railway.dishes d ON d.dishes_id = oi.dishes_id\n" +
-                "group by d.dishes_name\n" +
-                "order by quantity desc\n" +
-                "LIMIT 5";
+                "                ON o.order_id = oi.order_id INNER JOIN railway.dishes d ON d.dishes_id = oi.dishes_id\n" +
+                "                group by  d.dishes_id\n" +
+                "                order by quantity desc\n" +
+                "                LIMIT 5)\n" +
+                "SELECT t.dishes_name,t.dish_image, t.quantity, t.sale_price FROM TEMP t;";
         List<BestSellerDishesDTO> list = template.query(query, new BestSellerDishRowMapper());
         return list;
     }
