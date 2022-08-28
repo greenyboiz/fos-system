@@ -168,9 +168,7 @@ export default {
       const infoHeight = this.$refs.priceOrder.clientHeight;
       const headlineHeight = this.$refs.headline.clientHeight;
       const searchArea = this.$refs.searchArea.clientHeight;
-      console.log(infoHeight, headlineHeight, searchArea);
       this.$set(this.orderHeight, 'max-height', `calc(100% - ${headlineHeight}px - ${searchArea}px - 2.2rem - ${infoHeight}px)`);
-      console.log(this.orderHeight);
     },
 
     connect() {
