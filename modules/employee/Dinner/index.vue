@@ -47,9 +47,6 @@ export default {
 
   mounted() {
     this.getListTable();
-    // setInterval(() => {
-    //   this.getListTable();
-    // }, 60000);
     this.connect();
   },
 
