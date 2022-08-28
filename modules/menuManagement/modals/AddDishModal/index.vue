@@ -32,10 +32,10 @@
           <label for="costPrice">Giá mua:</label>
           <input id="costPrice" v-model.number="formDish.costPrice" type="number" placeholder="Nhập giá bán" min="0" />
         </div>
-        <div class="info-dish__item">
+        <!-- <div class="info-dish__item">
           <label for="discount">Giảm giá:</label>
           <input id="discount" v-model.number="formDish.discount" type="number" placeholder="Nhập phần trăm giảm" min="0" />
-        </div>
+        </div> -->
         <div class="info-dish__item">
           <label for="category">Phân loại:</label>
           <MultiSelect

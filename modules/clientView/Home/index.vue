@@ -20,7 +20,7 @@
         <input id="fullname" v-model="formData.customer.fullName" type="text" placeholder="Nhập họ và tên" />
       </div>
       <div class="customer__item">
-        <label for="phone">SĐT: <span style="color: red; margin-bottom: 4px">*</span></label>
+        <label for="phone">SĐT:</label>
         <input id="phone" v-model="formData.customer.contact" type="text" placeholder="Nhập SĐT" required />
       </div>
     </div>
