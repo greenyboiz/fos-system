@@ -49,11 +49,20 @@ import { tableManagementService, employeeService, clientService } from '@/servic
 import { filter } from 'lodash';
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
+import SockJs from 'sockjs-client';
+import StompClient from 'webstomp-client';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
 Vue.use(VueToast, { position: 'top' });
 export default {
   name: 'SwapTableModal',
+
+  // props: {
+  //   connect: {
+  //     type: Function,
+  //     default: Function,
+  //   }
+  // },
 
   data() {
     return {
@@ -74,6 +83,7 @@ export default {
   methods: {
     show() {
       this.getListTable();
+      this.connect();
       this.$refs.swapTable.show();
     },
 
@@ -83,6 +93,27 @@ export default {
       this.moveTo = '';
       this.$refs.swapTable.hide();
       location.reload();
+    },
+
+    connect() {
+      this.socket = new SockJs('https://project-for-fos-mld.herokuapp.com/ws');
+      this.stompClient = StompClient.over(this.socket);
+      this.stompClient.connect({}, this.onConnected);
+    },
+
+    onConnected() {
+      this.stompClient.subscribe('/topic/staffRoom');
+    },
+
+    sendMessage(id) {
+      // console.log(this.stompClient);
+      console.log(id);
+      if (this.stompClient) {
+        const tables = {
+          tableId: id,
+        };
+        this.stompClient.send('/app/chat.sendMessage', JSON.stringify(tables), {});
+      }
     },
 
     async getListTable() {
@@ -148,6 +179,12 @@ export default {
       });
 
       if (res.success) {
+        console.log(this.moveTo);
+        this.sendMessage(this.moveTo);
+        localStorage.tableId = this.moveTo;
+        this.moveFrom = null;
+        this.moveTo = null;
+        this.selectedTable = null;
         Vue.$toast.success('Chuyển bàn thành công');
         this.getListTable();
       }

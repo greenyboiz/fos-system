@@ -58,7 +58,7 @@
               <span style="font-weight: 500">SL:</span>
               <div class="changeNum">
                 <span class="downNumber" @click="decreaseDish(val)"><i class="bi bi-dash-circle"></i></span>
-                <input v-model="val.numberOfDish" class="mr-1 ml-1" type="number">
+                <input v-model="val.numberOfDish" class="mr-1 ml-1" type="number" disabled>
                 <span class="upNumber" @click="increaseDish(val)"><i class="bi bi-plus-circle"></i></span>
               </div>
             </div>

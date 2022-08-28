@@ -105,7 +105,7 @@
         </div>
       </div>
     </div>
-    <SwapTableModal ref="swapTableRef" />
+    <SwapTableModal ref="swapTableRef" :connect="connect" />
   </div>
 </template>
 

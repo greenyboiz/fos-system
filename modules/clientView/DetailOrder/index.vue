@@ -195,7 +195,6 @@ export default {
 
     onMessageReceived(payload) {
       const message = JSON.parse(payload.body);
-      console.log(message);
 
       if(message.type === 'CHAT') {
           const element = document.getElementById(message.content);

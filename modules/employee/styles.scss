@@ -230,8 +230,10 @@
   border-top: 1px solid #9b9b9b;
 
   &__btn {
-    width: 200px;
+    width: max-content;
     height: 40px;
+    margin: 0 4px;
+    padding: 4px 8px;
     background-color: #fff;
     border: 1px solid #069255;
     border-radius: 5px;
@@ -268,6 +270,7 @@
   flex-direction: column;
   flex-grow: 1;
   min-height: 0 !important;
+  padding: 0 12px;
 
   &__content {
     overflow: auto;
@@ -302,7 +305,7 @@
         height: 3px;
         background: #c5c5c566;
         top: 0;
-        right: 17px;
+        right: 0px;
       }
     }
   }
