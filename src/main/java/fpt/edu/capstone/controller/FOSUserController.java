@@ -92,7 +92,7 @@ public class FOSUserController {
         if(!bcryptEncoder.matches(fosUser.getOldPassword(),fosUser1.getPassword())){
 //        if(!bcryptEncoder.encode(fosUser.getOldPassword()).equals(fosUser1.getPassword())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ResponseObject("fail", "Old Password incorrect ",false, null)
+                    new ResponseObject("fail", "Old Password incorrect",false, null)
             );
         }
         if(fosUser.getNewPassword().equals(fosUser.getOldPassword())){
@@ -165,7 +165,7 @@ public class FOSUserController {
             );
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseObject("fail","Your mail incorrect",false,"null")
+                    new ResponseObject("fail","mail not exist",false,"null")
             );
         }
     }
