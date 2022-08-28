@@ -1,7 +1,7 @@
 <template>
   <div class="client-view">
     <div class="headline">
-      <div class="headline__title">MLD Restaurent</div>
+      <div class="headline__title">Octavian Winery</div>
       <div class="headline__support">Support</div>
     </div>
     <div class="searchArea">

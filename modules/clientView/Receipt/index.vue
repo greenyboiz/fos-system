@@ -1,6 +1,6 @@
 <template>
   <div class="receipt">
-    <div class="receipt__header">MLD Restaurent</div>
+    <div class="receipt__header">Octavian Winery</div>
     <div class="receipt__content">
       <div class="receipt__order">Hóa đơn #{{ orderNo }} của {{ customerName }}</div>
       <div class="receipt__time">{{ createAt }}</div>

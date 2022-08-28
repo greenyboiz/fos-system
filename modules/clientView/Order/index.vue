@@ -2,7 +2,7 @@
   <div class="client-view">
     <b-container>
     <div class="headline">
-      <div class="headline__title">MLD Restaurent</div>
+      <div class="headline__title">Octavian Winery</div>
       <div class="headline__support" @click="handleShowSupportModal()">Support</div>
     </div>
     <div class="searchArea">
