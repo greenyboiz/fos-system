@@ -21,7 +21,7 @@
             :class="{ had: !item.status, statue: item.status, active: selectedTable === item.tableId }"
             @click="onSelectTable(item.tableId)"
           >
-            A{{ item.tableId }}
+            B{{ item.tableId }}
 
               <!-- <div class="choice__status">
                     <img src="@/assets/images/done.png" />
@@ -31,9 +31,9 @@
       </ul>
       <div class="swapTable__label text-center">
         Chuyển từ bàn
-        <span>A<input v-model.number="moveFrom" type="text"></span>
+        <span>B<input v-model.number="moveFrom" type="text"></span>
         đến bàn
-        <span>A<input v-model.number="moveTo" type="text"></span>
+        <span>B<input v-model.number="moveTo" type="text"></span>
       </div>
       <div class="swapTable__button text-center" @click="handleSwapTable()">
         <button>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { tableManagementService, employeeService } from '@/services';
+import { tableManagementService, employeeService, clientService } from '@/services';
 import { filter } from 'lodash';
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
@@ -86,7 +86,7 @@ export default {
     },
 
     async getListTable() {
-      const res = await tableManagementService.getListTable({
+      const res = await clientService.getListTableStaff({
         headers: {
           Authorization: this.$auth.$storage._state['_token.local'],
         },

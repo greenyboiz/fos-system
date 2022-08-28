@@ -91,7 +91,7 @@ export default {
   methods: {
     validateEmail(email) {
       // eslint-disable-next-line max-len
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const re = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
       return re.test(String(email).toLowerCase());
     },
 
@@ -110,7 +110,12 @@ export default {
         email: this.forgetPwdEmail,
       };
 
-      const res = await authService.getNewPassword(reqParams);
+      const res = await authService.getNewPassword(reqParams).catch((e) => {
+        if (e.response.data.message === 'mail not exist') {
+          this.$toast.error('Email không tồn tại');
+          this.forgetPwdEmail = '';
+        }
+      });
 
       if (res.success) {
         this.$toast.success('Vui lòng mở email để lấy mật khẩu mới');

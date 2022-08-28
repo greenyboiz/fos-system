@@ -138,10 +138,12 @@
         .changeNum {
           display: flex;
           align-items: center;
+          justify-content: space-between;
 
           input {
             border: none;
-            width: 13px;
+            width: 24px;
+            text-align: center;
           }
         }
       }

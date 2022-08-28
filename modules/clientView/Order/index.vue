@@ -76,17 +76,20 @@
         <div class="head-seeAll">Xem tất cả</div>
       </div>
       <div class="special__list">
-        <div v-for="spec in bestSeller" :key="spec.id" class="special-item">
+        <div v-for="(spec, specIndex) in bestSeller" :key="specIndex" class="special-item">
           <div class="spec-image">
-            <img src="@/assets/images/menu-image.png" alt="" width="96px">
+            <img :src="spec.dishesImage" alt="" width="96px" height="96px">
           </div>
           <div class="spec-info">
-            <div class="spec-name">{{ spec.name }}</div>
+            <div class="spec-name">{{ spec.dishesName }}</div>
             <div class="spec-price">{{ currencyFormatter(spec.salePrice) }} VNĐ</div>
             <div class="spec-qua">
               <div class="spec-quality">
                 <StarFill :currentColor="'#EEC800'" />
-                {{ spec.star }}
+                <StarFill :currentColor="'#EEC800'" />
+                <StarFill :currentColor="'#EEC800'" />
+                <StarFill :currentColor="'#EEC800'" />
+                <StarFill :currentColor="'#EEC800'" />
               </div>
               <div class="spec-quantity">
                 <!-- <div class="changeNum">
@@ -113,7 +116,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import VueSlickCarousel from 'vue-slick-carousel';
-import { menuManagementService, orderService, clientService } from '@/services';
+import { menuManagementService, orderService, clientService, chartService } from '@/services';
 import StarFill from '@/components/CustomIcon/star-fill.vue';
 import { map, filter, reduce } from 'lodash';
 import SupportModal from '@/components/common/SupportModal/index.vue';
@@ -140,11 +143,7 @@ export default {
       dishId: null,
       catType: '',
       numberOfDishes: 0,
-      bestSeller: [
-        { id: 1, name: 'Cocktail Bloody Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
-        { id: 2, name: 'Cocktail None Bloody Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
-        { id: 3, name: 'Cocktail Bloody None Marry', salePrice: 599999, star: 4.5, numberOfDish: 0 },
-      ],
+      bestSeller: [],
       orderIdLocal: null,
       showSpModal: false,
     };
@@ -187,6 +186,7 @@ export default {
     this.orderIdLocal = localStorage.getItem('orderId');
     this.getListCategory();
     this.getListDish();
+    this.getBestSellerDish();
   },
 
   methods: {
@@ -227,6 +227,14 @@ export default {
     handleSelectAll() {
       this.catType = '';
       this.getListDish();
+    },
+
+    async getBestSellerDish() {
+      const res = await chartService.getBestSellerDish();
+
+      if (res.success) {
+        this.bestSeller = res.data;
+      }
     },
 
     async getListDish() {

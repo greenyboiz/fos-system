@@ -51,6 +51,7 @@ export default {
       oldPass: '',
       newPass: '',
       confirmNewPass: '',
+      wrongOldPass: false,
     };
   },
 
@@ -70,6 +71,12 @@ export default {
     validator() {
       if (!this.oldPass) {
         Vue.$toast.error('Vui lòng nhập mật khẩu cũ');
+        document.getElementById('oldPwd').focus();
+        return false;
+      }
+
+      if (this.wrongOldPass) {
+        Vue.$toast.error('Mật khẩu cũ không đúng');
         document.getElementById('oldPwd').focus();
         return false;
       }
@@ -119,10 +126,15 @@ export default {
     },
 
     async changePass(reqParams) {
+      this.wrongOldPass = false;
       const res = await authService.changePassword(reqParams, {
           headers: {
             Authorization: this.$auth.$storage._state['_token.local'],
           },
+        }).catch((e) => {
+          if (e.response.data.message === 'Old Password incorrect') {
+            this.wrongOldPass = true;
+          }
         });
 
       if (res.success) {
