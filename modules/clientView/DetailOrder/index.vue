@@ -40,9 +40,9 @@
               <div class="spec-name">{{ spec.dishes.dishesName }}</div>
               <div class="spec-price">
                 <div class="spec-cost">{{ currencyFormatter(spec.dishes.salePrice) }} VNĐ</div>
-                <div class="spec-remove" @click="handleRemoveOrderItem(spec.orderItemId)">
+                <!-- <div class="spec-remove" @click="handleRemoveOrderItem(spec.orderItemId)">
                   <Trash />
-                </div>
+                </div> -->
               </div>
               <div class="spec-qua">
                 <div class="spec-quantity">
@@ -109,7 +109,7 @@ export default {
   name: 'Page',
 
   components: {
-    Trash,
+    // Trash,
     SupportModal,
     Loading,
   },

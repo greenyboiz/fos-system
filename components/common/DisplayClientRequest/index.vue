@@ -10,7 +10,7 @@
     @hidden="handleHideModal"
   >
     <div class="supportType">
-      <span>Bàn A{{ tableRq }} cần hỗ trợ {{ rqType }}</span>
+      <span>Bàn B{{ tableRq }} cần hỗ trợ {{ rqType }}</span>
     </div>
   </b-modal>
 </template>

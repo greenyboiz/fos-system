@@ -29,6 +29,12 @@
 
 .campaign {
   margin-bottom: 2rem;
+
+  &-item {
+    img {
+      border-radius: 15px;
+    }
+  }
 }
 
 .customer {

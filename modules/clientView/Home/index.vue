@@ -7,10 +7,16 @@
     <div class="campaign">
       <VueSlickCarousel :arrows="false" :dots="true" :autoplay="true">
         <div class="campaign-item">
-          <img src="@/assets/images/campaign.jpg" alt="" width="100%" />
+          <img src="@/assets/images/campaign.jpg" alt="" width="100%" height="180px" />
         </div>
         <div class="campaign-item">
-          <img src="@/assets/images/campaign.jpg" alt="" width="100%" />
+          <img src="@/assets/images/campaign2.png" alt="" width="100%" height="180px" />
+        </div>
+        <div class="campaign-item">
+          <img src="@/assets/images/campaign3.png" alt="" width="100%" height="180px" />
+        </div>
+        <div class="campaign-item">
+          <img src="@/assets/images/campaign4.jpg" alt="" width="100%" height="180px" />
         </div>
       </VueSlickCarousel>
     </div>
