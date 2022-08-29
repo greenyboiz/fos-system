@@ -50,7 +50,7 @@
     <div class="receipt__footer">
       <div class="thanks-label">Cảm ơn Quý khách và hẹn gặp lại!</div>
       <div class="other__payment" style="text-align: left; margin-top: 0.5rem">
-        <span style="font-size: 14px">
+        <span style="font-size: 14px; color: red">
           Note: Quý khách vui lòng giữ lại hóa đơn sau khi thanh toán để mang ra quầy kiểm tra
         </span>
       </div>

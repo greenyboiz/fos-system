@@ -236,6 +236,7 @@ export default {
       this.formDish.status = this.statusSelected;
       this.formDish.category = this.selectedCategory;
       this.formDish.dishesId = this.dishesId;
+      this.formDish.dishImage = this.avatar;
 
       const requestParams = this.formDish;
 

@@ -286,7 +286,7 @@
     .intoMoney {
       position: relative;
       height: 50px;
-      border-bottom: 1px solid #9b9b9b;
+      // border-bottom: 1px solid #9b9b9b;
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -307,6 +307,14 @@
         top: 0;
         right: 0px;
       }
+    }
+
+    .note {
+      border-bottom: 1px solid #9b9b9b;
+      font-size: 14px;
+      color: red;
+      display: flex;
+      justify-content: flex-end;
     }
   }
 

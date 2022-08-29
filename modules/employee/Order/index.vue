@@ -1,7 +1,7 @@
 <template>
   <div class="order">
     <div class="order__top">
-      <div class="order__option">
+      <!-- <div class="order__option">
         <div
           v-for="item in listTypeOrder"
           :key="'menu' + item.categoryId"
@@ -11,14 +11,14 @@
         >
           {{ item.categoryName }}
         </div>
-        <li class="tabs-slider" role="presentation"></li>
-      </div>
+         <li class="tabs-slider" role="presentation"></li> -->
+      <!-- </div> --> -->
     </div>
 
     <!--  -->
 
     <div class="order__list">
-      <div v-for="(item, index) in listFood" :key="'item' + index" class="order__i">
+      <div v-for="(item, index) in listDish" :key="'item' + index" class="order__i">
         <div class="order__item">
           <div class="order__img">
             <img :src="item.dishImage" />
@@ -28,10 +28,10 @@
             <p class="order__name">{{ item.dishesName || '' }}</p>
 
             <div class="order__detail">
-              <div class="order__price">{{ currencyFormatter(item.salePrice) }}</div>
-              <div class="order__add">
+              <div class="order__price">{{ currencyFormatter(item.salePrice) || 0 }}đ</div>
+              <!-- <div class="order__add">
                 <img src="@/assets/images/plus.png" />
-              </div>
+              </div> -->
             </div>
           </div>
         </div>

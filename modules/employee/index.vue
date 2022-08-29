@@ -49,8 +49,11 @@
             </div>
           </div>
           <div class="intoMoney">
-            Tổng:
-            <span> {{ currencyFormatter(totalPriceOrder + (totalPriceOrder * 10) / 100) }} đ </span>
+              Tổng:
+              <span> {{ currencyFormatter(totalPriceOrder + (totalPriceOrder * 10) / 100) }} đ </span>
+          </div>
+          <div class="note">
+            Ghi chú: Nhân viên chỉ được thanh toán khi nhận được hóa đơn từ khách hàng
           </div>
 
           <div class="test__manipulation">
