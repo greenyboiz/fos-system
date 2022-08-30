@@ -385,18 +385,7 @@ export default {
     },
 
     handleSelectedStatus() {
-      console.log(this.statusSelected);
     },
-
-    // handleAddAvatar(e) {
-    //   const file = this.$refs.avatarRef.files;
-    //   if (!file.length) return;
-
-    //   this.avatar = URL.createObjectURL(file[0]);
-    //   // this.avatar = file[0];
-    //   // console.log(this.avatar);
-    //   // e.target.value = '';
-    // },
 
     handleShowPassword() {
       this.showPassword = !this.showPassword;

@@ -195,7 +195,6 @@ export default {
     // },
 
     handleSelectCat() {
-      // console.log(this.selectedCategory);
     },
 
     async getListCategory() {

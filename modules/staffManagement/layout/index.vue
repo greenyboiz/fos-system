@@ -238,12 +238,6 @@ export default {
     },
 
     deleteUser(userId) {
-      // const res = await staffManagementService.deleteUser(userId);
-
-      // if (res.status) {
-      //   console.log('success');
-      //   this.getListUser();
-      // }
       const sameRole = find(this.listStaff, (item) => item.userId === userId);
       if (sameRole.role.roleName === 'ROLE_ADMIN') {
         Vue.$toast.error('Không thể chuyển trạng thái của admin khác');

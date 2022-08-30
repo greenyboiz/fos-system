@@ -207,7 +207,7 @@ export default {
       currentPage: 1,
       profitByMonth: 0,
       costByMonth: 0,
-      selectedYear: '2022',
+      selectedYear: 'Tất cả',
       yearRevenue: new Date().getFullYear(),
       yearProfit: new Date().getFullYear(),
       listYear: ['Tất cả', 2022, 2023, 2024, 2025, 2026, 2027],

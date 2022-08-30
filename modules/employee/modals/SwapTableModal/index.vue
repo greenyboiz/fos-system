@@ -106,8 +106,6 @@ export default {
     },
 
     sendMessage(id) {
-      // console.log(this.stompClient);
-      console.log(id);
       if (this.stompClient) {
         const tables = {
           tableId: id,
@@ -179,7 +177,6 @@ export default {
       });
 
       if (res.success) {
-        console.log(this.moveTo);
         this.sendMessage(this.moveTo);
         localStorage.tableId = this.moveTo;
         this.moveFrom = null;

@@ -229,9 +229,6 @@ export default {
     },
 
     changeStatus(dishId) {
-      // const findDish = find(this.listDishes, (item) => item.dishesId === dishId);
-      // console.log(findDish);
-      // if (findDish.status)
       this.$confirmPopup.open({
         title: 'Xác nhận',
         message: 'Bạn có chắc muốn đổi trạng thái món ăn này không?',
