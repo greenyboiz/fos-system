@@ -53,7 +53,7 @@
                       </button>
                       <button class="btn__delete" @click="changeActiveTable(item.tableId)">
                         <!-- <img src="@/assets/icons/delete.png" alt="" /> -->
-                        Vô hiệu hóa
+                        Chuyển trạng thái
                       </button>
                     </div>
                   </td>
@@ -171,8 +171,8 @@ export default {
       }
       this.$confirmPopup.open({
         title: 'Xác nhận',
-        message: 'Bạn có chắc muốn vô hiệu hóa bàn này không?',
-        confirmText: 'Vô hiệu hóa',
+        message: 'Bạn có chắc muốn chuyển trạng thái bàn này không?',
+        confirmText: 'Chuyển trạng thái',
 
         confirmed: async () => {
           const res = await tableManagementService.changeActiveTable(tableId, {}, {
