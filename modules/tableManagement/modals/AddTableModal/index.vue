@@ -92,12 +92,19 @@ export default {
       ],
       listSeat: [2, 4, 6, 8, 10, 12],
       thisLinkQr: '',
+      oldLinkQr: '',
     };
   },
 
   watch: {
     tableId() {
       this.getDetailTable();
+    },
+
+    thisLinkQr() {
+      if (this.thisLinkQr) {
+        this.oldLinkQr = this.thisLinkQr;
+      }
     }
   },
 
@@ -179,7 +186,7 @@ export default {
       }
 
       if (this.modalTitle) {
-        if (this.formTable.qrCode.qrcodeLink !== this.thisLinkQr) {
+        if ((this.formTable.qrCode.qrcodeLink !== this.thisLinkQr) && existQrcode) {
           Vue.$toast.error('Mã QR đã tồn tại');
           document.getElementById('qrlink').focus();
           return false;

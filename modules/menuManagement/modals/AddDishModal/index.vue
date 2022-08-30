@@ -84,7 +84,7 @@ import ImageOrDefault from '@/components/common/ImageOrDefault/index.vue';
 import CustomCheckbox from '@/components/common/CustomCheckbox/index.vue';
 import { menuManagementService } from '@/services';
 import MultiSelect from 'vue-multiselect';
-import { size, find } from 'lodash';
+import { size, find, findIndex } from 'lodash';
 
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
@@ -135,6 +135,7 @@ export default {
       selectedCategory: {},
       isDone: false,
       thisDishName: '',
+      oldDish: '',
     };
   },
 
@@ -144,6 +145,12 @@ export default {
     dishesId() {
       this.getDishById();
     },
+
+    thisDishName() {
+      if (this.thisDishName) {
+        this.oldDish = this.thisDishName;
+      }
+    }
   },
 
   methods: {
@@ -266,7 +273,9 @@ export default {
         const dish = res.data;
 
         this.formDish = dish;
-        this.thisDishName = dish.dishesName.trim();
+        if (dish) {
+          this.thisDishName = dish.dishesName;
+        }
         this.formDish.dishesName.trim();
         this.formDish.description.trim();
         this.selectedCategory = dish.category;
@@ -332,13 +341,15 @@ export default {
         return false;
       }
 
+      // const dishNameIndex = findIndex(this.listDishes, (item) => item.dishesName === this.formDish.dishesName);
+
       if (this.modalTitle) {
-        if (this.formDish.dishesName !== this.thisDishName) {
-          Vue.$toast.error('Tên món ăn đã tồn tại');
-          this.formDish.dishesName = '';
-          document.getElementById('dishesName').focus();
-          return false;
-        }
+          if ((this.formDish.dishesName !== this.oldDish) && existDishName) {
+            Vue.$toast.error('Tên món ăn đã tồn tại');
+            this.formDish.dishesName = '';
+            document.getElementById('dishesName').focus();
+            return false;
+          }
       }
 
       if (!this.formDish.description) {
