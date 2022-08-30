@@ -183,7 +183,7 @@ export default {
 
           if (res.success) {
             this.getListTable();
-            Vue.$toast.success('Vô hiệu hóa thành công');
+            Vue.$toast.success('Chuyển trạng thái thành công');
           }
         },
       });
