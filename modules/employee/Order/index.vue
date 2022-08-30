@@ -12,7 +12,7 @@
           {{ item.categoryName }}
         </div>
          <li class="tabs-slider" role="presentation"></li> -->
-      <!-- </div> --> -->
+      <!-- </div> -->
     </div>
 
     <!--  -->
