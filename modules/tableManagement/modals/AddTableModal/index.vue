@@ -90,7 +90,8 @@ export default {
         { id: 0, name: 'Đã đầy' },
         { id: 1, name: 'Còn trống' },
       ],
-      listSeat: [2, 4, 6, 8, 10, 12]
+      listSeat: [2, 4, 6, 8, 10, 12],
+      thisLinkQr: '',
     };
   },
 
@@ -137,6 +138,7 @@ export default {
           status: toNumber(data.status),
         };
         this.statusSelected = toNumber(data.status);
+        this.thisLinkQr = data.qrCode.qrcodeLink;
       }
     },
 
@@ -174,6 +176,14 @@ export default {
         Vue.$toast.error('Mã QR đã tồn tại');
         document.getElementById('qrlink').focus();
         return false;
+      }
+
+      if (this.modalTitle) {
+        if (this.formTable.qrCode.qrcodeLink !== this.thisLinkQr) {
+          Vue.$toast.error('Mã QR đã tồn tại');
+          document.getElementById('qrlink').focus();
+          return false;
+        }
       }
       return true;
     },

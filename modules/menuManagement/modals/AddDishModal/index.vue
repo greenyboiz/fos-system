@@ -134,6 +134,7 @@ export default {
       listCategory: [],
       selectedCategory: {},
       isDone: false,
+      thisDishName: '',
     };
   },
 
@@ -266,6 +267,7 @@ export default {
         const dish = res.data;
 
         this.formDish = dish;
+        this.thisDishName = dish.dishesName.trim();
         this.formDish.dishesName.trim();
         this.formDish.description.trim();
         this.selectedCategory = dish.category;
@@ -301,6 +303,10 @@ export default {
       return str;
     },
 
+    onDishNameChange() {
+
+    },
+
     validator() {
       if (!this.formDish.dishesName) {
         Vue.$toast.error('Vui lòng nhập tên Món ăn');
@@ -317,12 +323,23 @@ export default {
         return false;
       }
 
+      // this.$watch(this.formDish.dishesName, this.onDishNameChange());
+
       const existDishName = find(this.listDishes, (item) => item.dishesName === this.formDish.dishesName);
       if (existDishName && !this.modalTitle) {
         Vue.$toast.error('Tên món ăn đã tồn tại');
         this.formDish.dishesName = '';
         document.getElementById('dishesName').focus();
         return false;
+      }
+
+      if (this.modalTitle) {
+        if (this.formDish.dishesName !== this.thisDishName) {
+          Vue.$toast.error('Tên món ăn đã tồn tại');
+          this.formDish.dishesName = '';
+          document.getElementById('dishesName').focus();
+          return false;
+        }
       }
 
       if (!this.formDish.description) {
