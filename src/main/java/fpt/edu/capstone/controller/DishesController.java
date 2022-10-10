@@ -61,7 +61,7 @@ public class DishesController {
             );
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                new ResponseObject("fail", "this dishes is exist",false, null)
+                new ResponseObject("fail", "this dishes is not exist",false, null)
         );
     }
 
